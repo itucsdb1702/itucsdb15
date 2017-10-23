@@ -22,23 +22,6 @@ def get_elephantsql_dsn(vcap_services):
 
 @app.route('/')
 def home_page():
-    with dbapi2.connect(app.config['dsn']) as connection:
-        cursor = connection.cursor()
-        query = """DROP TABLE IF EXISTS USERS"""
-        cursor.execute(query)
-
-        query = """CREATE TABLE USERS(
-        ID SERIAL NOT NULL,
-        USERNAME VARCHAR(30),
-        PASSWORD VARCHAR(15),
-        MAIL_ID INTEGER,
-        POST_ID INTEGER,
-        PRIMARY KEY(ID)
-        )"""
-        cursor.execute(query)
-
-        connection.commit()
-
     now = datetime.datetime.now()
     return render_template('home.html', current_time=now.ctime())
 
