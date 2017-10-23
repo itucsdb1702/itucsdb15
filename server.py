@@ -37,6 +37,8 @@ def home_page():
         )"""
         cursor.execute(query)
 
+        connection.commit()
+
     now = datetime.datetime.now()
     return render_template('home.html', current_time=now.ctime())
 
