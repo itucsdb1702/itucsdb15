@@ -3,9 +3,9 @@ import os
 import json
 import re
 import psycopg2 as dbapi2
-import psycopg2
 from flask import redirect
-from flask import Flask
+from flask.helpers import url_for
+from flask import Flask, flash
 from flask import render_template
 
 app = Flask(__name__)
