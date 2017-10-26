@@ -23,8 +23,20 @@ def get_elephantsql_dsn(vcap_services):
 @app.route('/')
 def home_page():
     now = datetime.datetime.now()
-    return render_template('home.html', current_time=now.ctime())
+    return render_template('home.html')
 
+@app.route('/home')
+def home_page_1():
+    now = datetime.datetime.now()
+    return render_template('home.html')
+
+@app.route('/login')
+def login_page():
+    return render_template('login.html')
+
+@app.route('/signup')
+def signup_page():
+    return render_template('signup.html')
 
 if __name__ == '__main__':
     VCAP_APP_PORT = os.getenv('VCAP_APP_PORT')
