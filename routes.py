@@ -12,7 +12,6 @@ from flask import current_app as app
 from classes import User
 from classes import UserList
 from flask_login import login_manager, login_user, logout_user
-dsn = """user='vagrant' password='vagrant' host='localhost' port=5432 dbname='itucsdb'"""
 
 page = Blueprint('page',__name__)
 
