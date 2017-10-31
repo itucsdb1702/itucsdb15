@@ -2,6 +2,7 @@ import psycopg2 as dbapi2
 from flask import current_app as app
 from flask_login import UserMixin
 from flask import flash
+dsn = """user='vagrant' password='vagrant' host='localhost' port=5432 dbname='itucsdb'"""
 
 class User(UserMixin):
     def __init__(self, username, email, password):
