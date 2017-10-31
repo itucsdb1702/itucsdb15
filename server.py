@@ -3,12 +3,30 @@ import os
 import json
 import re
 import psycopg2 as dbapi2
+from flask import redirect, Blueprint, flash
 from flask import redirect
 from flask.helpers import url_for
 from flask import Flask, flash
 from flask import render_template
+from classes import User
+from classes import UserList
+from flask_login import login_manager
+from flask_login.login_manager import LoginManager
+from routes import page
 
-app = Flask(__name__)
+login_manager = LoginManager()
+
+def create_app():
+    app = Flask(__name__)
+    app.register_blueprint(page)
+    app.userlist = UserList()
+    app.secret_key = "secret key"
+    login_manager.init_app(app)
+    login_manager.login_view = 'page.signup'
+    return app
+
+app = create_app()
+
 
 def get_elephantsql_dsn(vcap_services):
     """Returns the data source name for ElephantSQL."""
@@ -20,23 +38,24 @@ def get_elephantsql_dsn(vcap_services):
              dbname='{}'""".format(user, password, host, port, dbname)
     return dsn
 
-@app.route('/')
-def home_page():
-    now = datetime.datetime.now()
-    return render_template('home.html')
 
-@app.route('/home')
-def home_page_1():
-    now = datetime.datetime.now()
-    return render_template('home.html')
+@app.route('/init_user_db')
+def init_user_db():
+    with dbapi2.connect(app.config['dsn']) as connection:
+        cursor = connection.cursor()
+        query = """DROP TABLE IF EXISTS USERS"""
+        cursor.execute(query)
 
-@app.route('/login')
-def login_page():
-    return render_template('login.html')
-
-@app.route('/signup')
-def signup_page():
-    return render_template('signup.html')
+        query = """CREATE TABLE USERS(
+        ID SERIAL NOT NULL,
+        USERNAME VARCHAR(30),
+        PASSWORD VARCHAR(15),
+        EMAIL VARCHAR(50),
+        POST_ID INTEGER,
+        PRIMARY KEY(ID)
+        )"""
+        cursor.execute(query)
+    return redirect(url_for('page.home_page'))
 
 if __name__ == '__main__':
     VCAP_APP_PORT = os.getenv('VCAP_APP_PORT')
