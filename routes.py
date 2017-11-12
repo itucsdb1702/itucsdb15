@@ -12,6 +12,7 @@ from flask import current_app as app
 from classes import User
 from classes import UserList
 from flask_login import login_manager, login_user, logout_user
+from passlib.apps import custom_app_context as pwd_context
 
 page = Blueprint('page',__name__)
 
@@ -33,7 +34,7 @@ def signup():
         if request.method == "POST":
             username = request.form['username']
             email = request.form['email']
-            password = request.form['password']
+            password0 = request.form['password']
 
             with dbapi2._connect(current_app.config['dsn']) as connection:
                 cursor = connection.cursor()
@@ -50,6 +51,7 @@ def signup():
                         flash('Please choose a unique E-mail.')
                     return redirect(url_for('page.signup'))
                 else:
+                    password = pwd_context.encrypt(password0)
                     newuser = User(username, email, password)
                     app.userlist.add_user(newuser)
                     return render_template('home.html')

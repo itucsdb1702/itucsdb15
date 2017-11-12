@@ -49,7 +49,7 @@ def init_user_db():
         query = """CREATE TABLE USERS(
         ID SERIAL NOT NULL,
         USERNAME VARCHAR(30),
-        PASSWORD VARCHAR(15),
+        PASSWORD VARCHAR(250),
         EMAIL VARCHAR(50),
         POST_ID INTEGER,
         PRIMARY KEY(ID)

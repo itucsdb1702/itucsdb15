@@ -2,6 +2,7 @@ import psycopg2 as dbapi2
 from flask import current_app as app
 from flask_login import UserMixin
 from flask import flash
+from passlib.apps import custom_app_context as pwd_context
 
 class User(UserMixin):
     def __init__(self, username, email, password):
@@ -29,4 +30,17 @@ class UserList:
             connection.commit()
             cursor.close()
 
+    def verify(self,username,passw):
+        with dbapi2.connect(app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            query = "SELECT USERNAME, PASSWORD FROM USERS WHERE (NAME = %s)"
+            cursor.execute(query, (username,))
+            user = cursor.fetchone()
+            if user is not None:
+                if pwd_context.verify(passw,user[1]):
+                    return 0
+                else:
+                    return -1
+            else:
+                return -1
 
