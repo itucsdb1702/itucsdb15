@@ -68,62 +68,11 @@ def init_user_db():
         USERNAME VARCHAR(30),
         PASSWORD VARCHAR(250),
         EMAIL VARCHAR(50),
+        POST_ID INTEGER,
         PRIMARY KEY(ID)
         )"""
         cursor.execute(query)
-        connection.commit()
-
     return redirect(url_for('page.home_page'))
-
-@app.route('/init_movies_db')
-def init_movies_db():
-    with dbapi2.connect(app.config['dsn']) as connection:
-        cursor = connection.cursor()
-        query = "DROP TABLE IF EXISTS MOVIES"
-        cursor.execute(query)
-
-        query ="""CREATE TABLE MOVIES(
-        MOVIEID SERIAL NOT NULL,
-        TITLE VARCHAR(100),
-        YEAR INTEGER,
-        SCORE FLOAT,
-        VOTES INTEGER,
-        IMDB_URL VARCHAR(2068),
-        PRIMARY KEY(MOVIEID)
-        )
-        """
-        cursor.execute(query)
-        connection.commit()
-
-        return redirect(url_for('page.home_page'))
-
-@app.route('/init_posts_db')
-def init_posts_db():
-    with dbapi2.connect(app.config['dsn']) as connection:
-        cursor = connection.cursor()
-        query = "DROP TABLE IF EXISTS POSTS"
-        cursor.execute(query)
-
-        query = """CREATE TABLE POSTS(
-        POST_ID SERIAL NOT NULL,
-        COMMENTS VARCHAR(300),
-        MOVIE_ID INTEGER,
-        PRIMARY KEY(POST_ID)
-        )
-        """
-        cursor.execute(query)
-
-
-        query = """ALTER TABLE POSTS
-        ADD FOREIGN KEY(MOVIE_ID)
-        REFERENCES MOVIES(MOVIEID)
-        ON DELETE CASCADE
-        """
-        cursor.execute(query)
-
-        connection.commit()
-
-        return redirect(url_for('page.home_page'))
 
 if __name__ == '__main__':
     VCAP_APP_PORT = os.getenv('VCAP_APP_PORT')
