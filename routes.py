@@ -13,9 +13,10 @@ from classes import User
 from classes import UserList
 from flask_login import login_manager, login_user, logout_user
 from passlib.apps import custom_app_context as pwd_context
+from flask_login.utils import current_user
+
 
 page = Blueprint('page',__name__)
-
 
 @page.route('/')
 def home_page():
@@ -27,7 +28,55 @@ def home_page_1():
 
 @page.route('/login', methods = ['GET', 'POST'])
 def login_page():
-    return render_template('login.html')
+
+
+
+    if request.method == "POST":
+        
+        if current_user.get_id() is not None:
+            flash('You are already logged in to MovieShake as ' + current_user.get_id())
+            return redirect(url_for('page.home_page'))
+        else:
+
+            username = request.form['uname']
+            passwordNotEncrypted = request.form['pass']
+        
+            if app.userlist.verify(username, passwordNotEncrypted) is not 0:
+                flash('Please check your user name and password')
+                return redirect(url_for('page.login_page'))
+            else:
+                with dbapi2._connect(app.config['dsn']) as connection:
+                    cursor = connection.cursor()
+                    query = "SELECT EMAIL FROM USERS WHERE (USERNAME = %s)"
+                    cursor.execute(query, (username,))
+                    email = cursor.fetchone()
+                
+                
+                userToLogin = User(username, email, passwordNotEncrypted)
+
+                if login_user(userToLogin):
+                    flash("Welcome, " + current_user.username)
+                else:
+                    flash("A problem occured, please try again.")
+                
+                return redirect(url_for('page.home_page'))
+
+    else:
+        return render_template('login.html')
+
+
+@page.route("/logout")
+def logout():
+    if current_user.get_id() is not None:
+        if logout_user():
+            flash("Successfully logged out.")
+        else:
+            flash("Please try logging out again.")
+    else:
+        flash("You're not logged in.")
+            
+    return redirect(url_for('page.home_page'))
+
 
 @page.route('/signup', methods = ['GET', 'POST'])
 def signup():

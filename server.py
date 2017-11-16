@@ -13,8 +13,24 @@ from classes import UserList
 from flask_login import login_manager
 from flask_login.login_manager import LoginManager
 from routes import page
+from flask_login.utils import current_user
 
 login_manager = LoginManager()
+
+@login_manager.user_loader
+def user_loader(user_id):
+        with dbapi2._connect(app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            query = "SELECT EMAIL FROM USERS WHERE (USERNAME = %s)"
+            cursor.execute(query, (user_id,))
+            email = cursor.fetchone()
+            cursor = connection.cursor()
+            query = "SELECT PASSWORD FROM USERS WHERE (USERNAME = %s)"
+            cursor.execute(query, (user_id,))
+            password = cursor.fetchone()
+            
+            user = User(user_id, password, email)
+            return user
 
 def create_app():
     app = Flask(__name__)
@@ -26,6 +42,7 @@ def create_app():
     return app
 
 app = create_app()
+
 
 
 def get_elephantsql_dsn(vcap_services):
