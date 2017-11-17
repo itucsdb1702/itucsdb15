@@ -29,18 +29,16 @@ def home_page_1():
 @page.route('/login', methods = ['GET', 'POST'])
 def login_page():
 
-
-
     if request.method == "POST":
-        
+
         if current_user.get_id() is not None:
-            flash('You are already logged in to MovieShake as ' + current_user.get_id())
+            flash('You are already logged in MovieShake as ' + current_user.get_id())
             return redirect(url_for('page.home_page'))
         else:
 
             username = request.form['uname']
             passwordNotEncrypted = request.form['pass']
-        
+
             if app.userlist.verify(username, passwordNotEncrypted) is not 0:
                 flash('Please check your user name and password')
                 return redirect(url_for('page.login_page'))
@@ -50,15 +48,15 @@ def login_page():
                     query = "SELECT EMAIL FROM USERS WHERE (USERNAME = %s)"
                     cursor.execute(query, (username,))
                     email = cursor.fetchone()
-                
-                
+
+
                 userToLogin = User(username, email, passwordNotEncrypted)
 
                 if login_user(userToLogin):
                     flash("Welcome, " + current_user.username)
                 else:
                     flash("A problem occured, please try again.")
-                
+
                 return redirect(url_for('page.home_page'))
 
     else:
@@ -74,7 +72,7 @@ def logout():
             flash("Please try logging out again.")
     else:
         flash("You're not logged in.")
-            
+
     return redirect(url_for('page.home_page'))
 
 
