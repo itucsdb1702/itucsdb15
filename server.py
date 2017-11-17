@@ -74,6 +74,28 @@ def init_user_db():
         cursor.execute(query)
     return redirect(url_for('page.home_page'))
 
+@app.route('/init_movies_db')
+def init_movies_db():
+    with dbapi2.connect(app.config['dsn']) as connection:
+        cursor = connection.cursor()
+        query = "DROP TABLE IF EXISTS MOVIES"
+        cursor.execute(query)
+
+        query ="""CREATE TABLE MOVIES(
+        MOVIEID SERIAL NOT NULL,
+        TITLE VARCHAR(100),
+        YEAR INTEGER,
+        SCORE FLOAT,
+        VOTES INTEGER,
+        IMDB_URL VARCHAR(2068),
+        PRIMARY KEY(MOVIEID)
+        )
+        """
+        cursor.execute(query)
+        connection.commit()
+
+        return redirect(url_for('page.home_page'))
+
 @app.route('/init_posts_db')
 def init_posts_db():
     with dbapi2.connect(app.config['dsn']) as connection:
