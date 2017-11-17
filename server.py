@@ -14,8 +14,11 @@ from flask_login import login_manager
 from flask_login.login_manager import LoginManager
 from routes import page
 from flask_login.utils import current_user
+from initialize_db import initialize_db_function
+
 
 login_manager = LoginManager()
+
 
 @login_manager.user_loader
 def user_loader(user_id):
@@ -28,7 +31,7 @@ def user_loader(user_id):
             query = "SELECT PASSWORD FROM USERS WHERE (USERNAME = %s)"
             cursor.execute(query, (user_id,))
             password = cursor.fetchone()
-            
+
             user = User(user_id, password, email)
             return user
 
@@ -123,6 +126,15 @@ def init_posts_db():
         connection.commit()
 
         return redirect(url_for('page.home_page'))
+
+
+@app.route('/initdb')
+def initialize_database():
+    with dbapi2.connect(app.config['dsn']) as connection:
+        cursor = connection.cursor()
+        initialize_db_function(cursor)
+        connection.commit()
+    return redirect(url_for('page.home_page'))
 
 if __name__ == '__main__':
     VCAP_APP_PORT = os.getenv('VCAP_APP_PORT')
