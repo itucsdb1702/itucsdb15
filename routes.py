@@ -171,4 +171,16 @@ def update_actor():
 
     return redirect('actors')
 
+@page.route('/delete_actor', methods = ['GET', 'POST'])
+def delete_actor():
 
+    if request.method =='POST':
+        ID = request.form['ID']
+
+        with dbapi2.connect(app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            query = """DELETE FROM ACTORS WHERE ID = '""" +ID + """' """
+            cursor.execute(query)
+            connection.commit()
+
+    return redirect('actors')
