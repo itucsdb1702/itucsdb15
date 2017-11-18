@@ -105,4 +105,24 @@ def signup():
         else:
             return render_template('signup.html')
 
+@page.route('/actors', methods = ['GET', 'POST'])
+def actors():
+
+    stars = []
+    with dbapi2._connect(current_app.config['dsn']) as connection:
+        cursor = connection.cursor()
+        query = """SELECT * FROM ACTORS"""
+
+        cursor.execute(query)
+
+        for star in cursor:
+            stars.append(star)
+
+        connection.commit()
+
+
+    return render_template('actors.html', stars = stars)
+
+
+
 

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset = "UTF-8" />
+		<title> ACTORS </title>
+
+
+
+
+	</head>
+
+	<body>
+
+		<div>
+			<table>
+				<tr>
+					<th> NAME </th>
+					<th> SURNAME </th>
+					<th> GENDER </th>
+					<th> BIRTHDATE </th>
+					<th> COUNTRY </th>
+				</tr>
+				{% for ID, NAME, SURNAME, GENDER, BIRTHDATE, COUNTRY in stars %}
+				<tr>
+					<td>{{ NAME }} </td>
+					<td>{{ SURNAME }} </td>
+					<td>{{ GENDER }} </td>
+					<td>{{ BIRTHDATE }} </td>
+					<td>{{ COUNTRY }} </td>
+				</tr>
+				{% endfor %}
+
+
+
+
+
+			</table>
+
+
+		</div>
+
+
+
+
+
+
+	</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</html>
