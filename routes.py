@@ -15,6 +15,7 @@ from flask_login import login_manager, login_user, logout_user
 from passlib.apps import custom_app_context as pwd_context
 from flask_login.utils import current_user
 from psycopg2.psycopg1 import connection
+from _sqlite3 import connect
 
 
 page = Blueprint('page',__name__)
@@ -149,8 +150,25 @@ def add_actor():
 
     return redirect('actors')
 
+@page.route('/update_actor', methods = ['GET', 'POST'])
+def update_actor():
+
+    if request.method =='POST':
+        ID = request.form['ID']
+        new_NAME = request.form['N_NAME']
+        new_SURNAME = request.form['N_SURNAME']
+        new_GENDER = request.form['N_GENDER']
+        new_BIRTHDATE = request.form['N_BIRTHDATE']
+        new_COUNTRY = request.form['N_COUNTRY']
+
+        with dbapi2.connect(app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            query = """UPDATE ACTORS SET( NAME, SURNAME, GENDER, BIRTHDATE, COUNTRY) = ( %s, %s, %s, %s, %s) WHERE ID = %s"""
+
+            cursor.execute(query, (new_NAME, new_SURNAME, new_GENDER, new_BIRTHDATE, new_COUNTRY, ID))
+            connection.commit()
 
 
-
+    return redirect('actors')
 
 
