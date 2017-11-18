@@ -14,6 +14,7 @@ from classes import UserList
 from flask_login import login_manager, login_user, logout_user
 from passlib.apps import custom_app_context as pwd_context
 from flask_login.utils import current_user
+from psycopg2.psycopg1 import connection
 
 
 page = Blueprint('page',__name__)
@@ -122,6 +123,33 @@ def actors():
 
 
     return render_template('actors.html', stars = stars)
+
+
+@page.route('/add_actor', methods = ['GET', 'POST'])
+def add_actor():
+
+    with dbapi2._connect(current_app.config['dsn']) as connection:
+        cursor = connection.cursor()
+
+
+    if request.method == 'POST':
+        NAME = request.form['NAME']
+        SURNAME = request.form['SURNAME']
+        GENDER = request.form['GENDER']
+        BIRTHDATE = request.form['BIRTHDATE']
+        COUNTRY = request.form['COUNTRY']
+
+
+        with dbapi2.connect(app.config['dsn']) as connection:
+            cursor = connection.cursor()
+
+            query = """INSERT INTO ACTORS (NAME, SURNAME, GENDER, BIRTHDATE, COUNTRY) VALUES (%s, %s, %s, %s, %s)"""
+            cursor.execute(query, (NAME, SURNAME, GENDER, BIRTHDATE, COUNTRY))
+            connection.commit()
+
+    return redirect('actors')
+
+
 
 
 

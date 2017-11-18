@@ -4,10 +4,6 @@
 	<head>
 		<meta charset = "UTF-8" />
 		<title> ACTORS </title>
-
-
-
-
 	</head>
 
 	<body>
@@ -15,6 +11,7 @@
 		<div>
 			<table>
 				<tr>
+					<th> ID </th>
 					<th> NAME </th>
 					<th> SURNAME </th>
 					<th> GENDER </th>
@@ -23,6 +20,7 @@
 				</tr>
 				{% for ID, NAME, SURNAME, GENDER, BIRTHDATE, COUNTRY in stars %}
 				<tr>
+					<td>{{ ID }} </td>
 					<td>{{ NAME }} </td>
 					<td>{{ SURNAME }} </td>
 					<td>{{ GENDER }} </td>
@@ -30,11 +28,6 @@
 					<td>{{ COUNTRY }} </td>
 				</tr>
 				{% endfor %}
-
-
-
-
-
 			</table>
 
 
@@ -42,21 +35,21 @@
 
 
 
+	  <div>
+      <form action = "/add_actor" method="post" id = "addactor">
+        NAME: <input type = "text" name = "NAME"><br>
+        SURNAME: <input type = "text" name = "SURNAME"><br>
+        GENDER: <input type = "text" name = "GENDER"><br>
+        BIRTHDATE: <input type = "text" name = "BIRTHDATE"><br>
+        COUNTRY: <input type = "text" name = "COUNTRY"><br>
+      </form>
+
+      <button type="submit" form="addactor" value="Submit">Add</button>
+    </div>
 
 
 
 	</body>
-
-
-
-
-
-
-
-
-
-
-
 
 
 
