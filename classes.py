@@ -5,7 +5,6 @@ from flask import flash
 from flask_login import login_manager, login_user, logout_user
 from passlib.apps import custom_app_context as pwd_context
 from flask_login.login_manager import LoginManager
-from pygments.lexers.csound import CsoundScoreLexer
 import requests
 
 class User(UserMixin):
