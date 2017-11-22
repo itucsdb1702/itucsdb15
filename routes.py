@@ -1,4 +1,6 @@
 import datetime
+import string
+import requests
 import os
 import json
 import re
@@ -11,6 +13,7 @@ from flask import request, current_app
 from flask import current_app as app
 from classes import User
 from classes import UserList
+from classes import Movie
 from flask_login import login_manager, login_user, logout_user
 from passlib.apps import custom_app_context as pwd_context
 from flask_login.utils import current_user
@@ -27,6 +30,7 @@ def home_page():
 @page.route('/home')
 def home_page_1():
     return render_template('home.html')
+
 
 @page.route('/login', methods = ['GET', 'POST'])
 def login_page():
@@ -184,3 +188,45 @@ def delete_actor():
             connection.commit()
 
     return redirect('actors')
+
+@page.route('/movies', methods = ['GET', 'POST'])
+def movies_page():
+
+    
+    if request.method == "POST":
+        movie = Movie(request.form['title'].title(), "", "", "", "")
+        score = request.form['score']
+    
+        #checks if user is logged in
+        if current_user.get_id() is not None:
+            
+            if(movie.search_movie_in_db() == 0):
+                movieToAdd = movie
+                flash(movieToAdd.title + " is added to your watched list.")
+                return redirect(url_for('page.home_page'))
+            
+            else:
+                if (movie.verify_movie_from_api() == -1):
+                    flash("There is no such movie")
+                    return redirect(url_for('page.home_page'))
+                else:
+                    movieToAdd = movie.verify_movie_from_api()
+                    movieToAdd.score = score
+                    
+                    movieToAdd.add_movie_to_db()
+    
+                    flash(movieToAdd.title + " ("+ movieToAdd.year+") is added to your watched list.")
+                    return redirect(url_for('page.home_page'))
+    
+        else:
+            flash("Please log in to MovieShake")
+            return redirect(url_for('page.login_page'))
+    else:
+        if current_user.get_id() is not None:
+            return render_template('movies.html')
+        else:
+            flash("Please log in to MovieShake")
+            return redirect(url_for('page.login_page'))
+
+
+

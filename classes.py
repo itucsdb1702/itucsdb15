@@ -5,6 +5,8 @@ from flask import flash
 from flask_login import login_manager, login_user, logout_user
 from passlib.apps import custom_app_context as pwd_context
 from flask_login.login_manager import LoginManager
+from pygments.lexers.csound import CsoundScoreLexer
+import requests
 
 class User(UserMixin):
     def __init__(self, username, email, password):
@@ -67,4 +69,51 @@ class UserList:
                     return -1
             else:
                 return -1
+            
+class Movie:
+    def __init__(self, title, year, score, votes, imdb_url):
+        self.title = title
+        self.year = year
+        self.score = score
+        self.votes = votes
+        self.imdb_url = imdb_url
+        
+    def search_movie_in_db(self):
+        with dbapi2.connect(app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            query = "SELECT MOVIEID FROM MOVIES WHERE (TITLE = %s)"
+            cursor.execute(query, (self.title, ))
+            movie = cursor.fetchone()
+            if movie is not None:
+                return 0
+            else:
+                return -1
+    
+    def verify_movie_from_api(self):
+        
+        title = self.title.replace(' ', '+')
+        url = "http://www.omdbapi.com/?apikey=e5ccb3ca&t="+ self.title
+        response = requests.get(url).json()
+    
+        if(response['Response'] == "False"):
+            return -1
+        
+        else:
+            title = response['Title']
+            year = response['Year']
+            votes = 1
+            imdb_url = "http://www.imdb.com/title/" + response['imdbID']
+            
+            movie = Movie(title, year, "", votes, imdb_url)
+            
+            return movie
+        
+    def add_movie_to_db(self):
+        with dbapi2.connect(app.config['dsn']) as connection:
+                    cursor = connection.cursor()
+                    query = """INSERT INTO MOVIES (TITLE, YEAR, SCORE, VOTES, IMDB_URL) 
+                    VALUES (%s, %s, %s, %s, %s)"""
+    
+                    cursor.execute(query, (self.title, self.year, self.score, self.votes, self.imdb_url))
+                    connection.commit()
 
