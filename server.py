@@ -74,6 +74,19 @@ def init_user_db():
         EMAIL VARCHAR(50),
         POST_ID INTEGER,
         PRIMARY KEY(ID)
+        UNIQUE (USERNAME)
+        )"""
+        cursor.execute(query)
+    return redirect(url_for('page.home_page'))
+
+@app.route('/make_username_unique')
+def unique_username():
+    with dbapi2.connect(app.config['dsn']) as connection:
+        cursor = connection.cursor()
+        
+
+        query = """ALTER TABLE USERS
+            ADD UNIQUE (USERNAME);
         )"""
         cursor.execute(query)
     return redirect(url_for('page.home_page'))
@@ -99,6 +112,8 @@ def init_movies_db():
         connection.commit()
 
         return redirect(url_for('page.home_page'))
+
+
 
 @app.route('/init_posts_db')
 def init_posts_db():
@@ -128,6 +143,28 @@ def init_posts_db():
 
         return redirect(url_for('page.home_page'))
 
+@app.route('/init_watchedlist_db')
+def init_watchedlist_db():
+    with dbapi2.connect(app.config['dsn']) as connection:
+        cursor = connection.cursor()
+        query = "DROP TABLE IF EXISTS WATCHEDLIST"
+        cursor.execute(query)
+
+        query = """CREATE TABLE WATCHEDLIST (
+            USERNAME VARCHAR(30),
+            MOVIEID INT,
+            SCORE INT,
+            CONSTRAINT PAIR PRIMARY KEY (USERNAME,MOVIEID),
+                FOREIGN KEY (USERNAME) REFERENCES USERS(USERNAME),
+                FOREIGN KEY (MOVIEID) REFERENCES MOVIES(MOVIEID),
+                CASCADE
+        )
+        """
+        cursor.execute(query)
+
+        connection.commit()
+
+        return redirect(url_for('page.home_page'))
 
 @app.route('/initdb')
 def initialize_database():

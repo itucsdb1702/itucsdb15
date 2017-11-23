@@ -83,8 +83,33 @@ class Movie:
             query = "SELECT MOVIEID FROM MOVIES WHERE (TITLE = %s)"
             cursor.execute(query, (self.title, ))
             movie = cursor.fetchone()
+
             if movie is not None:
-                return 0
+                return movie
+            else:
+                return -1
+    
+    def getscore_in_movie_db(self, movieid):
+        with dbapi2.connect(app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            query = "SELECT SCORE FROM MOVIES WHERE (MOVIEID = %s)"
+            cursor.execute(query, (movieid, ))
+            movie = cursor.fetchone()
+
+            if movie is not None:
+                return movie
+            else:
+                return -1
+    
+    def getvotes_in_movie_db(self, movieid):
+        with dbapi2.connect(app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            query = "SELECT VOTES FROM MOVIES WHERE (MOVIEID = %s)"
+            cursor.execute(query, (movieid, ))
+            movie = cursor.fetchone()
+
+            if movie is not None:
+                return movie
             else:
                 return -1
     
@@ -115,4 +140,46 @@ class Movie:
     
                     cursor.execute(query, (self.title, self.year, self.score, self.votes, self.imdb_url))
                     connection.commit()
+                    
+    def update_votes_and_score(self, movieid, score, votes):
+        with dbapi2.connect(app.config['dsn']) as connection:
+                    cursor = connection.cursor()
+                    query = """UPDATE MOVIES
+                            SET SCORE = %s, VOTES= %s
+                            WHERE MOVIEID = %s;"""
+    
+                    cursor.execute(query, (score, votes, movieid))
+                    connection.commit()
+        
+        
+        
+class WatchedList:
+    def __init__(self, username, movieid, score):          
+        self.username = username
+        self.movieid = movieid
+        self.score = score
+    
+    def add_movie_user_pair(self):
+            with dbapi2.connect(app.config['dsn']) as connection:
+                    cursor = connection.cursor()
+                    query = """INSERT INTO WATCHEDLIST (USERNAME, MOVIEID, SCORE) 
+                    VALUES (%s, %s, %s)"""
+    
+                    cursor.execute(query, (self.username, self.movieid, self.score))
+                    connection.commit()
+    def existsInWatchedList(self):
+         with dbapi2.connect(app.config['dsn']) as connection:
+                    cursor = connection.cursor()
+                    query = """SELECT MOVIEID FROM WATCHEDLIST WHERE ((USERNAME = %s) AND (MOVIEID = %s)) """
+    
+                    cursor.execute(query, (self.username, self.movieid))
+                    id = cursor.fetchone()
+                    
+                    if id is None:
+                        return False
+                    else:
+                        return True
+    
 
+
+    

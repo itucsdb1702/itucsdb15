@@ -14,11 +14,13 @@ from flask import current_app as app
 from classes import User
 from classes import UserList
 from classes import Movie
+from classes import WatchedList
 from flask_login import login_manager, login_user, logout_user
 from passlib.apps import custom_app_context as pwd_context
 from flask_login.utils import current_user
 from psycopg2.psycopg1 import connection
 from _sqlite3 import connect
+from multiprocessing import current_process
 
 
 page = Blueprint('page',__name__)
@@ -38,7 +40,7 @@ def login_page():
     if request.method == "POST":
 
         if current_user.get_id() is not None:
-            flash('You are already logged in MovieShake as ' + current_user.get_id())
+            flash('You are already logged in MovieShake as ' + current_user.username)
             return redirect(url_for('page.home_page'))
         else:
 
@@ -200,13 +202,36 @@ def movies_page():
         #checks if user is logged in
         if current_user.get_id() is not None:
             
-            if(movie.search_movie_in_db() == 0):
-                movieToAdd = movie
-                flash(movieToAdd.title + " is added to your watched list.")
-                return redirect(url_for('page.home_page'))
+            if(movie.search_movie_in_db() != -1):
+                movieId = movie.search_movie_in_db()
+                userMoviePair = WatchedList(current_user.username, movieId, score)
+                                
+                if (userMoviePair.existsInWatchedList() is True):
+                    flash("You have already added "+ movie.title+".")
+                    return redirect(url_for('page.home_page'))
+                
+                else:
+                    userMoviePair.add_movie_user_pair()
+                    
+                    #score and vote need to be updated on movies table
+                    oldscore = int(movie.getscore_in_movie_db(movieId)[0])
+                    totalVotes = int(movie.getvotes_in_movie_db(movieId)[0])
+                    
+                    newscore = ((oldscore*totalVotes)+int(score))/(totalVotes + 1)
+                    totalVotes = totalVotes + 1
+                    
+                    print(newscore)
+                    print(totalVotes)
+                    
+                    movie.update_votes_and_score(movieId, newscore, totalVotes)
+                    
+                    flash(movie.title + " is added to your watched list.")
+                    return redirect(url_for('page.home_page'))
+    
             
             else:
-                if (movie.verify_movie_from_api() == -1):
+                movieToAdd = movie.verify_movie_from_api()
+                if (movieToAdd == -1):
                     flash("There is no such movie")
                     return redirect(url_for('page.home_page'))
                 else:
@@ -216,6 +241,11 @@ def movies_page():
                     movieToAdd.add_movie_to_db()
     
                     flash(movieToAdd.title + " ("+ movieToAdd.year+") is added to your watched list.")
+                    
+                    movieId = movieToAdd.search_movie_in_db()
+                    userMoviePair = WatchedList(current_user.username, movieId, score)
+                    userMoviePair.add_movie_user_pair()
+                                        
                     return redirect(url_for('page.home_page'))
     
         else:
@@ -227,6 +257,33 @@ def movies_page():
         else:
             flash("Please log in to MovieShake")
             return redirect(url_for('page.login_page'))
+        
+@page.route("/profile")
+def profile_page():
+    
+    #UI not added yet.
+    
+    if current_user.get_id() is not None:
+         list = get_watchedlist_by_user(current_user.username)
+         flash(list)
+         return render_template('profile.html')
+    else:
+        flash("Please log in to MovieShake")
+        return redirect(url_for('page.login_page'))
 
 
 
+def get_watchedlist_by_user(username):
+        with dbapi2.connect(app.config['dsn']) as connection:
+                    cursor = connection.cursor()
+                    query = """SELECT TITLE, YEAR, m.SCORE, VOTES, IMDB_URL FROM MOVIES m
+                                 INNER JOIN WATCHEDLIST w ON (m.MOVIEID = w.MOVIEID)
+                                 WHERE (w.USERNAME = %s) """
+    
+                    cursor.execute(query, (username, ))
+                    info = cursor.fetchall()
+                    
+                    if info is None:
+                        return -1
+                    else:
+                        return info
