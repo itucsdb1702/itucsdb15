@@ -73,7 +73,7 @@ def init_user_db():
         PASSWORD VARCHAR(250),
         EMAIL VARCHAR(50),
         POST_ID INTEGER,
-        PRIMARY KEY(ID)
+        PRIMARY KEY(ID),
         UNIQUE (USERNAME)
         )"""
         cursor.execute(query)
@@ -86,8 +86,8 @@ def unique_username():
         
 
         query = """ALTER TABLE USERS
-            ADD UNIQUE (USERNAME);
-        )"""
+            ADD UNIQUE (USERNAME)
+        """
         cursor.execute(query)
     return redirect(url_for('page.home_page'))
 
@@ -150,16 +150,12 @@ def init_watchedlist_db():
         query = "DROP TABLE IF EXISTS WATCHEDLIST"
         cursor.execute(query)
 
-        query = """CREATE TABLE WATCHEDLIST (
-            USERNAME VARCHAR(30),
-            MOVIEID INT,
-            SCORE INT,
-            CONSTRAINT PAIR PRIMARY KEY (USERNAME,MOVIEID),
+        query = """CREATE TABLE WATCHEDLIST (USERNAME VARCHAR(30) NOT NULL,
+            MOVIEID INT NOT NULL,
+            SCORE INT, CONSTRAINT PAIR PRIMARY KEY (USERNAME,MOVIEID),
                 FOREIGN KEY (USERNAME) REFERENCES USERS(USERNAME),
-                FOREIGN KEY (MOVIEID) REFERENCES MOVIES(MOVIEID),
-                CASCADE
-        )
-        """
+                FOREIGN KEY (MOVIEID) REFERENCES MOVIES(MOVIEID)
+        )"""
         cursor.execute(query)
 
         connection.commit()
