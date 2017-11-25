@@ -198,7 +198,11 @@ def movies_page():
     if request.method == "POST":
         movie = Movie(request.form['title'].title(), "", "", "", "")
         score = request.form['score']
-    
+        
+        if int(score)<1 or int(score)>10:
+            flash("Your rating to the movie should be between 1 and 10.")
+            return redirect(url_for('page.movies_page'))
+        
         #checks if user is logged in
         if current_user.get_id() is not None:
             
@@ -219,9 +223,6 @@ def movies_page():
                     
                     newscore = ((oldscore*totalVotes)+int(score))/(totalVotes + 1)
                     totalVotes = totalVotes + 1
-                    
-                    print(newscore)
-                    print(totalVotes)
                     
                     movie.update_votes_and_score(movieId, newscore, totalVotes)
                     
