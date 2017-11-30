@@ -299,5 +299,5 @@ def UserList():
         connection.commit()
 
     
-    return render_template('table.html', users = users)
+    return render_template('userlist.html', users = users)
 
