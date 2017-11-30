@@ -13,26 +13,30 @@
 <div class="container">
   <h2>Users</h2>
   <p>The user list is below.</p>                                                                                      
-  <div class="table-responsive">          
+  <div class="table-responsive">        
   <table class="table">
     <thead>
       <tr>
-        <th>Username</th>
-        <th>Email</th>
+      	<th id='id'>User Id</th>
+        <th id='username'>Username</th>
+        <th id='email'>Email</th>
       </tr>
     </thead>
     <tbody>
-    {% for USERNAME, EMAIL in users %}
+    {% for USERID, USERNAME, EMAIL in users %}
       <tr>
-        <td>{{ USERNAME }}</td>
+      	<td>{{ USERID }}<br></td>
+        <td>{{ USERNAME }}<br></td>
         <td>{{ EMAIL }}</td>
-        <td><button type="button" class="btn btn-primary">Follow</button></td>
+        <td><button onclick="location.href = '{{ url_for('page.Follow', id=USERID) }}'" type ="submit" class = "btn btn-danger"> Follow </button></td>
+        <td><button onclick="location.href = '{{ url_for('page.Unfollow', id=USERID) }}'" type ="submit" class = "btn btn-danger"> Unfollow </button></td>
       </tr>
     {% endfor %}
     </tbody>
   </table>
   </div>
 </div>
+
 
 </body>
 {% endblock %}

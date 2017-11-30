@@ -221,9 +221,9 @@ class FollowerPair:
             with dbapi2.connect(app.config['dsn']) as connection:
                     cursor = connection.cursor()
                     query = """DELETE FROM FOLLOWERS
-                                WHERE((FOLLOWING_USER_ID = %S) AND (FOLLOWED_USER_ID = %S))"""
+                                WHERE((FOLLOWING_USER_ID = %s) AND (FOLLOWED_USER_ID = %s))"""
                     
-                    cursor.execute(query, (self.following_id, self.follower_id))
+                    cursor.execute(query, (self.following_id, self.followed_id,))
                     connection.commit()
     
     def get_following_users_by_userid(self):

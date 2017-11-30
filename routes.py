@@ -15,6 +15,7 @@ from classes import User
 from classes import UserList
 from classes import Movie
 from classes import WatchedList
+from classes import FollowerPair
 from flask_login import login_manager, login_user, logout_user
 from passlib.apps import custom_app_context as pwd_context
 from flask_login.utils import current_user
@@ -261,9 +262,7 @@ def movies_page():
         
 @page.route("/profile")
 def profile_page():
-    
-    #UI not added yet.
-    
+        
     if current_user.get_id() is not None:
          movies = []
          with dbapi2._connect(current_app.config['dsn']) as connection:
@@ -284,20 +283,37 @@ def profile_page():
         return redirect(url_for('page.login_page'))
 
 
-@page.route("/userlist")
+@page.route("/userlist", methods = ['GET', 'POST'])
 def UserList():
-    users = []
-    with dbapi2._connect(current_app.config['dsn']) as connection:
-        cursor = connection.cursor()
-        query = """SELECT USERNAME, EMAIL FROM USERS"""
-
-        cursor.execute(query)
-
-        for user in cursor:
-            users.append(user)
-
-        connection.commit()
-
     
-    return render_template('userlist.html', users = users)
+        users = []
+        with dbapi2._connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            query = """SELECT ID, USERNAME, EMAIL FROM USERS"""
+    
+            cursor.execute(query)
+    
+            for user in cursor:
+                users.append(user)
+    
+            connection.commit()
+    
+        
+        return render_template('userlist.html', users = users)
+@page.route("/follow/<id>")
+def Follow(id):
+    user = User(current_user.username, "","")
+    followingid = user.get_user_id()
+    
+    follower_pair = FollowerPair(followingid, id)
+    follower_pair.new_follow()
+    return redirect(url_for('page.home_page'))
 
+@page.route("/unfollow/<id>")
+def Unfollow(id):
+    user = User(current_user.username, "","")
+    followingid = user.get_user_id()
+    
+    follower_pair = FollowerPair(followingid, id)
+    follower_pair.unfollow()
+    return redirect(url_for('page.home_page'))
