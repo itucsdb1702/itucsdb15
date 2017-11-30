@@ -162,6 +162,25 @@ def init_watchedlist_db():
 
         return redirect(url_for('page.home_page'))
 
+@app.route('/init_followers_db')    
+def init_followers_db():
+    with dbapi2.connect(app.config['dsn']) as connection:
+        cursor = connection.cursor()
+        query = "DROP TABLE IF EXISTS FOLLOWERS"
+        cursor.execute(query)
+
+        query = """CREATE TABLE FOLLOWERS (FRIENDSHIP_ID SERIAL NOT NULL,
+            FOLLOWING_USER_ID INT NOT NULL,
+            FOLLOWED_USER_ID INT, CONSTRAINT FRIENDSHIP UNIQUE (FOLLOWING_USER_ID,FOLLOWED_USER_ID),
+                FOREIGN KEY (FOLLOWING_USER_ID) REFERENCES USERS(ID),
+                FOREIGN KEY (FOLLOWED_USER_ID) REFERENCES USERS(ID)
+            ON DELETE CASCADE
+        )"""
+        cursor.execute(query)
+
+        connection.commit()
+
+        return redirect(url_for('page.home_page'))
 @app.route('/initdb')
 def initialize_database():
     with dbapi2.connect(app.config['dsn']) as connection:

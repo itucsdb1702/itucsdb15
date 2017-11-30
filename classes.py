@@ -27,6 +27,21 @@ class User(UserMixin):
                 return
             else:
                 return self.username
+    
+    def get_user_id(self):
+        with dbapi2._connect(app.config['dsn']) as connection:
+
+            cursor = connection.cursor()
+
+            query = "SELECT ID FROM USERS WHERE (USERNAME = %s)"
+
+            cursor.execute(query, (self.username,))
+
+            userid = cursor.fetchone()
+            if userid is None:
+                return
+            else:
+                return userid
      
     def is_active(self):
         # Here you should write whatever the code is
@@ -179,7 +194,44 @@ class WatchedList:
                         return False
                     else:
                         return True
+    def delete_from_watched_list(self):
+            with dbapi2.connect(app.config['dsn']) as connection:
+                    cursor = connection.cursor()
+                    query = """DELETE FROM WATCHEDLIST
+                                WHERE((USERNAME = %S) AND (MOVIEID = %S))"""
     
+                    cursor.execute(query, (self.username, self.movieid))
+                    connection.commit()
 
-
+class FollowerPair:
+    def __init__(self, following_id, followed_id):          
+        self.following_id = following_id
+        self.followed_id = followed_id
     
+    def new_follow(self):
+            with dbapi2.connect(app.config['dsn']) as connection:
+                    cursor = connection.cursor()
+                    query = """INSERT INTO FOLLOWERS (FOLLOWING_USER_ID, FOLLOWED_USER_ID) 
+                    VALUES (%s, %s)"""
+                    
+                    cursor.execute(query, (self.following_id, self.followed_id))
+                    connection.commit()
+    
+    def unfollow(self):
+            with dbapi2.connect(app.config['dsn']) as connection:
+                    cursor = connection.cursor()
+                    query = """DELETE FROM FOLLOWERS
+                                WHERE((FOLLOWING_USER_ID = %S) AND (FOLLOWED_USER_ID = %S))"""
+                    
+                    cursor.execute(query, (self.following_id, self.follower_id))
+                    connection.commit()
+    
+    def get_following_users_by_userid(self):
+            with dbapi2.connect(app.config['dsn']) as connection:
+                    cursor = connection.cursor()
+                    query = """SELECT FOLLOWED_USER_ID FROM FOLLOWERS
+                                WHERE(FOLLOWING_USER_ID = %S)"""
+                    
+                    cursor.execute(query, (self.following_id,))
+                    connection.commit()
+        

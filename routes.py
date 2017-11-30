@@ -263,6 +263,7 @@ def movies_page():
 def profile_page():
     
     #UI not added yet.
+    user = User(current_user.username, "", "")
     
     if current_user.get_id() is not None:
          list = get_watchedlist_by_user(current_user.username)
