@@ -265,26 +265,39 @@ def profile_page():
     #UI not added yet.
     
     if current_user.get_id() is not None:
-         list = get_watchedlist_by_user(current_user.username)
-         flash(list)
-         return render_template('profile.html')
+         movies = []
+         with dbapi2._connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            query = """SELECT TITLE, YEAR, m.SCORE, VOTES, IMDB_URL FROM MOVIES m
+                                 INNER JOIN WATCHEDLIST w ON (m.MOVIEID = w.MOVIEID)
+                                 WHERE (w.USERNAME = %s) """
+    
+            cursor.execute(query, (current_user.username, ))
+    
+            for movie in cursor:
+                movies.append(movie)
+    
+            connection.commit()
+         return render_template('profile.html', movies = movies)
     else:
         flash("Please log in to MovieShake")
         return redirect(url_for('page.login_page'))
 
 
+@page.route("/userlist")
+def UserList():
+    users = []
+    with dbapi2._connect(current_app.config['dsn']) as connection:
+        cursor = connection.cursor()
+        query = """SELECT USERNAME, EMAIL FROM USERS"""
 
-def get_watchedlist_by_user(username):
-        with dbapi2.connect(app.config['dsn']) as connection:
-                    cursor = connection.cursor()
-                    query = """SELECT TITLE, YEAR, m.SCORE, VOTES, IMDB_URL FROM MOVIES m
-                                 INNER JOIN WATCHEDLIST w ON (m.MOVIEID = w.MOVIEID)
-                                 WHERE (w.USERNAME = %s) """
+        cursor.execute(query)
+
+        for user in cursor:
+            users.append(user)
+
+        connection.commit()
+
     
-                    cursor.execute(query, (username, ))
-                    info = cursor.fetchall()
-                    
-                    if info is None:
-                        return -1
-                    else:
-                        return info
+    return render_template('table.html', users = users)
+
