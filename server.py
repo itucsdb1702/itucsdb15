@@ -83,7 +83,7 @@ def init_user_db():
 def unique_username():
     with dbapi2.connect(app.config['dsn']) as connection:
         cursor = connection.cursor()
-        
+
 
         query = """ALTER TABLE USERS
             ADD UNIQUE (USERNAME)
@@ -153,8 +153,8 @@ def init_watchedlist_db():
         query = """CREATE TABLE WATCHEDLIST (USERNAME VARCHAR(30) NOT NULL,
             MOVIEID INT NOT NULL,
             SCORE INT, CONSTRAINT PAIR PRIMARY KEY (USERNAME,MOVIEID),
-                FOREIGN KEY (USERNAME) REFERENCES USERS(USERNAME),
-                FOREIGN KEY (MOVIEID) REFERENCES MOVIES(MOVIEID)
+                FOREIGN KEY (USERNAME) REFERENCES USERS(USERNAME)ON DELETE CASCADE ON UPDATE CASCADE,
+                FOREIGN KEY (MOVIEID) REFERENCES MOVIES(MOVIEID) ON DELETE CASCADE ON UPDATE CASCADE
         )"""
         cursor.execute(query)
 
@@ -162,7 +162,7 @@ def init_watchedlist_db():
 
         return redirect(url_for('page.home_page'))
 
-@app.route('/init_followers_db')    
+@app.route('/init_followers_db')
 def init_followers_db():
     with dbapi2.connect(app.config['dsn']) as connection:
         cursor = connection.cursor()

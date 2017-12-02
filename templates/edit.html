@@ -1,0 +1,81 @@
+<head>
+<link rel="stylesheet" type="text/css" href="static/login.css">
+</head>
+{% extends 'base.html' %} {% block content %}
+
+<div class="row">
+	<div class="col-md-3"></div>
+	<div class="col-md-6">
+		<div class="panel with-nav-tabs panel-info">
+
+
+			<div class="panel-body">
+				<div class="tab-content">
+					<form method="POST" action=" {{ url_for('page.edit_profile') }}">
+						<div id="signup" class="tab-pane fade in active register">
+							<div class="container-fluid">
+								<div class="row">
+									<h2 class="text-center" style="color: #f0ad4e;">
+										<Strong> Edit </Strong>
+									</h2>
+									<hr />
+									<div class="row">
+										<div class="col-xs-12 col-sm-12 col-md-12">
+											<div class="form-group">
+												<div class="input-group">
+													<div class="input-group-addon iga1">
+														<span class="glyphicon glyphicon-user"></span>
+													</div>
+													<input type="text" class="form-control"
+														placeholder="New Username" name="username">
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-xs-12 col-sm-12 col-md-12">
+											<div class="form-group">
+												<div class="input-group">
+													<div class="input-group-addon iga1">
+														<span class="glyphicon glyphicon-envelope"></span>
+													</div>
+													<input type="email" class="form-control"
+														placeholder="New E-mail" name="email">
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-xs-12 col-sm-12 col-md-12">
+											<div class="form-group">
+												<div class="input-group">
+													<div class="input-group-addon iga1">
+														<span class="glyphicon glyphicon-lock"></span>
+													</div>
+													<input type="password" class="form-control"
+														placeholder="New Password" name="password">
+												</div>
+											</div>
+										</div>
+									</div>
+									<hr>
+									<div class="row">
+										<div class="col-xs-12 col-sm-12 col-md-12">
+											<div class="form-group">
+												<button type="submit"
+													class="btn btn-lg btn-block btn-warning">Update</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</form>
+{% endblock %}

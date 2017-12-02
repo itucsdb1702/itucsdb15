@@ -82,8 +82,51 @@ def logout():
     else:
         flash("You're not logged in.")
 
-    return redirect(url_for('page.home_page'))
+    return redirect(url_for('page.login_page'))
 
+@page.route("/edit_profile", methods = ['GET', 'POST'])
+def edit_profile():
+    if request.method == "GET":
+        if current_user.get_id() is not None:
+            return render_template('edit.html')
+        else:
+            flash("You're not logged in.")
+            return redirect(url_for('page.login_page'))
+    else:
+        if current_user.get_id() is not None:
+            new_username = request.form['username']
+            new_email = request.form['email']
+            new_password = request.form['password']
+
+            with dbapi2._connect(current_app.config['dsn']) as connection:
+                cursor = connection.cursor()
+                query = "SELECT ID FROM USERS WHERE (USERNAME = %s)"
+                cursor.execute(query, (new_username,))
+                user1 = cursor.fetchone()
+                query = "SELECT ID FROM USERS WHERE (EMAIL =%s)"
+                cursor.execute(query,(new_email,))
+                user2 = cursor.fetchone()
+                if user1 is not None or user2 is not None:
+                    if user1 is not None:
+                        flash('Please choose a unique Username')
+                    if user2 is not None:
+                        flash('Please choose a unique E-mail.')
+                    return redirect(url_for('page.edit_profile'))
+
+            new_password_encrypted = pwd_context.encrypt(new_password)
+
+            with dbapi2.connect(app.config['dsn']) as connection:
+                       cursor = connection.cursor()
+                       query = """UPDATE USERS
+                                SET USERNAME = %s, EMAIL = %s, PASSWORD = %s
+                                WHERE USERNAME = %s;"""
+
+                       cursor.execute(query, (new_username, new_email, new_password_encrypted,current_user.username))
+                       connection.commit()
+            return redirect(url_for('page.home_page'))
+        else:
+            flash("You're not logged in.")
+            return redirect(url_for('page.login_page'))
 
 @page.route('/signup', methods = ['GET', 'POST'])
 def signup():
@@ -195,42 +238,42 @@ def delete_actor():
 @page.route('/movies', methods = ['GET', 'POST'])
 def movies_page():
 
-    
+
     if request.method == "POST":
         movie = Movie(request.form['title'].title(), "", "", "", "")
         score = request.form['score']
-        
+
         if int(score)<1 or int(score)>10:
             flash("Your rating to the movie should be between 1 and 10.")
             return redirect(url_for('page.movies_page'))
-        
+
         #checks if user is logged in
         if current_user.get_id() is not None:
-            
+
             if(movie.search_movie_in_db() != -1):
                 movieId = movie.search_movie_in_db()
                 userMoviePair = WatchedList(current_user.username, movieId, score)
-                                
+
                 if (userMoviePair.existsInWatchedList() is True):
                     flash("You have already added "+ movie.title+".")
                     return redirect(url_for('page.home_page'))
-                
+
                 else:
                     userMoviePair.add_movie_user_pair()
-                    
+
                     #score and vote need to be updated on movies table
                     oldscore = int(movie.getscore_in_movie_db(movieId)[0])
                     totalVotes = int(movie.getvotes_in_movie_db(movieId)[0])
-                    
+
                     newscore = ((oldscore*totalVotes)+int(score))/(totalVotes + 1)
                     totalVotes = totalVotes + 1
-                    
+
                     movie.update_votes_and_score(movieId, newscore, totalVotes)
-                    
+
                     flash(movie.title + " is added to your watched list.")
                     return redirect(url_for('page.home_page'))
-    
-            
+
+
             else:
                 movieToAdd = movie.verify_movie_from_api()
                 if (movieToAdd == -1):
@@ -239,17 +282,17 @@ def movies_page():
                 else:
                     movieToAdd = movie.verify_movie_from_api()
                     movieToAdd.score = score
-                    
+
                     movieToAdd.add_movie_to_db()
-    
+
                     flash(movieToAdd.title + " ("+ movieToAdd.year+") is added to your watched list.")
-                    
+
                     movieId = movieToAdd.search_movie_in_db()
                     userMoviePair = WatchedList(current_user.username, movieId, score)
                     userMoviePair.add_movie_user_pair()
-                                        
+
                     return redirect(url_for('page.home_page'))
-    
+
         else:
             flash("Please log in to MovieShake")
             return redirect(url_for('page.login_page'))
@@ -259,10 +302,10 @@ def movies_page():
         else:
             flash("Please log in to MovieShake")
             return redirect(url_for('page.login_page'))
-        
+
 @page.route("/profile")
 def profile_page():
-        
+
     if current_user.get_id() is not None:
          movies = []
          with dbapi2._connect(current_app.config['dsn']) as connection:
@@ -270,12 +313,12 @@ def profile_page():
             query = """SELECT TITLE, YEAR, m.SCORE, VOTES, IMDB_URL FROM MOVIES m
                                  INNER JOIN WATCHEDLIST w ON (m.MOVIEID = w.MOVIEID)
                                  WHERE (w.USERNAME = %s) """
-    
+
             cursor.execute(query, (current_user.username, ))
-    
+
             for movie in cursor:
                 movies.append(movie)
-    
+
             connection.commit()
          return render_template('profile.html', movies = movies)
     else:
@@ -285,26 +328,26 @@ def profile_page():
 
 @page.route("/userlist", methods = ['GET', 'POST'])
 def UserList():
-    
+
         users = []
         with dbapi2._connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """SELECT ID, USERNAME, EMAIL FROM USERS"""
-    
+
             cursor.execute(query)
-    
+
             for user in cursor:
                 users.append(user)
-    
+
             connection.commit()
-    
-        
+
+
         return render_template('userlist.html', users = users)
 @page.route("/follow/<id>")
 def Follow(id):
     user = User(current_user.username, "","")
     followingid = user.get_user_id()
-    
+
     follower_pair = FollowerPair(followingid, id)
     follower_pair.new_follow()
     return redirect(url_for('page.home_page'))
@@ -313,7 +356,7 @@ def Follow(id):
 def Unfollow(id):
     user = User(current_user.username, "","")
     followingid = user.get_user_id()
-    
+
     follower_pair = FollowerPair(followingid, id)
     follower_pair.unfollow()
     return redirect(url_for('page.home_page'))
