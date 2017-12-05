@@ -16,6 +16,7 @@ from classes import UserList
 from classes import Movie
 from classes import WatchedList
 from classes import FollowerPair
+from classes import MovieList
 from flask_login import login_manager, login_user, logout_user
 from passlib.apps import custom_app_context as pwd_context
 from flask_login.utils import current_user
@@ -373,3 +374,55 @@ def Unfollow(id):
     else:
         follower_pair.unfollow()
         return redirect(url_for('page.home_page'))
+    
+@page.route("/list", methods = ['GET', 'POST'])
+def list_page():
+    if request.method == "POST":
+        
+        flag = False
+
+        if current_user.username is None:
+            flash('Please log in.')
+            return redirect(url_for('page.login_page'))
+        else:
+
+            list_name = request.form['name']
+            movie1 = request.form['moviename1']
+            movie2 = request.form['moviename2']
+            movie3 = request.form['moviename3']
+            movie4 = request.form['moviename4']
+            
+            list_array = [movie1.title(),movie2.title(),movie3.title(),movie4.title()]
+                        
+            smovie = Movie(list_array[0], "", "", "", "" )
+            movie = smovie.search_movie_in_db()
+            newlist = MovieList(current_user.get_user_id(),movie, list_name)
+
+
+            for movie in list_array:
+                if movie == "":
+                    continue
+                else:
+                    smovie = Movie(movie, "", "", "", "" )
+                    movie = smovie.search_movie_in_db()
+                        
+                    if movie == -1:
+                        flag = True
+                            
+                    else:
+                        newlist = MovieList(current_user.get_user_id(),movie, list_name)
+                        if newlist.exists() == 1:
+                            flash('You have already added that movie.')
+                            return redirect(url_for('page.list_page'))
+                        else:
+                            newlist.add_movie()
+                        
+            if flag is True:
+                flash('The movie is not in db')
+                    
+            return redirect(url_for('page.home_page'))
+
+    else:
+        return render_template('list.html')
+
+
