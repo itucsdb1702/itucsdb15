@@ -48,7 +48,7 @@ class User(UserMixin):
 
             cursor = connection.cursor()
 
-            query = """SELECT POST_ID, TITLE, COMMENTS FROM
+            query = """SELECT p.POST_ID, TITLE, COMMENTS FROM
                             USERS u INNER JOIN POSTS p ON (u.ID = p.USER_ID)
                             INNER JOIN MOVIES m ON (m.MOVIEID = p.MOVIE_ID)
                         WHERE (USERNAME = %s)"""
@@ -283,41 +283,41 @@ class FollowerPair:
                         return False
                     else:
                         return True
-                    
+
 class MovieList:
-    def __init__(self, user_id, movie_id, list_name):          
+    def __init__(self, user_id, movie_id, list_name):
         self.user_id = user_id
         self.movie_id = movie_id
         self.list_name = list_name
-    
+
     def add_movie(self):
             with dbapi2.connect(app.config['dsn']) as connection:
                     cursor = connection.cursor()
-                    query = """INSERT INTO MOVIELIST (USER_ID, MOVIE_ID, LIST_NAME) 
+                    query = """INSERT INTO MOVIELIST (USER_ID, MOVIE_ID, LIST_NAME)
                     VALUES (%s, %s, %s)"""
-    
+
                     cursor.execute(query, (self.user_id, self.movie_id, self.list_name))
-                    connection.commit()   
-    
+                    connection.commit()
+
     def delete_list(self):
          with dbapi2.connect(app.config['dsn']) as connection:
                     cursor = connection.cursor()
                     query = """DELETE FROM MOVIELIST WHERE (LIST_NAME = %s)"""
-    
+
                     cursor.execute(query, (self.list_name,))
-                    connection.commit() 
-                    
+                    connection.commit()
+
     def exists(self):
             with dbapi2.connect(app.config['dsn']) as connection:
                     cursor = connection.cursor()
                     query = """SELECT LIST_ID FROM MOVIELIST
                                 WHERE((LIST_NAME = %s) AND (MOVIE_ID = %s))"""
-                    
+
                     cursor.execute(query, (self.list_name, self.movie_id,))
                     name = cursor.fetchone()
-                    
+
                     connection.commit()
-                    
+
                     if name is None:
                         return self
                     else:
