@@ -337,20 +337,28 @@ def UserList():
             cursor.execute(query)
 
             for user in cursor:
-                users.append(user)
+                if current_user.username == user[1]:
+                    continue
+                else:
+                    users.append(user)
 
             connection.commit()
-
-
         return render_template('userlist.html', users = users)
+    
 @page.route("/follow/<id>")
 def Follow(id):
     user = User(current_user.username, "","")
     followingid = user.get_user_id()
 
     follower_pair = FollowerPair(followingid, id)
-    follower_pair.new_follow()
-    return redirect(url_for('page.home_page'))
+    
+    if follower_pair.exists():
+        flash('You have already followed that user.')
+        return redirect(url_for('page.home_page'))
+    else:
+        follower_pair.new_follow()
+        return redirect(url_for('page.home_page'))
+
 
 @page.route("/unfollow/<id>")
 def Unfollow(id):
@@ -358,5 +366,10 @@ def Unfollow(id):
     followingid = user.get_user_id()
 
     follower_pair = FollowerPair(followingid, id)
-    follower_pair.unfollow()
-    return redirect(url_for('page.home_page'))
+    
+    if follower_pair.exists() is False:
+        flash('You do not follow that user.')
+        return redirect(url_for('page.home_page'))
+    else:
+        follower_pair.unfollow()
+        return redirect(url_for('page.home_page'))

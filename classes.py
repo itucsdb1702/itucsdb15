@@ -234,4 +234,19 @@ class FollowerPair:
                     
                     cursor.execute(query, (self.following_id,))
                     connection.commit()
-        
+                    
+    def exists(self):
+            with dbapi2.connect(app.config['dsn']) as connection:
+                    cursor = connection.cursor()
+                    query = """SELECT FRIENDSHIP_ID FROM FOLLOWERS
+                                WHERE((FOLLOWING_USER_ID = %s) AND (FOLLOWED_USER_ID = %s))"""
+                    
+                    cursor.execute(query, (self.following_id, self.followed_id))
+                    pair = cursor.fetchone()
+                    
+                    connection.commit()
+                    
+                    if pair is None:
+                        return False
+                    else:
+                        return True
