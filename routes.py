@@ -14,6 +14,7 @@ from flask import current_app as app
 from classes import User
 from classes import UserList
 from classes import Movie
+from classes import Post
 from classes import WatchedList
 from classes import FollowerPair
 from classes import MovieList
@@ -176,7 +177,6 @@ def actors():
 
     return render_template('actors.html', stars = stars)
 
-
 @page.route('/add_actor', methods = ['GET', 'POST'])
 def add_actor():
 
@@ -239,10 +239,10 @@ def delete_actor():
 @page.route('/movies', methods = ['GET', 'POST'])
 def movies_page():
 
-
     if request.method == "POST":
         movie = Movie(request.form['title'].title(), "", "", "", "")
         score = request.form['score']
+        comments = request.form['comment']
 
         if int(score)<1 or int(score)>10:
             flash("Your rating to the movie should be between 1 and 10.")
@@ -254,6 +254,7 @@ def movies_page():
             if(movie.search_movie_in_db() != -1):
                 movieId = movie.search_movie_in_db()
                 userMoviePair = WatchedList(current_user.username, movieId, score)
+                post = Post(current_user.get_user_id(), movieId,comments)
 
                 if (userMoviePair.existsInWatchedList() is True):
                     flash("You have already added "+ movie.title+".")
@@ -271,7 +272,8 @@ def movies_page():
 
                     movie.update_votes_and_score(movieId, newscore, totalVotes)
 
-                    flash(movie.title + " is added to your watched list.")
+                    post.add_post_to_db()
+                    flash(movie.title + " is added to your watched list and your post has been saved.")
                     return redirect(url_for('page.home_page'))
 
 
@@ -286,11 +288,14 @@ def movies_page():
 
                     movieToAdd.add_movie_to_db()
 
-                    flash(movieToAdd.title + " ("+ movieToAdd.year+") is added to your watched list.")
+                    flash(movieToAdd.title + " ("+ movieToAdd.year+") is added to your watched list and your post has been saved.")
 
                     movieId = movieToAdd.search_movie_in_db()
                     userMoviePair = WatchedList(current_user.username, movieId, score)
                     userMoviePair.add_movie_user_pair()
+
+                    post = Post(current_user.get_user_id(), movieId,comments)
+                    post.add_post_to_db()
 
                     return redirect(url_for('page.home_page'))
 
@@ -345,14 +350,14 @@ def UserList():
 
             connection.commit()
         return render_template('userlist.html', users = users)
-    
+
 @page.route("/follow/<id>")
 def Follow(id):
     user = User(current_user.username, "","")
     followingid = user.get_user_id()
 
     follower_pair = FollowerPair(followingid, id)
-    
+
     if follower_pair.exists():
         flash('You have already followed that user.')
         return redirect(url_for('page.home_page'))
@@ -367,7 +372,7 @@ def Unfollow(id):
     followingid = user.get_user_id()
 
     follower_pair = FollowerPair(followingid, id)
-    
+
     if follower_pair.exists() is False:
         flash('You do not follow that user.')
         return redirect(url_for('page.home_page'))

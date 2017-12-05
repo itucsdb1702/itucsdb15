@@ -124,8 +124,9 @@ def init_posts_db():
 
         query = """CREATE TABLE POSTS(
         POST_ID SERIAL NOT NULL,
-        COMMENTS VARCHAR(300),
+        COMMENTS TEXT,
         MOVIE_ID INTEGER,
+        USER_ID INTEGER,
         PRIMARY KEY(POST_ID)
         )
         """
@@ -135,6 +136,9 @@ def init_posts_db():
         query = """ALTER TABLE POSTS
         ADD FOREIGN KEY(MOVIE_ID)
         REFERENCES MOVIES(MOVIEID)
+        ON DELETE CASCADE,
+        ADD FOREIGN KEY(USER_ID)
+        REFERENCES USERS(ID)
         ON DELETE CASCADE
         """
         cursor.execute(query)

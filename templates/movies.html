@@ -3,63 +3,64 @@
 </head>
 {% extends 'base.html' %} {% block content %}
 <div class="row">
-	
-					<form method="POST" action=" {{ url_for('page.movies_page') }}">
-						<div id="addMovie" class="tab-pane fade in active register">
-							<div class="container-fluid">
-								<div class="row">
-									<h2 class="text-center" style="color: #5cb85c;">
-										<Strong> Rate Movie </Strong>
-									</h2>
-									<hr />
-									<div class="row">
-										<div class="col-xs-12 col-sm-12 col-md-12">
-											<div class="form-group">
-												<div class="input-group">
-													<div class="input-group-addon iga1">
-														<span class="glyphicon glyphicon-film"></span>
-													</div>
-													<input type="text" class="form-control"
-														placeholder="Name Of The Movie" name="title">
-												</div>
-											</div>
-										</div>
-									</div>
 
-									
-
-									<div class="row">
-										<div class="col-xs-12 col-sm-12 col-md-12">
-											<div class="form-group">
-												<div class="input-group">
-													<div class="input-group-addon iga1">
-														<span class="glyphicon glyphicon-star-empty"></span>
-													</div>
-													<input type="text" class="form-control"
-														placeholder="Your Rating" name="score">
-												</div>
-											</div>
-										</div>
+	<form method="POST" action=" {{ url_for('page.movies_page') }}">
+		<div id="addMovie" class="tab-pane fade in active register">
+			<div class="container-fluid">
+				<div class="row">
+					<h2 class="text-center" style="color: #5cb85c;">
+						<Strong> Rate Movie </Strong>
+					</h2>
+					<hr />
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12">
+							<div class="form-group">
+								<div class="input-group">
+									<div class="input-group-addon iga1">
+										<span class="glyphicon glyphicon-film"></span>
 									</div>
-									<hr>
-									<div class="row">
-										<div class="col-xs-12 col-sm-12 col-md-12">
-											<div class="form-group">
-												<button type="submit"
-													class="btn btn-lg btn-block btn-warning">Submit</button>
-											</div>
-										</div>
-									</div>
+									<input type="text" class="form-control"
+										placeholder="Name Of The Movie" name="title">
 								</div>
 							</div>
 						</div>
+					</div>
 
 
+
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12">
+							<div class="form-group">
+								<div class="input-group">
+									<div class="input-group-addon iga1">
+										<span class="glyphicon glyphicon-star-empty"></span>
+									</div>
+									<input type="text" class="form-control"
+										placeholder="Your Rating" name="score">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="comment">Comment:</label>
+						<textarea class="form-control" rows="5" id="comment" name="comment"></textarea>
+					</div>
+					<hr>
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12">
+							<div class="form-group">
+								<button type="submit" class="btn btn-lg btn-block btn-warning">Submit</button>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="col-md-3"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-md-3"></div>
 </div>
 </div>
 {% endblock %}
