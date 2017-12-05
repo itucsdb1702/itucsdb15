@@ -43,6 +43,26 @@ class User(UserMixin):
             else:
                 return userid
 
+    def get_posts(self):
+        with dbapi2._connect(app.config['dsn']) as connection:
+
+            cursor = connection.cursor()
+
+            query = """SELECT POST_ID, TITLE, COMMENTS FROM
+                            USERS u INNER JOIN POSTS p ON (u.ID = p.USER_ID)
+                            INNER JOIN MOVIES m ON (m.MOVIEID = p.MOVIE_ID)
+                        WHERE (USERNAME = %s)"""
+
+            cursor.execute(query, (self.username,))
+            posts = []
+            for postid in cursor:
+                posts.append(postid)
+
+            connection.commit()
+
+            return posts
+
+
     def is_active(self):
         # Here you should write whatever the code is
         # that checks the database if your user is active
@@ -180,7 +200,6 @@ class Post:
 
                     cursor.execute(query, (self.userid, self.movieid, self.comment))
                     connection.commit()
-
 
 class WatchedList:
     def __init__(self, username, movieid, score):

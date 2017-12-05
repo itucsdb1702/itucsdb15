@@ -325,7 +325,11 @@ def profile_page():
                 movies.append(movie)
 
             connection.commit()
-         return render_template('profile.html', movies = movies)
+
+            posts = []
+            posts = current_user.get_posts()
+
+         return render_template('profile.html', movies = movies, posts = posts)
     else:
         flash("Please log in to MovieShake")
         return redirect(url_for('page.login_page'))
