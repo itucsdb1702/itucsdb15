@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
-
+	<head>
+		<link rel="stylesheet" type="text/css" href="static/login.css">
+	</head>
+	{% extends 'base.html' %} {% block content %}
 	<head>
 		<meta charset = "UTF-8" />
 		<title> ACTORS </title>
@@ -8,16 +11,18 @@
 
 	<body>
 
-		<div>
-			<table>
-				<tr>
-					<th> ID </th>
-					<th> NAME </th>
-					<th> SURNAME </th>
-					<th> GENDER </th>
-					<th> BIRTHDATE </th>
-					<th> COUNTRY </th>
-				</tr>
+		<div class="container">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th> ID</th>
+						<th> NAME</th>
+						<th> SURNAME</th>
+						<th> GENDER </th>
+						<th> BIRTHDATE </th>
+						<th> COUNTRY </th>
+					</tr>
+				</thead>
 				{% for ID, NAME, SURNAME, GENDER, BIRTHDATE, COUNTRY in stars %}
 				<tr>
 					<td>{{ ID }} </td>
@@ -37,11 +42,21 @@
 
 	  <div>
       <form action = "/add_actor" method="post" id = "addactor">
-        NAME: <input type = "text" name = "NAME"><br>
-        SURNAME: <input type = "text" name = "SURNAME"><br>
-        GENDER: <input type = "text" name = "GENDER"><br>
-        BIRTHDATE: <input type = "text" name = "BIRTHDATE"><br>
-        COUNTRY: <input type = "text" name = "COUNTRY"><br>
+      	<div class="input-group">
+			NAME: <input type = "text" name = "NAME"><br>
+        </div>
+        <div class="input-group">
+        	SURNAME: <input type = "text" name = "SURNAME"><br>
+        </div>
+        <div class="input-group">
+			GENDER: <input type = "text" name = "GENDER"><br>
+        </div>
+        <div class="input-group">
+			BIRTHDATE: <input type = "text" name = "BIRTHDATE"><br>
+        </div>
+        <div class="input-group">
+			COUNTRY: <input type = "text" name = "COUNTRY"><br>
+        </div>
       </form>
 
       <button type="submit" form="addactor" value="Submit">Add</button>
@@ -78,16 +93,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+{% endblock %}
 
 </html>
