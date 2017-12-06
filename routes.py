@@ -179,62 +179,74 @@ def actors():
 
 @page.route('/add_actor', methods = ['GET', 'POST'])
 def add_actor():
-
-    with dbapi2._connect(current_app.config['dsn']) as connection:
-        cursor = connection.cursor()
-
-
-    if request.method == 'POST':
-        NAME = request.form['NAME']
-        SURNAME = request.form['SURNAME']
-        GENDER = request.form['GENDER']
-        BIRTHDATE = request.form['BIRTHDATE']
-        COUNTRY = request.form['COUNTRY']
-
-
-        with dbapi2.connect(app.config['dsn']) as connection:
+    #checks if user is logged in
+    if current_user.get_id() is not None:
+        with dbapi2._connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
 
-            query = """INSERT INTO ACTORS (NAME, SURNAME, GENDER, BIRTHDATE, COUNTRY) VALUES (%s, %s, %s, %s, %s)"""
-            cursor.execute(query, (NAME, SURNAME, GENDER, BIRTHDATE, COUNTRY))
-            connection.commit()
 
-    return redirect('actors')
+            if request.method == 'POST':
+                 NAME = request.form['NAME']
+                 SURNAME = request.form['SURNAME']
+                 GENDER = request.form['GENDER']
+                 BIRTHDATE = request.form['BIRTHDATE']
+                 COUNTRY = request.form['COUNTRY']
+
+
+                 with dbapi2.connect(app.config['dsn']) as connection:
+                     cursor = connection.cursor()
+
+                     query = """INSERT INTO ACTORS (NAME, SURNAME, GENDER, BIRTHDATE, COUNTRY) VALUES (%s, %s, %s, %s, %s)"""
+                     cursor.execute(query, (NAME, SURNAME, GENDER, BIRTHDATE, COUNTRY))
+                     connection.commit()
+
+            return redirect('actors')
+    else:
+         flash("Please log in to MovieShake")
+         return redirect(url_for('page.login_page'))
 
 @page.route('/update_actor', methods = ['GET', 'POST'])
 def update_actor():
+    #checks if user is logged in
+    if current_user.get_id() is not None:
+        if request.method =='POST':
+             ID = request.form['ID']
+             new_NAME = request.form['N_NAME']
+             new_SURNAME = request.form['N_SURNAME']
+             new_GENDER = request.form['N_GENDER']
+             new_BIRTHDATE = request.form['N_BIRTHDATE']
+             new_COUNTRY = request.form['N_COUNTRY']
 
-    if request.method =='POST':
-        ID = request.form['ID']
-        new_NAME = request.form['N_NAME']
-        new_SURNAME = request.form['N_SURNAME']
-        new_GENDER = request.form['N_GENDER']
-        new_BIRTHDATE = request.form['N_BIRTHDATE']
-        new_COUNTRY = request.form['N_COUNTRY']
+             with dbapi2.connect(app.config['dsn']) as connection:
+                 cursor = connection.cursor()
+                 query = """UPDATE ACTORS SET( NAME, SURNAME, GENDER, BIRTHDATE, COUNTRY) = ( %s, %s, %s, %s, %s) WHERE ID = %s"""
 
-        with dbapi2.connect(app.config['dsn']) as connection:
-            cursor = connection.cursor()
-            query = """UPDATE ACTORS SET( NAME, SURNAME, GENDER, BIRTHDATE, COUNTRY) = ( %s, %s, %s, %s, %s) WHERE ID = %s"""
-
-            cursor.execute(query, (new_NAME, new_SURNAME, new_GENDER, new_BIRTHDATE, new_COUNTRY, ID))
-            connection.commit()
+                 cursor.execute(query, (new_NAME, new_SURNAME, new_GENDER, new_BIRTHDATE, new_COUNTRY, ID))
+                 connection.commit()
 
 
-    return redirect('actors')
+        return redirect('actors')
+    else:
+         flash("Please log in to MovieShake")
+         return redirect(url_for('page.login_page'))
 
 @page.route('/delete_actor', methods = ['GET', 'POST'])
 def delete_actor():
+    #checks if user is logged in
+    if current_user.get_id() is not None:
+        if request.method =='POST':
+             ID = request.form['ID']
 
-    if request.method =='POST':
-        ID = request.form['ID']
+             with dbapi2.connect(app.config['dsn']) as connection:
+                 cursor = connection.cursor()
+                 query = """DELETE FROM ACTORS WHERE ID = '""" + ID + """' """
+                 cursor.execute(query)
+                 connection.commit()
 
-        with dbapi2.connect(app.config['dsn']) as connection:
-            cursor = connection.cursor()
-            query = """DELETE FROM ACTORS WHERE ID = '""" +ID + """' """
-            cursor.execute(query)
-            connection.commit()
-
-    return redirect('actors')
+        return redirect('actors')
+    else:
+         flash("Please log in to MovieShake")
+         return redirect(url_for('page.login_page'))
 
 @page.route('/movies', methods = ['GET', 'POST'])
 def movies_page():
@@ -495,5 +507,5 @@ def DeleteWholeList(listname):
 
 @page.route("/oscars", methods= ['GET', 'POST'])
 def oscars():
-    
+
     return render_template('oscars.html')
