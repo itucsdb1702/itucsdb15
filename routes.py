@@ -435,7 +435,18 @@ def list_page():
                     movie = smovie.search_movie_in_db()
                         
                     if movie == -1:
-                        flag = True
+                        movieToAdd = smovie.verify_movie_from_api()
+                        if (movieToAdd == -1):
+                            flash("There is no such movie")
+                            return redirect(url_for('page.home_page'))
+                        else:
+                            movieToAdd.score = 7
+        
+                            movieToAdd.add_movie_to_db()
+                            movieid = movieToAdd.search_movie_in_db()
+                            print(movieid)
+                            newlist = MovieList(current_user.get_user_id(),movieid[0], list_name)
+                            newlist.add_movie()
                             
                     else:
                         newlist = MovieList(current_user.get_user_id(),movie, list_name)
@@ -444,9 +455,7 @@ def list_page():
                             return redirect(url_for('page.list_page'))
                         else:
                             newlist.add_movie()
-                        
-            if flag is True:
-                flash('The movie is not in db')
+
                     
             return redirect(url_for('page.home_page'))
 
