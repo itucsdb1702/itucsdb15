@@ -186,7 +186,7 @@ def init_followers_db():
         connection.commit()
 
         return redirect(url_for('page.home_page'))
-    
+
 @app.route('/init_movie_list_db')
 def init_movie_list_db():
     with dbapi2.connect(app.config['dsn']) as connection:
@@ -197,7 +197,7 @@ def init_movie_list_db():
         query = """CREATE TABLE MOVIELIST (
             LIST_ID SERIAL NOT NULL PRIMARY KEY,
             USER_ID INT NOT NULL,
-            MOVIE_ID INT NOT NULL, 
+            MOVIE_ID INT NOT NULL,
             LIST_NAME VARCHAR(50) NOT NULL,
             UNIQUE(LIST_NAME, USER_ID, MOVIE_ID), CONSTRAINT LISTPAIR
                 FOREIGN KEY (USER_ID) REFERENCES USERS(ID),
@@ -209,7 +209,7 @@ def init_movie_list_db():
         connection.commit()
 
         return redirect(url_for('page.home_page'))
-    
+
 @app.route('/initdb')
 def initialize_database():
     with dbapi2.connect(app.config['dsn']) as connection:

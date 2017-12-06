@@ -40,5 +40,11 @@ def initialize_db_function(cursor):
                     '1980-7-6',
                     'FRANCE')""")
 
-
+    # Oscars table
+    cursor.execute("""DROP TABLE IF EXIST OSCARS CASCADE""")
+    cursor.execute("""CREATE TABLE OSCARS(
+                    MOVIE VARCHAR(30),
+                    ACTRESS VARCHAR(30),
+                    ACTOR VARCHAR(30),
+                    YEAR INT PRIMARY KEY NOT NULL)""")
 

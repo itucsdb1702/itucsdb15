@@ -316,7 +316,7 @@ def profile_page():
          movies = []
          lists = []
          userid = current_user.get_user_id()
-         
+
          with dbapi2._connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """SELECT TITLE, YEAR, m.SCORE, VOTES, IMDB_URL FROM MOVIES m
@@ -327,17 +327,17 @@ def profile_page():
 
             for movie in cursor:
                 movies.append(movie)
-            
+
             query = """SELECT DISTINCT LIST_NAME FROM MOVIELIST WHERE (USER_ID = %s)"""
 
             cursor.execute(query, (userid, ))
 
             for list in cursor:
                 lists.append(list[0])
-                
+
             followingusers = []
             followingusers = current_user.get_following_users_by_userid()
-            
+
             posts = []
             posts = current_user.get_posts()
 
@@ -401,17 +401,17 @@ def Unfollow(id):
     else:
         follower_pair.unfollow()
         return redirect(url_for('page.home_page'))
-    
+
 @page.route("/list", methods = ['GET', 'POST'])
 def list_page():
     if request.method == "POST":
-        
+
         flag = False
 
         if current_user.username is None:
             flash('Please log in.')
             return redirect(url_for('page.login_page'))
-        
+
         else:
 
             list_name = request.form['name']
@@ -419,9 +419,9 @@ def list_page():
             movie2 = request.form['moviename2']
             movie3 = request.form['moviename3']
             movie4 = request.form['moviename4']
-            
+
             list_array = [movie1.title(),movie2.title(),movie3.title(),movie4.title()]
-                        
+
             smovie = Movie(list_array[0], "", "", "", "" )
             movie = smovie.search_movie_in_db()
             newlist = MovieList(current_user.get_user_id(),movie, list_name)
@@ -433,7 +433,7 @@ def list_page():
                 else:
                     smovie = Movie(movie, "", "", "", "" )
                     movie = smovie.search_movie_in_db()
-                        
+
                     if movie == -1:
                         movieToAdd = smovie.verify_movie_from_api()
                         if (movieToAdd == -1):
@@ -441,13 +441,13 @@ def list_page():
                             return redirect(url_for('page.home_page'))
                         else:
                             movieToAdd.score = 7
-        
+
                             movieToAdd.add_movie_to_db()
                             movieid = movieToAdd.search_movie_in_db()
                             print(movieid)
                             newlist = MovieList(current_user.get_user_id(),movieid[0], list_name)
                             newlist.add_movie()
-                            
+
                     else:
                         newlist = MovieList(current_user.get_user_id(),movie, list_name)
                         if newlist.exists() == 1:
@@ -456,7 +456,7 @@ def list_page():
                         else:
                             newlist.add_movie()
 
-                    
+
             return redirect(url_for('page.home_page'))
 
     else:
@@ -472,7 +472,7 @@ def Show_list(listname):
         query = """SELECT TITLE, YEAR, SCORE, VOTES, IMDB_URL FROM MOVIES m
                                  INNER JOIN MOVIELIST l ON (m.MOVIEID = l.MOVIE_ID)
                                  WHERE ((l.LIST_NAME = %s) AND (l.USER_ID = %s))"""
-        
+
         user_id = current_user.get_user_id()
         cursor.execute(query, (listname,user_id,))
 
@@ -485,15 +485,15 @@ def Show_list(listname):
 
 @page.route("/deletelist/<listname>")
 def DeleteWholeList(listname):
-    
+
     userid = current_user.get_user_id()
     listToDelete = MovieList(userid, "", listname)
-    
+
     listToDelete.delete_list()
     flash(listname + " successfully deleted.")
     return redirect(url_for('page.profile_page'))
+
+@page.route("/oscars", methods= ['GET', 'POST'])
+def oscars():
     
-    
-    
-    
-    
+    return render_template('oscars.html')
