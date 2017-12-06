@@ -314,6 +314,9 @@ def profile_page():
 
     if current_user.get_id() is not None:
          movies = []
+         lists = []
+         userid = current_user.get_user_id()
+         
          with dbapi2._connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """SELECT TITLE, YEAR, m.SCORE, VOTES, IMDB_URL FROM MOVIES m
@@ -324,13 +327,19 @@ def profile_page():
 
             for movie in cursor:
                 movies.append(movie)
+            
+            query = """SELECT DISTINCT LIST_NAME FROM MOVIELIST WHERE (USER_ID = %s)"""
 
-            connection.commit()
+            cursor.execute(query, (userid, ))
 
+            for list in cursor:
+                lists.append(list[0])
+            
             posts = []
             posts = current_user.get_posts()
 
-         return render_template('profile.html', movies = movies, posts = posts)
+            connection.commit()
+         return render_template('profile.html', lists = lists, movies = movies, posts = posts)
     else:
         flash("Please log in to MovieShake")
         return redirect(url_for('page.login_page'))
@@ -393,6 +402,7 @@ def list_page():
         if current_user.username is None:
             flash('Please log in.')
             return redirect(url_for('page.login_page'))
+        
         else:
 
             list_name = request.form['name']
@@ -433,5 +443,26 @@ def list_page():
 
     else:
         return render_template('list.html')
+
+
+@page.route("/showlist/<listname>")
+def Show_list(listname):
+    movies = []
+    listnames = []
+    with dbapi2._connect(current_app.config['dsn']) as connection:
+        cursor = connection.cursor()
+        query = """SELECT TITLE, YEAR, SCORE, VOTES, IMDB_URL FROM MOVIES m
+                                 INNER JOIN MOVIELIST l ON (m.MOVIEID = l.MOVIE_ID)
+                                 WHERE ((l.LIST_NAME = %s) AND (l.USER_ID = %s))"""
+        
+        user_id = current_user.get_user_id()
+        cursor.execute(query, (listname,user_id,))
+
+        for movie in cursor:
+            movies.append(movie)
+
+        connection.commit()
+        listnames.append(listname)
+    return render_template('movielist.html', movies = movies, listname = listnames)
 
 

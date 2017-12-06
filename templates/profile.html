@@ -48,6 +48,31 @@
 				</div>
 
 			</div>
+			
+			<div class="col-md-6 col-lg-6 col-xs-12 col-sm-6">
+
+				<h2>My Movie Lists</h2>
+				<p>Click to the name of the list to show content.</p>
+				<div class="table-responsive">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Name</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for LIST_NAME in lists %}
+							<tr>
+								<td><a href = "showlist/{{ LIST_NAME }}">{{ LIST_NAME }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+
+			</div>
+			
+			
 			<div class="col-md-6 col-lg-6 col-xs-12 col-sm-6">
 
 				<h2>My posts</h2>

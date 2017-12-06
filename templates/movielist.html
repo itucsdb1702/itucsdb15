@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+{% extends 'base.html' %} {% block content %}
+
+<body>
+
+<div class="container">
+  {% for LIST_NAME in listname %}
+  <h2>{{LIST_NAME}}</h2>
+  {% endfor %}
+  <div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+      	<th id='title'>Title</th>
+        <th id='year'>Release Year</th>
+        <th id='score'>Score</th>
+        <th id='votes'>Votes</th>
+        <th id='imdb_url'>Imdb URL</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for TITLE, YEAR, SCORE, VOTES, IMDB_URL in movies %}
+      <tr>
+      	<td>{{ TITLE }}<br></td>
+        <td>{{ YEAR }}<br></td>
+        <td>{{ SCORE }}</td>
+        <td>{{ VOTES }}</td>
+        <td><a href = "{{ IMDB_URL }}">{{ IMDB_URL }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+
+
+</body>
+{% endblock %}
+
+</html>
+
