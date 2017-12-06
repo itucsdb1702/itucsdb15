@@ -11,7 +11,7 @@
 <body>
 
 <div class="container">
-  <h2>Users</h2>
+  <h2>Who to follow?</h2>
   <p>The user list is below.</p>
   <div class="table-responsive">
   <table class="table">
@@ -29,7 +29,6 @@
         <td>{{ USERNAME }}<br></td>
         <td>{{ EMAIL }}</td>
         <td><button onclick="location.href = '{{ url_for('page.Follow', id=USERID) }}'" type ="submit" class = "btn btn-primary"> Follow </button></td>
-        <td><button onclick="location.href = '{{ url_for('page.Unfollow', id=USERID) }}'" type ="submit" class = "btn btn-danger"> Unfollow </button></td>
       </tr>
     {% endfor %}
     </tbody>

@@ -334,12 +334,15 @@ def profile_page():
 
             for list in cursor:
                 lists.append(list[0])
+                
+            followingusers = []
+            followingusers = current_user.get_following_users_by_userid()
             
             posts = []
             posts = current_user.get_posts()
 
             connection.commit()
-         return render_template('profile.html', lists = lists, movies = movies, posts = posts)
+         return render_template('profile.html', lists = lists, movies = movies, posts = posts, followingusers = followingusers)
     else:
         flash("Please log in to MovieShake")
         return redirect(url_for('page.login_page'))
@@ -347,13 +350,19 @@ def profile_page():
 
 @page.route("/userlist", methods = ['GET', 'POST'])
 def UserList():
-
+        userid = current_user.get_user_id()
         users = []
         with dbapi2._connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            query = """SELECT ID, USERNAME, EMAIL FROM USERS"""
+            query = """SELECT ID, USERNAME, EMAIL FROM USERS
 
-            cursor.execute(query)
+                        EXCEPT
+
+                        SELECT ID, USERNAME, EMAIL FROM USERS u
+                        INNER JOIN FOLLOWERS f ON (u.ID = f.FOLLOWED_USER_ID)
+                        WHERE (f.FOLLOWING_USER_ID = %s) """
+
+            cursor.execute(query, (userid,))
 
             for user in cursor:
                 if current_user.username == user[1]:
