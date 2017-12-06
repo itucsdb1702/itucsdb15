@@ -465,4 +465,17 @@ def Show_list(listname):
         listnames.append(listname)
     return render_template('movielist.html', movies = movies, listname = listnames)
 
-
+@page.route("/deletelist/<listname>")
+def DeleteWholeList(listname):
+    
+    userid = current_user.get_user_id()
+    listToDelete = MovieList(userid, "", listname)
+    
+    listToDelete.delete_list()
+    flash(listname + " successfully deleted.")
+    return redirect(url_for('page.profile_page'))
+    
+    
+    
+    
+    

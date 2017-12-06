@@ -12,8 +12,11 @@
 
 <div class="container">
   {% for LIST_NAME in listname %}
-  <h2>{{LIST_NAME}}</h2>
-  {% endfor %}
+  <h2>
+  	<span>{{LIST_NAME}} </span>
+	<button onclick="location.href = '{{ url_for('page.DeleteWholeList', listname=LIST_NAME) }}'" type ="submit" class = "btn btn-danger pull-right"> Delete List </button>
+  </h2> 
+	{% endfor %}
   <div class="table-responsive">
   <table class="table">
     <thead>
