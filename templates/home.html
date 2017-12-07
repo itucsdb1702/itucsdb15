@@ -1,3 +1,51 @@
-{% extends 'base.html' %}
-{% block content %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="static/login.css">
+	</head>
+	{% extends 'base.html' %} {% block content %}
+	<head>
+		<meta charset = "UTF-8" />
+		<title> SERIES </title>
+	</head>
+
+	<body>
+			<div class="row" style=" margin:0 auto;">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="carousel slide" id="carousel-256323">
+								<ol class="carousel-indicators">
+									<li data-slide-to="0" data-target="#carousel-256323">
+									</li>
+									<li data-slide-to="1" data-target="#carousel-256323">
+									</li>
+								</ol>
+								<div class="carousel-inner">
+									<div class="item" style=" margin:0 auto;">
+										<img alt="Carousel Bootstrap First" src="https://i0.wp.com/playiplay.com/wp-content/uploads/2017/10/star-wars-battlefront-2-darth-vader-playable-villain-header.jpg.optimal.jpg?resize=1600%2C581.83" />
+										<div class="carousel-caption">
+											<h2>
+												CULT, CLASSIC, INDEPENDENT AND AWARD-WINNING FILMS FROM AROUND THE WORLD
+											</h2>
+										</div>
+									</div>
+									<div class="item active">
+										<img alt="Carousel Bootstrap Second" src="http://www.giornalepop.it/wp-content/uploads/2016/10/Westworld-banner-1110x400.jpg"/>
+										<div class="carousel-caption">
+											<h4>
+												FIND MOST POPULER SERIES
+											</h4>
+										</div>
+									</div>
+
+								</div> <a class="left carousel-control" href="#carousel-256323" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control" href="#carousel-256323" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 {% endblock %}
+</body>
+
+</html>
