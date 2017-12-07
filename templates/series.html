@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="static/login.css">
+	</head>
+	{% extends 'base.html' %} {% block content %}
+	<head>
+		<meta charset = "UTF-8" />
+		<title> SERIES </title>
+	</head>
+
+	<body>
+		<div class="container-fluid">
+			<div class="row" style=" margin:0 auto;">
+				<ul class="nav nav-pills">
+				  <li class="active"><a href="#">Home</a></li>
+				  <li><a href="#">En Çok İzlenen</a></li>
+				  <li><a href="#">Puana Göre</a></li>
+				  <li><a href="#">En Çok Takip Edilen</a></li>
+				</ul>
+			</div>
+			<div class="row" style=" margin:0 auto;">
+				{% for ID , TITLE , STARTYEAR,ENDYEAR, SCORE,VOTES ,PICTURE,DESCRIPTION in nums %}
+				<div class="col-md-12"  >
+
+					<h3>
+						{{ ID }} ) {{ TITLE }}
+					</h3>
+					<div class="row">
+						<div class="col-md-4">
+							<img alt="Bootstrap Image Preview" src="http://cdn.pastemagazine.com/www/blogs/lists/winter-is-coming-game-of-thrones.jpg" class="img-rounded" style="width:100%"/>
+						</div>
+						<div class="col-md-4">
+								<li>
+									{{ STARTYEAR }}
+								</li>
+								<li>
+									{{ ENDYEAR }}
+								</li>
+								<li>
+									{{ SCORE }}
+								</li>
+						</div>
+						<div class="col-md-4">
+							<ol>
+								<li>
+									Lorem ipsum dolor sit amet
+								</li>
+								<li>
+									Consectetur adipiscing elit
+								</li>
+								<li>
+									Integer molestie lorem at massa
+								</li>
+								<li>
+									Facilisis in pretium nisl aliquet
+								</li>
+								<li>
+									Nulla volutpat aliquam velit
+								</li>
+								<li>
+									Faucibus porta lacus fringilla vel
+								</li>
+								<li>
+									Aenean sit amet erat nunc
+								</li>
+								<li>
+									Eget porttitor lorem
+								</li>
+							</ol>
+						</div>
+					</div>
+					<div class="row" style="background-color:blue;">
+					<p>
+						Nine noble families fight for control over the mythical lands of Westeros, while a forgotten race returns after being dormant for thousands of years.
+					</p>
+					</div>
+					<div class="row" style="background-color:black;">
+						<div class="col-md-4">
+
+							<button type="button" class="btn btn-primary">
+								Favourites
+							</button>
+						</div>
+						<div class="col-md-4">
+
+							<button type="button" class="btn btn-success">
+								Like
+							</button>
+						</div>
+						<div class="col-md-4">
+
+							<button type="button" class="btn btn-danger">
+								Dislike
+							</button>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+		</body>
+
+{% endblock %}
+
+</html>
