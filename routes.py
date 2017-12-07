@@ -267,10 +267,29 @@ def movies_page():
                 movieId = movie.search_movie_in_db()
                 userMoviePair = WatchedList(current_user.username, movieId, score)
                 post = Post(current_user.get_user_id(), movieId,comments)
+                
+                oldscore = userMoviePair.existsInWatchedList()
 
-                if (userMoviePair.existsInWatchedList() is True):
-                    flash("You have already added "+ movie.title+".")
-                    return redirect(url_for('page.home_page'))
+                if (oldscore != -1):
+                    oldscore = oldscore[0]
+                    print(oldscore)
+                    print(score)
+                    if int(oldscore) == int(score):
+                        flash("You have already added "+ movie.title+".")
+                        return redirect(url_for('page.home_page'))
+                    else:
+                        userMoviePair.updateScoreOfWatchedMovie()
+                        
+                        
+                        oldScoreMoviesTable = int(movie.getscore_in_movie_db(movieId)[0])
+                        totalVotes = int(movie.getvotes_in_movie_db(movieId)[0])
+    
+                        newscore = ((oldScoreMoviesTable*totalVotes)-int(oldscore)+int(score))/(totalVotes)
+    
+                        movie.update_votes_and_score(movieId, newscore, totalVotes)
+
+                        flash("You score to "+ movie.title+" is updated as " + score+".")
+                        return redirect(url_for('page.home_page'))
 
                 else:
                     userMoviePair.add_movie_user_pair()
