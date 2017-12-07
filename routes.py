@@ -500,7 +500,7 @@ def Show_list(listname):
     listnames = []
     with dbapi2._connect(current_app.config['dsn']) as connection:
         cursor = connection.cursor()
-        query = """SELECT TITLE, YEAR, SCORE, VOTES, IMDB_URL FROM MOVIES m
+        query = """SELECT MOVIEID, TITLE, YEAR, SCORE, VOTES, IMDB_URL FROM MOVIES m
                                  INNER JOIN MOVIELIST l ON (m.MOVIEID = l.MOVIE_ID)
                                  WHERE ((l.LIST_NAME = %s) AND (l.USER_ID = %s))"""
 
@@ -523,6 +523,17 @@ def DeleteWholeList(listname):
     listToDelete.delete_list()
     flash(listname + " successfully deleted.")
     return redirect(url_for('page.profile_page'))
+
+@page.route("/removefromlist/<listname>/<movieid>")
+def RemoveMovieFromList(listname, movieid):
+    userid = current_user.get_user_id()
+    listToDelete = MovieList(userid, movieid, listname)
+
+    listToDelete.removeMovieFromList()
+    flash("Selected movie successfully removed from "+listname+".")
+    return redirect(url_for('page.profile_page'))
+    
+
 
 @page.route("/oscars", methods= ['GET', 'POST'])
 def oscars():

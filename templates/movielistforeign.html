@@ -14,14 +14,12 @@
   {% for LIST_NAME in listname %}
   <h2>
   	<span>{{LIST_NAME}} </span>
-	<button onclick="location.href = '{{ url_for('page.DeleteWholeList', listname=LIST_NAME) }}'" type ="submit" class = "btn btn-danger pull-right"> Delete List </button>
   </h2> 
-
+	{% endfor %}
   <div class="table-responsive">
   <table class="table">
     <thead>
       <tr>
-      	<th id='id'>#</th>
       	<th id='title'>Title</th>
         <th id='year'>Release Year</th>
         <th id='score'>Score</th>
@@ -30,17 +28,14 @@
       </tr>
     </thead>
     <tbody>
-    {% for MOVIEID, TITLE, YEAR, SCORE, VOTES, IMDB_URL in movies %}
+    {% for TITLE, YEAR, SCORE, VOTES, IMDB_URL in movies %}
       <tr>
-      	<td>{{ MOVIEID }}<br></td>
       	<td>{{ TITLE }}<br></td>
         <td>{{ YEAR }}<br></td>
         <td>{{ SCORE }}</td>
         <td>{{ VOTES }}</td>
         <td><a href = "{{ IMDB_URL }}">{{ IMDB_URL }}</td>
-        <td><button onclick="location.href = '{{ url_for('page.RemoveMovieFromList', listname=LIST_NAME, movieid=MOVIEID) }}'" type ="submit" class = "btn btn-warning pull-right"> Remove Movie </button></td>
       </tr>
-    {% endfor %}
     {% endfor %}
     </tbody>
   </table>

@@ -340,3 +340,11 @@ class MovieList:
                         return self
                     else:
                         return 1
+    
+    def removeMovieFromList(self):
+        with dbapi2.connect(app.config['dsn']) as connection:
+                    cursor = connection.cursor()
+                    query = """DELETE FROM MOVIELIST WHERE ((LIST_NAME = %s) AND (USER_ID = %s) AND (MOVIE_ID = %s))"""
+
+                    cursor.execute(query, (self.list_name, self.user_id, self.movie_id,))
+                    connection.commit()
