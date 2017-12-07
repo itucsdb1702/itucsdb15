@@ -267,7 +267,7 @@ def movies_page():
                 movieId = movie.search_movie_in_db()
                 userMoviePair = WatchedList(current_user.username, movieId, score)
                 post = Post(current_user.get_user_id(), movieId,comments)
-                
+
                 oldscore = userMoviePair.existsInWatchedList()
 
                 if (oldscore != -1):
@@ -279,13 +279,13 @@ def movies_page():
                         return redirect(url_for('page.home_page'))
                     else:
                         userMoviePair.updateScoreOfWatchedMovie()
-                        
-                        
+
+
                         oldScoreMoviesTable = int(movie.getscore_in_movie_db(movieId)[0])
                         totalVotes = int(movie.getvotes_in_movie_db(movieId)[0])
-    
+
                         newscore = ((oldScoreMoviesTable*totalVotes)-int(oldscore)+int(score))/(totalVotes)
-    
+
                         movie.update_votes_and_score(movieId, newscore, totalVotes)
 
                         flash("You score to "+ movie.title+" is updated as " + score+".")
@@ -528,3 +528,19 @@ def DeleteWholeList(listname):
 def oscars():
 
     return render_template('oscars.html')
+
+@page.route('/series', methods = ['GET', 'POST'])
+def series():
+
+    nums = []
+    with dbapi2._connect(current_app.config['dsn']) as connection:
+        cursor = connection.cursor()
+        query = """SELECT * FROM SERIES"""
+
+        cursor.execute(query)
+
+        for num in cursor:
+            nums.append(num)
+
+        connection.commit()
+    return render_template('series.html', nums = nums)

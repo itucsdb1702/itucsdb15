@@ -187,3 +187,33 @@ def initialize_db_function(cursor):
                         'NATALIE PORTMAN',
                         'COLIN FIRTH',
                         '2010')""")
+
+     # Series table
+    cursor.execute("""DROP TABLE IF EXISTS SERIES CASCADE""")
+    cursor.execute("""CREATE TABLE SERIES(
+                                    ID SERIAL PRIMARY KEY NOT NULL,
+                                    TITLE VARCHAR(100),
+                                    STARTYEAR INTEGER,
+                                    ENDYEAR INTEGER,
+                                    SCORE FLOAT,
+                                    VOTES INTEGER,
+                                    PICTURE VARCHAR(500),
+                                    DESCRIPTION VARCHAR(1000) )""")
+
+    cursor.execute("""INSERT INTO SERIES (TITLE, STARTYEAR, ENDYEAR, SCORE,VOTES, PICTURE, DESCRIPTION) VALUES(
+                    'Game Of Thrones',
+                    '2011',
+                    '2018',
+                    '9.6',
+                    '1424',
+                    'http://cdn.pastemagazine.com/www/blogs/lists/winter-is-coming-game-of-thrones.jpg',
+                    'Nine noble families fight for control over the mythical lands of Westeros, while a forgotten race returns after being dormant for thousands of years.')""")
+
+    cursor.execute("""INSERT INTO SERIES (TITLE, STARTYEAR, ENDYEAR, SCORE, VOTES,PICTURE, DESCRIPTION) VALUES(
+                    'Game Of ',
+                    '2011',
+                    '2018',
+                    '9.6',
+                    '1424',
+                    'http://cdn.pastemagazine.com/www/blogs/lists/winter-is-coming-game-of-thrones.jpg',
+                    'Nine noble families fight for control over the mythical lands of Westeros, while a forgotten race returns after being dormant for thousands of years.')""")
