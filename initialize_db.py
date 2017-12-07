@@ -142,51 +142,69 @@ def initialize_db_function(cursor):
     cursor.execute("""DROP TABLE IF EXISTS OSCARS CASCADE""")
     cursor.execute("""CREATE TABLE OSCARS(
                     MOVIE VARCHAR(30),
-                    ACTRESS VARCHAR(30),
-                    ACTOR VARCHAR(30),
+                    ACTRESS_NAME VARCHAR(30),
+                    ACTRESS_SURNAME VARCHAR(30),
+                    ACTOR_NAME VARCHAR(30),
+                    ACTOR_SURNAME VARCHAR(30),
                     YEAR INT PRIMARY KEY NOT NULL)""")
 
-    cursor.execute("""INSERT INTO OSCARS (MOVIE, ACTRESS, ACTOR, YEAR) VALUES(
+    cursor.execute("""INSERT INTO OSCARS (MOVIE, ACTRESS_NAME, ACTRESS_SURNAME, ACTOR_NAME, ACTOR_SURNAME, YEAR) VALUES(
                         'MOONLIGHT',
-                        'EMMA STONE',
-                        'CASEY AFFLECK',
+                        'EMMA',
+                        'STONE',
+                        'CASEY',
+                        'AFFLECK',
                         '2016')""")
 
-    cursor.execute("""INSERT INTO OSCARS (MOVIE, ACTRESS, ACTOR, YEAR) VALUES(
+    cursor.execute("""INSERT INTO OSCARS (MOVIE, ACTRESS_NAME, ACTRESS_SURNAME, ACTOR_NAME, ACTOR_SURNAME, YEAR) VALUES(
                         'SPOTLIGHT',
-                        'BRIE LARSON',
-                        'LEONARDO DICAPRIO',
+                        'BRIE',
+                        'LARSON',
+                        'LEONARDO',
+                        'DICAPRIO',
                         '2015')""")
 
-    cursor.execute("""INSERT INTO OSCARS (MOVIE, ACTRESS, ACTOR, YEAR) VALUES(
+    cursor.execute("""INSERT INTO OSCARS (MOVIE, ACTRESS_NAME, ACTRESS_SURNAME, ACTOR_NAME, ACTOR_SURNAME, YEAR) VALUES(
                         'BIRDMAN',
-                        'JULIANNE MOORE',
-                        'EDDIE REDMAYNE',
+                        'JULIANNE',
+                        'MOORE',
+                        'EDDIE',
+                        'REDMAYNE',
                         '2014')""")
 
-    cursor.execute("""INSERT INTO OSCARS (MOVIE, ACTRESS, ACTOR, YEAR) VALUES(
+    cursor.execute("""INSERT INTO OSCARS (MOVIE, ACTRESS_NAME, ACTRESS_SURNAME, ACTOR_NAME, ACTOR_SURNAME, YEAR) VALUES(
                         '12 YEARS A SLAVE',
-                        'CATE BLANCHETT',
-                        'MATTHEW McCONAUGHEY',
+                        'CATE',
+                        'LANCHETT',
+                        'MATTHEW',
+                        'McCONAUGHEY',
                         '2013')""")
 
-    cursor.execute("""INSERT INTO OSCARS (MOVIE, ACTRESS, ACTOR, YEAR) VALUES(
+    cursor.execute("""INSERT INTO OSCARS (MOVIE, ACTRESS_NAME, ACTRESS_SURNAME, ACTOR_NAME, ACTOR_SURNAME, YEAR) VALUES(
                         'ARGO',
-                        'JENNIFER LAWRANCE',
-                        'DANIEL DAY-LEWIS',
+                        'JENNIFER',
+                        'LAWRANCE',
+                        'DANIEL',
+                        'DAY-LEWIS',
                         '2012')""")
 
-    cursor.execute("""INSERT INTO OSCARS (MOVIE, ACTRESS, ACTOR, YEAR) VALUES(
+    cursor.execute("""INSERT INTO OSCARS (MOVIE, ACTRESS_NAME, ACTRESS_SURNAME, ACTOR_NAME, ACTOR_SURNAME, YEAR) VALUES(
                         'THE ARTIST',
-                        'MERYL STREEP',
-                        'JEAN DUJARDIN',
+                        'MERYL',
+                        'STREEP',
+                        'JEAN',
+                        'DUJARDIN',
                         '2011')""")
 
-    cursor.execute("""INSERT INTO OSCARS (MOVIE, ACTRESS, ACTOR, YEAR) VALUES(
+    cursor.execute("""INSERT INTO OSCARS (MOVIE, ACTRESS_NAME, ACTRESS_SURNAME, ACTOR_NAME, ACTOR_SURNAME, YEAR) VALUES(
                         'THE KING''S SPEECH',
-                        'NATALIE PORTMAN',
-                        'COLIN FIRTH',
+                        'NATALIE',
+                        'PORTMAN',
+                        'COLIN',
+                        'FIRTH',
                         '2010')""")
+
+
 
      # Series table
     cursor.execute("""DROP TABLE IF EXISTS SERIES CASCADE""")

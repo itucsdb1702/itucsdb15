@@ -532,13 +532,26 @@ def RemoveMovieFromList(listname, movieid):
     listToDelete.removeMovieFromList()
     flash("Selected movie successfully removed from "+listname+".")
     return redirect(url_for('page.profile_page'))
-    
+
 
 
 @page.route("/oscars", methods= ['GET', 'POST'])
 def oscars():
+    winners = []
 
-    return render_template('oscars.html')
+    with dbapi2._connect(current_app.config['dsn']) as connection:
+        cursor = connection.cursor()
+        query = """SELECT * FROM OSCARS"""
+
+        cursor.execute(query)
+
+        for winner in cursor:
+            winners.append(winner)
+
+        connection.commit()
+
+    return render_template('oscars.html', winners = winners)
+
 
 @page.route('/series', methods = ['GET', 'POST'])
 def series():
