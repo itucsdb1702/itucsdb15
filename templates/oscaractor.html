@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="static/login.css">
+	</head>
+	{% extends 'base.html' %} {% block content %}
+
+	<style>
+		#custom {
+		    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+		    border-collapse: collapse;
+		    width: 100%;
+		}
+
+		#custom td, #custom th {
+		    border: 1px solid #ddd;
+		    padding: 8px;
+		}
+
+		#custom tr:nth-child(even){background-color: #f2f2f2;}
+
+		#custom tr:hover {background-color: #ddd;}
+
+		#custom th {
+		    padding-top: 12px;
+		    padding-bottom: 12px;
+		    text-align: left;
+		    background-color: #4CAF50;
+		    color: white;
+		}
+	</style>
+
+	<body>
+		<div class="container">
+			<table id="custom">
+				<thead>
+					<tr>
+						<th> NAME</th>
+						<th> SURNAME</th>
+						<th> YEAR </th>
+					</tr>
+				</thead>
+				{% for NAME, SURNAME, YEAR in persons %}
+				<tr>
+					<td>{{ NAME }} </td>
+					<td>{{ SURNAME }}</td>
+					<td>{{ YEAR }} </td>
+				</tr>
+				{% endfor %}
+			</table>
+		</div>
+	</body>
+
+
+
+
+
+
+
+
+
+
+	{% endblock %}
+</html>

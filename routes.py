@@ -552,6 +552,25 @@ def oscars():
 
     return render_template('oscars.html', winners = winners)
 
+@page.route("/oscaractor", methods= ['GET', 'POST'])
+def oscaractor():
+    persons = []
+
+    with dbapi2._connect(current_app.config['dsn']) as connection:
+         cursor = connection.cursor()
+         query = """SELECT NAME, SURNAME, YEAR FROM ACTORS a INNER JOIN OSCARS o
+                             ON (((a.NAME = o.ACTRESS_NAME) AND (a.SURNAME = o.ACTRESS_SURNAME)) OR
+                             ((a.NAME = o.ACTOR_NAME) AND (a.SURNAME = o.ACTOR_SURNAME)))
+                             WHERE (((a.NAME = o.ACTRESS_NAME) AND (a.SURNAME = o.ACTRESS_SURNAME)) OR
+                             ((a.NAME = o.ACTOR_NAME) AND (a.SURNAME = o.ACTOR_SURNAME)))"""
+         cursor.execute(query)
+
+         for person in cursor:
+            persons.append(person)
+
+         connection.commit()
+
+    return render_template('oscaractor.html', persons = persons)
 
 @page.route('/series', methods = ['GET', 'POST'])
 def series():

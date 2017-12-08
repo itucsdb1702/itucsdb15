@@ -9,10 +9,49 @@
 		<title> ACTORS </title>
 	</head>
 
-	<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<ul class="breadcrumb">
+					<li class="active">
+						<a href="oscars"><strong>Oscar Winners</strong></a>
+					</li>
+					<li class="active">
+						<a href="oscaractor"><strong>Actor/Actress Won Oscar</strong></a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
 
+	<style>
+		#custom {
+		    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+		    border-collapse: collapse;
+		    width: 100%;
+		}
+
+		#custom td, #custom th {
+		    border: 1px solid #ddd;
+		    padding: 8px;
+		}
+
+		#custom tr:nth-child(even){background-color: #f2f2f2;}
+
+		#custom tr:hover {background-color: #ddd;}
+
+		#custom th {
+		    padding-top: 12px;
+		    padding-bottom: 12px;
+		    text-align: left;
+		    background-color: #4CAF50;
+		    color: white;
+		}
+	</style>
+
+	<body>
 		<div class="container">
-			<table class="table table-striped">
+			<table id="custom">
 				<thead>
 					<tr>
 						<th> ID</th>
@@ -34,12 +73,10 @@
 				</tr>
 				{% endfor %}
 			</table>
-
-
 		</div>
 	</body>
-	<body>
 
+	<body>
 		<div class = "container text-center">
 			<div class = "panel-warning">
 				<div class="panel-heading">Add an Actor or Actress</div>
@@ -53,7 +90,6 @@
 					</form>
 				</div>
 			</div>
-
 			<button type="submit" form="addactor" value="Submit">Add</button>
 		</div>
 	</body>
@@ -76,6 +112,7 @@
 			<button type="submit" form="updateactor" value="Submit">Update</button>
 		</div>
 	</body>
+
 	<body>
 		<div class = "container text-center">
 			<div class = "panel-warning">
