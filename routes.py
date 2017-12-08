@@ -558,11 +558,12 @@ def oscaractor():
 
     with dbapi2._connect(current_app.config['dsn']) as connection:
          cursor = connection.cursor()
-         query = """SELECT NAME, SURNAME, YEAR FROM ACTORS a INNER JOIN OSCARS o
+         query = """SELECT NAME, SURNAME, GENDER, BIRTHDATE, COUNTRY, YEAR FROM ACTORS a INNER JOIN OSCARS o
                              ON (((a.NAME = o.ACTRESS_NAME) AND (a.SURNAME = o.ACTRESS_SURNAME)) OR
                              ((a.NAME = o.ACTOR_NAME) AND (a.SURNAME = o.ACTOR_SURNAME)))
                              WHERE (((a.NAME = o.ACTRESS_NAME) AND (a.SURNAME = o.ACTRESS_SURNAME)) OR
-                             ((a.NAME = o.ACTOR_NAME) AND (a.SURNAME = o.ACTOR_SURNAME)))"""
+                             ((a.NAME = o.ACTOR_NAME) AND (a.SURNAME = o.ACTOR_SURNAME)))
+                             ORDER BY YEAR DESC"""
          cursor.execute(query)
 
          for person in cursor:

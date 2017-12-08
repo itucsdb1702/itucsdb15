@@ -37,13 +37,19 @@
 					<tr>
 						<th> NAME</th>
 						<th> SURNAME</th>
+						<th> GENDER </th>
+						<th> BIRTHDATE </th>
+						<th> COUNTRY </th>
 						<th> YEAR </th>
 					</tr>
 				</thead>
-				{% for NAME, SURNAME, YEAR in persons %}
+				{% for NAME, SURNAME, GENDER, BIRTHDATE, COUNTRY, YEAR in persons %}
 				<tr>
 					<td>{{ NAME }} </td>
 					<td>{{ SURNAME }}</td>
+					<td>{{ GENDER }} </td>
+					<td>{{ BIRTHDATE }} </td>
+					<td>{{ COUNTRY }} </td>
 					<td>{{ YEAR }} </td>
 				</tr>
 				{% endfor %}
