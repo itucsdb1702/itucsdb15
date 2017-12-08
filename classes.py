@@ -61,23 +61,23 @@ class User(UserMixin):
             connection.commit()
 
             return posts
-        
+
     def get_following_users_by_userid(self):
             with dbapi2.connect(app.config['dsn']) as connection:
                     cursor = connection.cursor()
                     query = """SELECT ID, USERNAME, EMAIL FROM USERS u
                                INNER JOIN FOLLOWERS f ON (u.ID = f.FOLLOWED_USER_ID)
                                WHERE (f.FOLLOWING_USER_ID = %s) """
-                    
+
                     userid = self.get_user_id()
                     cursor.execute(query, (userid,))
-                    
+
                     users = []
                     for user in cursor:
                         users.append(user)
-                    
+
                     connection.commit()
-                    
+
                     return users
 
 
@@ -261,7 +261,7 @@ class WatchedList:
                                 WHERE ((USERNAME = %s) AND (MOVIEID = %s))"""
 
                     cursor.execute(query, (self.score, self.username, self.movieid))
-                    
+
 
 class FollowerPair:
     def __init__(self, following_id, followed_id):
@@ -340,7 +340,7 @@ class MovieList:
                         return self
                     else:
                         return 1
-    
+
     def removeMovieFromList(self):
         with dbapi2.connect(app.config['dsn']) as connection:
                     cursor = connection.cursor()
@@ -348,3 +348,33 @@ class MovieList:
 
                     cursor.execute(query, (self.list_name, self.user_id, self.movie_id,))
                     connection.commit()
+class Series:
+    def add_series(TITLE, STARTYEAR, ENDYEAR, SCORE, VOTES,PICTURE, DESCRIPTION):
+        with dbapi2.connect(dsn) as connection:
+            try:
+                cursor = connection.cursor()
+                state= """INSERT INTO SERIES (TITLE, STARTYEAR, ENDYEAR, SCORE, VOTES,PICTURE, DESCRIPTION) VALUES(%s,%s,%s,%s,%s,%s,%s)"""
+                cursor.execute(state)
+                connection.commit()
+                cursor.close()
+            except dbapi2.DatabaseError as e:
+                connection.rollback()
+
+    def delete_series(ID):
+        with dbapi2.connect(dsn) as connection:
+            try:
+                cursor = connection.cursor()
+                cursor.execute("""DELETE FROM SERIES WHERE ID = %s""", (int(ID),))
+                connection.commit()
+            except dbapi2.DatabaseError as e:
+                connection.rollback()
+
+    def update_series(ID, TITLE, STARTYEAR, ENDYEAR, SCORE, VOTES,PICTURE, DESCRIPTION):
+        with dbapi2.connect(dsn) as connection:
+            try:
+                cursor = connection.cursor()
+                cursor.execute("""UPDATE SERIES SET TITLE = '%s', STARTYEAR = '%s', ENDYEAR = '%s', SCORE = '%s', VOTES = '%s', PICTURE = '%s', DESCRIPTION = '%s' WHERE ID = %d"""
+                               % (TITLE, STARTYEAR, ENDYEAR, SCORE, VOTES,PICTURE, DESCRIPTION,int(ID)))
+                connection.commit()
+            except dbapi2.DatabaseError as e:
+                connection.rollback()
