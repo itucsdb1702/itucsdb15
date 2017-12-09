@@ -11,6 +11,7 @@ from flask import Flask, flash
 from flask import render_template
 from classes import User
 from classes import UserList
+from classes import Post
 from flask_login import login_manager
 from flask_login.login_manager import LoginManager
 from routes import page

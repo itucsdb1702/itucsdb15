@@ -92,10 +92,6 @@ class User(UserMixin):
     def is_authenticated(self):
         return True
 
-
-
-
-
 class UserList:
     def __init__(self):
         self.last_user_id = None
@@ -219,6 +215,17 @@ class Post:
                     cursor.execute(query, (self.userid, self.movieid, self.comment))
                     connection.commit()
 
+    def delete_post_from_db(self):
+        with dbapi2.connect(app.config['dsn']) as connection:
+                    cursor = connection.cursor()
+                    query = """DELETE FROM POSTS WHERE (USER_ID = %s) AND
+                                                        (MOVIE_ID = %s) AND
+                                                        (COMMENTS = %s)
+                            """
+
+                    cursor.execute(query, (self.userid, self.movieid, self.comment))
+                    connection.commit()
+
 class WatchedList:
     def __init__(self, username, movieid, score):
         self.username = username
@@ -261,7 +268,6 @@ class WatchedList:
                                 WHERE ((USERNAME = %s) AND (MOVIEID = %s))"""
 
                     cursor.execute(query, (self.score, self.username, self.movieid))
-
 
 class FollowerPair:
     def __init__(self, following_id, followed_id):
@@ -348,6 +354,7 @@ class MovieList:
 
                     cursor.execute(query, (self.list_name, self.user_id, self.movie_id,))
                     connection.commit()
+
 class Series:
     def add_series(TITLE, STARTYEAR, ENDYEAR, SCORE, VOTES,PICTURE, DESCRIPTION):
         with dbapi2.connect(dsn) as connection:

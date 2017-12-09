@@ -48,7 +48,7 @@
 				</div>
 
 			</div>
-			
+
 			<div class="container">
 		<div class="row">
 			<div class="col-md-6 col-lg-6 col-xs-12 col-sm-6">
@@ -77,8 +77,8 @@
 				</div>
 
 			</div>
-			
-			
+
+
 			<div class="col-md-6 col-lg-6 col-xs-12 col-sm-6">
 
 				<h2>My Movie Lists</h2>
@@ -101,8 +101,8 @@
 				</div>
 
 			</div>
-			
-			
+
+
 			<div class="col-md-6 col-lg-6 col-xs-12 col-sm-6">
 
 				<h2>My posts</h2>
@@ -121,6 +121,7 @@
 								<td>{{ POST_ID }}</td>
 								<td>{{ TITLE }}</td>
 								<td style="word-wrap: break-word;min-width: 160px;max-width: 160px;">{{ COMMENTS }}</td>
+								<td><button onclick="location.href = '{{ url_for('page.delete_post', postid=POST_ID) }}'" type ="submit" class = "btn btn-danger"> Delete </button></td>
 							</tr>
 							{% endfor %}
 						</tbody>

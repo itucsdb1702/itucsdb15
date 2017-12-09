@@ -419,6 +419,23 @@ def Follow(id):
         return redirect(url_for('page.home_page'))
 
 
+@page.route("/deletepost/<postid>")
+def delete_post(postid):
+     with dbapi2._connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            query = """SELECT u.ID, m.MOVIEID, COMMENTS FROM
+                            USERS u INNER JOIN POSTS p ON (u.ID = p.USER_ID)
+                            INNER JOIN MOVIES m ON (m.MOVIEID = p.MOVIE_ID)
+                        WHERE (p.POST_ID = %s)"""
+
+            cursor.execute(query, (postid,))
+
+            post = cursor.fetchone()
+            post_to_delete = Post(post[0], post[1],post[2])
+            post_to_delete.delete_post_from_db()
+            connection.commit()
+            return redirect(url_for('page.profile_page'))
+
 @page.route("/unfollow/<id>")
 def Unfollow(id):
     user = User(current_user.username, "","")
