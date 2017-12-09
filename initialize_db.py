@@ -175,7 +175,7 @@ def initialize_db_function(cursor):
     cursor.execute("""INSERT INTO OSCARS (MOVIE, ACTRESS_NAME, ACTRESS_SURNAME, ACTOR_NAME, ACTOR_SURNAME, YEAR) VALUES(
                         '12 YEARS A SLAVE',
                         'CATE',
-                        'LANCHETT',
+                        'BLANCHETT',
                         'MATTHEW',
                         'McCONAUGHEY',
                         '2013')""")
@@ -183,7 +183,7 @@ def initialize_db_function(cursor):
     cursor.execute("""INSERT INTO OSCARS (MOVIE, ACTRESS_NAME, ACTRESS_SURNAME, ACTOR_NAME, ACTOR_SURNAME, YEAR) VALUES(
                         'ARGO',
                         'JENNIFER',
-                        'LAWRANCE',
+                        'LAWRENCE',
                         'DANIEL',
                         'DAY-LEWIS',
                         '2012')""")

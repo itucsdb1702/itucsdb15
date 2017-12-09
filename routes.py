@@ -569,6 +569,24 @@ def oscars():
 
     return render_template('oscars.html', winners = winners)
 
+@page.route("/oscarsreverseorder", methods= ['GET', 'POST'])
+def oscarsreverseorder():
+    winnersreverse = []
+
+    with dbapi2._connect(current_app.config['dsn']) as connection:
+        cursor = connection.cursor()
+        query = """SELECT * FROM OSCARS ORDER BY YEAR"""
+
+        cursor.execute(query)
+
+        for winner in cursor:
+            winnersreverse.append(winner)
+
+        connection.commit()
+
+    return render_template('oscarsreverseorder.html', winnersreverse = winnersreverse)
+
+
 @page.route("/oscaractor", methods= ['GET', 'POST'])
 def oscaractor():
     persons = []
