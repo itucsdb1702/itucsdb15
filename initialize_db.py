@@ -218,15 +218,6 @@ def initialize_db_function(cursor):
                                     PICTURE VARCHAR(500),
                                     DESCRIPTION VARCHAR(1000) )""")
 
-    cursor.execute("""INSERT INTO SERIES (TITLE, STARTYEAR, ENDYEAR, SCORE,VOTES, PICTURE, DESCRIPTION) VALUES(
-                    'Game Of Thrones',
-                    '2011',
-                    '2018',
-                    '9.6',
-                    '1424',
-                    'http://cdn.pastemagazine.com/www/blogs/lists/winter-is-coming-game-of-thrones.jpg',
-                    'Nine noble families fight for control over the mythical lands of Westeros, while a forgotten race returns after being dormant for thousands of years.')""")
-
 
     # News table
     cursor.execute("""DROP TABLE IF EXISTS NEWS CASCADE""")
