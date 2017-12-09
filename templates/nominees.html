@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="static/login.css">
+	</head>
+	{% extends 'base.html' %} {% block content %}
+	<head>
+		<meta charset = "UTF-8" />
+		<title> NOMINEES </title>
+	</head>
+
+	{% for ID, NAME, INFORMATION, PICTUREURL, DIRECTOR in candidates %}
+
+	<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3><strong> {{ NAME }} </strong></h3>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<img alt="Bootstrap Image Preview" src={{PICTUREURL}} class="img-thumbnail" />
+		</div>
+		<div class="col-md-6">
+			<p class="text-info text-left">
+				<strong>{{ INFORMATION }}</strong>
+			</p>
+			<p class="text-info text-left">
+			<strong><br>DIRECTED BY {{ DIRECTOR }}<br><br><br><br></strong>
+			</p>
+
+			<a href="#" class="btn btn-lg active" type="button">VOTE FOR THIS!</a>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+	{% endfor %}
+
+
+
+
+
+	{% endblock %}
+
+</html>

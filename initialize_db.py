@@ -208,15 +208,15 @@ def initialize_db_function(cursor):
     cursor.execute("""DROP TABLE IF EXISTS NOMINEES CASCADE""")
     cursor.execute("""CREATE TABLE NOMINEES(
                         ID SERIAL PRIMARY KEY NOT NULL,
-                        NAME VARCHAR(30) NOT NULL,
+                        NAME VARCHAR(50) NOT NULL,
                         INFORMATION VARCHAR(300),
-                        PICTUREURL VARCHAR(15),
-                        DIRECTOR VARCHAR(30))""")
+                        PICTUREURL VARCHAR(200),
+                        DIRECTOR VARCHAR(40))""")
 
     # Data for nominee table
     cursor.execute("""INSERT INTO NOMINEES (NAME, INFORMATION, PICTUREURL, DIRECTOR) VALUES(
                     'CALL ME BY YOUR NAME',
-                    'In Northern Italy in 1983, seventeen year-old Elio begins a relationship with visiting Oliver, his father's research assistant, with whom he bonds over his emerging sexuality, their Jewish heritage, and the beguiling Italian landscape.',
+                    'In Northern Italy in 1983, seventeen year-old Elio begins a relationship with visiting Oliver, his father''s research assistant, with whom he bonds over his emerging sexuality, their Jewish heritage, and the beguiling Italian landscape.',
                     'https://images-na.ssl-images-amazon.com/images/M/MV5BNDk3NTEwNjc0MV5BMl5BanBnXkFtZTgwNzYxNTMwMzI@._V1_UX182_CR0,0,182,268_AL_.jpg',
                     'LUCA GUADAGNINO')""")
 
@@ -228,7 +228,7 @@ def initialize_db_function(cursor):
 
     cursor.execute("""INSERT INTO NOMINEES (NAME, INFORMATION, PICTUREURL, DIRECTOR) VALUES(
                   'MOLLY''S GAME',
-                  'The true story of Molly Bloom, an Olympic-class skier who ran the world's most exclusive high-stakes poker game and became an FBI target.',
+                  'The true story of Molly Bloom, an Olympic-class skier who ran the world''s most exclusive high-stakes poker game and became an FBI target.',
                   'https://images-na.ssl-images-amazon.com/images/M/MV5BMzM3NzcxMzQyNl5BMl5BanBnXkFtZTgwNzUyNzcxNDM@._V1_UX182_CR0,0,182,268_AL_.jpg',
                   'AARON SORKIN')""")
 
@@ -258,7 +258,7 @@ def initialize_db_function(cursor):
 
     cursor.execute("""INSERT INTO NOMINEES (NAME, INFORMATION, PICTUREURL, DIRECTOR) VALUES(
                     'THREE BILBOARDS OUTSIDE EBBING, MISSOURI',
-                    'A mother personally challenges the local authorities to solve her daughter's murder when they fail to catch the culprit.',
+                    'A mother personally challenges the local authorities to solve her daughter''s murder when they fail to catch the culprit.',
                     'https://images-na.ssl-images-amazon.com/images/M/MV5BMjMxNzgwMDUyMl5BMl5BanBnXkFtZTgwMTQ0NTIyNDM@._V1_UX182_CR0,0,182,268_AL_.jpg',
                     'MARTIN McDONAGH')""")
 
@@ -270,13 +270,13 @@ def initialize_db_function(cursor):
 
     cursor.execute("""INSERT INTO NOMINEES (NAME, INFORMATION, PICTUREURL, DIRECTOR) VALUES(
                     'MOTHER!',
-                    'A couple's relationship is tested when uninvited guests arrive at their home, disrupting their tranquil existence.',
+                    'A couple''s relationship is tested when uninvited guests arrive at their home, disrupting their tranquil existence.',
                     'https://images-na.ssl-images-amazon.com/images/M/MV5BMzc5ODExODE0MV5BMl5BanBnXkFtZTgwNDkzNDUxMzI@._V1_UX182_CR0,0,182,268_AL_.jpg',
                     'DARREN ARONOFSKY')""")
 
     cursor.execute("""INSERT INTO NOMINEES (NAME, INFORMATION, PICTUREURL, DIRECTOR) VALUES(
                   'GET OUT',
-                  'It's time for a young African American to meet with his white girlfriend's parents for a weekend in their secluded estate in the woods, but before long, the friendly and polite ambience will give way to a nightmare.',
+                  'It''s time for a young African American to meet with his white girlfriend''s parents for a weekend in their secluded estate in the woods, but before long, the friendly and polite ambience will give way to a nightmare.',
                   'https://images-na.ssl-images-amazon.com/images/M/MV5BMjUxMDQwNjcyNl5BMl5BanBnXkFtZTgwNzcwMzc0MTI@._V1_UX182_CR0,0,182,268_AL_.jpg',
                   'JORDAN PEELE')""")
 
@@ -288,7 +288,7 @@ def initialize_db_function(cursor):
 
     cursor.execute("""INSERT INTO NOMINEES (NAME, INFORMATION, PICTUREURL, DIRECTOR) VALUES(
                   'THE BIG SICK',
-                  'Pakistan-born comedian Kumail Nanjiani and grad student Emily Gardner fall in love but struggle as their cultures clash. When Emily contracts a mysterious illness, Kumail finds himself forced to face her feisty parents, his family's expectations, and his true feelings.',
+                  'Pakistan-born comedian Kumail Nanjiani and grad student Emily Gardner fall in love but struggle as their cultures clash. When Emily contracts a mysterious illness, Kumail finds himself forced to face her feisty parents, his family''s expectations, and his true feelings.',
                   'https://images-na.ssl-images-amazon.com/images/M/MV5BZWM4YzZjOTEtZmU5ZS00ZTRkLWFiNjAtZTEwNzIzMDM5MjdmXkEyXkFqcGdeQXVyNDg2MjUxNjM@._V1_UX182_CR0,0,182,268_AL_.jpg',
                   'MICHEAL SHOWALTER')""")
 
@@ -312,7 +312,7 @@ def initialize_db_function(cursor):
 
     cursor.execute("""INSERT INTO NOMINEES (NAME, INFORMATION, PICTUREURL, DIRECTOR) VALUES(
                   'BLADE RUNNER 2049',
-                  'A young blade runner's discovery of a long-buried secret leads him to track down former blade runner Rick Deckard, who's been missing for thirty years.',
+                  'A young blade runner''s discovery of a long-buried secret leads him to track down former blade runner Rick Deckard, who''s been missing for thirty years.',
                   'https://images-na.ssl-images-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_UX182_CR0,0,182,268_AL_.jpg',
                   'DENIS VILLENEUVE')""")
 
@@ -344,7 +344,7 @@ def initialize_db_function(cursor):
                   'BREATHE',
                   'The inspiring true love story of Robin and Diana Cavendish, an adventurous couple who refuse to give up in the face of a devastating disease. Their heartwarming celebration of human possibility marks the directorial debut of Andy Serkis.',
                   'https://images-na.ssl-images-amazon.com/images/M/MV5BMTg1OTcxNjU1MV5BMl5BanBnXkFtZTgwMzcwMTQ3MzI@._V1_UX182_CR0,0,182,268_AL_.jpg',
-                  ''ANDY SERKIS)""")
+                  'ANDY SERKIS')""")
 
     cursor.execute("""INSERT INTO NOMINEES (NAME, INFORMATION, PICTUREURL, DIRECTOR) VALUES(
                     'LAST FLAG FLYING',

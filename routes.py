@@ -608,6 +608,23 @@ def oscaractor():
 
     return render_template('oscaractor.html', persons = persons)
 
+@page.route("/nominees", methods= ['GET', 'POST'])
+def nominees():
+    candidates = []
+
+    with dbapi2._connect(current_app.config['dsn']) as connection:
+        cursor = connection.cursor()
+        query = """SELECT * FROM NOMINEES"""
+
+        cursor.execute(query)
+
+        for candidate in cursor:
+            candidates.append(candidate)
+
+        connection.commit()
+
+    return render_template('nominees.html', candidates = candidates)
+
 @page.route('/series', methods = ['GET', 'POST'])
 def series():
 
