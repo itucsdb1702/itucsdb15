@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="static/login.css">
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	</head>
 	{% extends 'base.html' %} {% block content %}
 	<head>
@@ -17,7 +18,7 @@
 						<a href="oscars"><strong>Oscar Winners</strong></a>
 					</li>
 					<li class="active">
-						<a href="oscaractor"><strong>Actor/Actress Won Oscar</strong></a>
+						<a href="oscaractor"><strong>Actors and Actresses Won Oscar</strong></a>
 					</li>
 				</ul>
 			</div>
@@ -51,17 +52,17 @@
 
 	<body>
 		<div class="container">
-			<table id="custom">
-				<thead>
-					<tr>
-						<th> ID</th>
-						<th> NAME</th>
-						<th> SURNAME</th>
-						<th> GENDER </th>
-						<th> BIRTHDATE </th>
-						<th> COUNTRY </th>
-					</tr>
-				</thead>
+			<table class="w3-table-all w3-margin-top" id="custom">
+
+				<tr>
+					<th> ID</th>
+					<th> NAME</th>
+					<th> SURNAME</th>
+					<th> GENDER </th>
+					<th> BIRTHDATE </th>
+					<th> COUNTRY </th>
+				</tr>
+
 				{% for ID, NAME, SURNAME, GENDER, BIRTHDATE, COUNTRY in stars %}
 				<tr>
 					<td>{{ ID }} </td>
@@ -79,7 +80,7 @@
 	<body>
 		<div class = "container text-center">
 			<div class = "panel-warning">
-				<div class="panel-heading">Add an Actor or Actress</div>
+				<div class="panel-heading"><strong>Add an Actor or Actress</strong></div>
 				<div class = "panel-body">
 					<form action = "/add_actor" method="post" id = "addactor">
 							NAME: <input type = "text" placeholder = "Name" name = "NAME"><br>
@@ -97,7 +98,7 @@
 	<body>
 		<div class = "container text-center">
 			<div class = "panel-warning">
-				<div class = "panel-heading">Update an Actor or Actress</div>
+				<div class = "panel-heading"><strong>Update an Actor or Actress</strong></div>
 				<div class = "panel-body">
 					<form action = "/update_actor" method = "post" id = "updateactor">
 						ID: <input type = "text" placeholder = "ID" name = "ID"><br>
@@ -116,7 +117,7 @@
 	<body>
 		<div class = "container text-center">
 			<div class = "panel-warning">
-				<div class="panel-heading">Delete an Actor or Actress</div>
+				<div class="panel-heading"><strong>Delete an Actor or Actress</strong></div>
 				<div class = "panel-body">
 					<form action="/delete_actor" method="post" id="deleteactor">
 						ID: <input type="text" placeholder = "Enter ID of actor/actress" name="ID"><br>
@@ -127,6 +128,19 @@
 		</div>
 	</body>
 
+
 {% endblock %}
 
+
+
+
+
+
+
+
 </html>
+
+
+
+
+

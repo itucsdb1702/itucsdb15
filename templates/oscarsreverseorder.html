@@ -30,6 +30,9 @@
 
 					      <div class="item">
 					        <img src="https://www.the-numbers.com/images/movies/Moonlight-(2015)-1-Full.jpg">
+					        <div class="carousel-caption">
+								<h3>MOONLIGHT</h3>
+							</div>
 					      </div>
 
 					      <div class="item">
@@ -70,31 +73,29 @@
 						<h1 style="color:gold; background-color:black;">Oscar Winners</h1>
 					</div>
 				</div>
-				<div class="col-sm-4">
-					<div class="btn-group">
-						<button class="btn btn-default">Order by Year</button>
-						<button data-toggle="dropdown" class="btn btn-default dropdown-toggle">
-							<span class="caret"></span>
-						</button>
-						<ul class="dropdown-menu">
-							<li>
-								<a href="oscars">Newest First</a>
-							</li>
-							<li>
-								<a href="oscarsreverseorder">Oldest First</a>
-							</li>
-						</ul>
-					</div>
-				</div>
 			</div>
-		</div>
+			<div class="col-sm-4">
+				<div class="btn-group">
+					<button class="btn btn-default">Order by Year</button>
+					<button data-toggle="dropdown" class="btn btn-default dropdown-toggle">
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li>
+							<a href="oscars">Newest First</a>
+						</li>
+						<li>
+							<a href="oscarsreverseorder">Oldest First</a>
+						</li>
+					</ul>
+				</div>
 			</div>
 		</div>
 	</body>
 		<div class="container">
 			{% for MOVIE, ACTRESS_NAME, ACTRESS_SURNAME, ACTOR_NAME, ACTOR_SURNAME, YEAR in winnersreverse %}
 			<ul class="list-group">
-				<li class="list-group-item-info"><strong>Year: {{YEAR}}</strong></li>
+				<li class="list-group-item-info"><h3><strong>Year: {{YEAR}}</strong></h3></li>
 		    	<li class="list-group-item"><strong>Movie: {{MOVIE}}</strong></li>
 				<li class="list-group-item"><strong>Actress: {{ACTRESS_NAME}} {{ACTRESS_SURNAME}}</strong></li>
 				<li class="list-group-item"><strong>Actor: {{ACTOR_NAME}} {{ACTOR_SURNAME}}</strong></li>
