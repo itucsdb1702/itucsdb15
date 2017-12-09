@@ -222,11 +222,16 @@ def init_series_db():
     with dbapi2.connect(app.config['dsn']) as connection:
         cursor = connection.cursor()
         initialize_db_function(cursor)
-
-
         connection.commit()
-
         return redirect(url_for('page.home_page'))
+@app.route('/init_news_db')
+def init_news_db():
+    with dbapi2.connect(app.config['dsn']) as connection:
+        cursor = connection.cursor()
+        initialize_db_function(cursor)
+        connection.commit()
+        return redirect(url_for('page.home_page'))
+
 
 if __name__ == '__main__':
     VCAP_APP_PORT = os.getenv('VCAP_APP_PORT')
