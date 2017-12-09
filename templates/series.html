@@ -12,12 +12,36 @@
 	<body>
 		<div class="container-fluid">
 
+				<div class="container">
+				  <ul class="nav nav-pills">
+				    <li class="active"><a data-toggle="pill" href="#home">Series</a></li>
+				    <li><a data-toggle="pill" href="#menu1">Most Rated Series</a></li>
+				    <li><a data-toggle="pill" href="#menu2">Incoming Movies</a></li>
+				    <li><a data-toggle="pill" href="#menu3">Awarded Series</a></li>
+				  </ul>
+
+				  <div class="tab-content">
+				  <div >
+				    <div id="home" class="tab-pane fade in active" >
+				    </div>
+				    <div id="menu1" class="tab-pane fade">
+				    </div>
+				    <div id="menu2" class="tab-pane fade">
+				    </div>
+				    <div id="menu3" class="tab-pane fade">
+				    </div>
+				  </div>
+			</div>
 			<div class="row" style=" margin:0 auto;">
 				{% for ID , TITLE , STARTYEAR,ENDYEAR, SCORE,VOTES ,PICTURE,DESCRIPTION in nums %}
+				<div class="container">
+			  <div class="well">
+			      <div class="media">
 				<div class="col-md-12"  >
 
 					<h3>
-						{{ ID }} ) {{ TITLE }}
+
+						<a href="https://www.w3schools.com/html/">{{ ID }}){{ TITLE }}</a>
 					</h3>
 					<div class="row">
 						<div class="col-md-4">
@@ -35,40 +59,17 @@
 								</li>
 						</div>
 						<div class="col-md-4">
-							<ol>
-								<li>
-
-								</li>
-								<li>
-
-								</li>
-								<li>
-									Integer molestie lorem at massa
-								</li>
-								<li>
-									Facilisis in pretium nisl aliquet
-								</li>
-								<li>
-									Nulla volutpat aliquam velit
-								</li>
-								<li>
-									Faucibus porta lacus fringilla vel
-								</li>
-								<li>
-									Aenean sit amet erat nunc
-								</li>
-								<li>
-									Eget porttitor lorem
-								</li>
-							</ol>
+							<p>
+								Nine noble families fight for control over the mythical lands of Westeros, while a forgotten race returns after being dormant for thousands of years.
+							</p>
 						</div>
 					</div>
-					<div class="row" style="background-color:blue;">
-					<p>
-						Nine noble families fight for control over the mythical lands of Westeros, while a forgotten race returns after being dormant for thousands of years.
-					</p>
+					<div class="row" >
+							<p>
+
+							</p>
 					</div>
-					<div class="row" style="background-color:black;">
+					<div class="row" >
 						<div class="col-md-4">
 
 							<button type="button" class="btn btn-primary">
@@ -81,6 +82,7 @@
 								Like
 							</button>
 						</div>
+
 						<div class="col-md-4">
 
 							<button type="button" class="btn btn-danger">
@@ -90,8 +92,12 @@
 					</div>
 
 				</div>
+				</div>
+				</div>
+				</div>
 			</div>
 			{% endfor %}
+
 		</div>
 		</body>
 

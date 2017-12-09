@@ -605,3 +605,19 @@ def series():
 
         connection.commit()
     return render_template('series.html', nums = nums)
+
+@page.route('/news', methods = ['GET', 'POST'])
+def news():
+
+    nums = []
+    with dbapi2._connect(current_app.config['dsn']) as connection:
+        cursor = connection.cursor()
+        query = """SELECT * FROM NEWS"""
+
+        cursor.execute(query)
+
+        for num in cursor:
+            nums.append(num)
+
+        connection.commit()
+    return render_template('news.html', nums = nums)
