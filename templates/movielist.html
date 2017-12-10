@@ -14,6 +14,7 @@
   {% for LIST_NAME in listname %}
   <h2>
   	<span>{{LIST_NAME}} </span>
+  	<button onclick="location.href = '{{ url_for('page.list_page')}}'" type ="submit" class = "btn btn-success pull-right"> Add Movie To List </button>
 	<button onclick="location.href = '{{ url_for('page.DeleteWholeList', listname=LIST_NAME) }}'" type ="submit" class = "btn btn-danger pull-right"> Delete List </button>
   </h2> 
 

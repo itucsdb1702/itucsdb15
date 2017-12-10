@@ -30,11 +30,17 @@ page = Blueprint('page',__name__)
 
 @page.route('/')
 def home_page():
-    return render_template('home.html')
+    if current_user.get_id() is None:
+        return render_template('home2.html')
+    else:
+        return render_template('home.html')
 
 @page.route('/home')
 def home_page_1():
-    return render_template('home.html')
+    if current_user.get_id() is None:
+        return render_template('home2.html')
+    else:
+        return render_template('home.html')
 
 
 @page.route('/login', methods = ['GET', 'POST'])
