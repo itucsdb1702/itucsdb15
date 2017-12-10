@@ -384,7 +384,6 @@ def profile_page():
         flash("Please log in to MovieShake")
         return redirect(url_for('page.login_page'))
 
-
 @page.route("/userlist", methods = ['GET', 'POST'])
 def UserList():
         userid = current_user.get_user_id()
@@ -510,6 +509,22 @@ def user_profiles(user_id):
     else:
         flash("Please log in to MovieShake")
         return redirect(url_for('page.login_page'))
+
+@page.route("/searchresults", methods = ['GET', 'POST'])
+def search_users():
+
+    if current_user.get_id() is None:
+        flash("Please log in to MovieShake.")
+        return redirect(url_for('page.login_page'))
+    else:
+        username_to_search = request.form['search_uname']
+        with dbapi2._connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            query = "SELECT ID FROM USERS WHERE (USERNAME = %s)"
+            cursor.execute(query, (username_to_search,))
+            userid = cursor.fetchone()
+            return redirect(url_for('page.user_profiles', user_id = userid[0]))
+
 @page.route("/list", methods = ['GET', 'POST'])
 def list_page():
     if request.method == "POST":
@@ -570,7 +585,6 @@ def list_page():
     else:
         return render_template('list.html')
 
-
 @page.route("/showlist/<listname>")
 def Show_list(listname):
     movies = []
@@ -611,7 +625,6 @@ def Show_others_list(userid, listname):
         print(userid)
     return render_template('movielistforeign.html', movies = movies, listname = listnames, userid = userid)
 
-
 @page.route("/deletelist/<listname>")
 def DeleteWholeList(listname):
 
@@ -630,8 +643,6 @@ def RemoveMovieFromList(listname, movieid):
     listToDelete.removeMovieFromList()
     flash("Selected movie successfully removed from "+listname+".")
     return redirect(url_for('page.profile_page'))
-
-
 
 @page.route("/oscars", methods= ['GET', 'POST'])
 def oscars():
@@ -666,7 +677,6 @@ def oscarsreverseorder():
         connection.commit()
 
     return render_template('oscarsreverseorder.html', winnersreverse = winnersreverse)
-
 
 @page.route("/oscaractor", methods= ['GET', 'POST'])
 def oscaractor():
