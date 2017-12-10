@@ -20,6 +20,7 @@
   <table class="table">
     <thead>
       <tr>
+        <th id='id'>#</th>
       	<th id='title'>Title</th>
         <th id='year'>Release Year</th>
         <th id='score'>Score</th>
@@ -28,8 +29,9 @@
       </tr>
     </thead>
     <tbody>
-    {% for TITLE, YEAR, SCORE, VOTES, IMDB_URL in movies %}
+    {% for MOVIEID, TITLE, YEAR, SCORE, VOTES, IMDB_URL in movies %}
       <tr>
+        <td>{{ MOVIEID }}<br></td>
       	<td>{{ TITLE }}<br></td>
         <td>{{ YEAR }}<br></td>
         <td>{{ SCORE }}</td>

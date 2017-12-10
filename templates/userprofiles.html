@@ -92,9 +92,11 @@
 						</thead>
 						<tbody>
 							{% for LIST_NAME in lists %}
+							{% for USERID in userid %}
 							<tr>
-								<td><a href = "showlist/{{ LIST_NAME }}">{{ LIST_NAME }}</td>
+								<td><a href = "showotherslist/{{USERID}}/{{ LIST_NAME }}">{{ LIST_NAME }}</td>
 							</tr>
+							{% endfor %}
 							{% endfor %}
 						</tbody>
 					</table>

@@ -591,6 +591,27 @@ def Show_list(listname):
         listnames.append(listname)
     return render_template('movielist.html', movies = movies, listname = listnames)
 
+@page.route("/userprofiles/showotherslist/<userid>/<listname>")
+def Show_others_list(userid, listname):
+    movies = []
+    listnames = []
+    with dbapi2._connect(current_app.config['dsn']) as connection:
+        cursor = connection.cursor()
+        query = """SELECT MOVIEID, TITLE, YEAR, SCORE, VOTES, IMDB_URL FROM MOVIES m
+                                 INNER JOIN MOVIELIST l ON (m.MOVIEID = l.MOVIE_ID)
+                                 WHERE ((l.LIST_NAME = %s) AND (l.USER_ID = %s))"""
+
+        cursor.execute(query, (listname,userid,))
+
+        for movie in cursor:
+            movies.append(movie)
+
+        connection.commit()
+        listnames.append(listname)
+        print(userid)
+    return render_template('movielistforeign.html', movies = movies, listname = listnames, userid = userid)
+
+
 @page.route("/deletelist/<listname>")
 def DeleteWholeList(listname):
 
