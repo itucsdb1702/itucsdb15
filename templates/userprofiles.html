@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+{% extends 'base.html' %} {% block content %}
+<body>
+	<div class="container">
+	<div class="row">
+	<h1 class="pull-left">{{username}}'s Profile</h1>
+	<button onclick="location.href = '{{ url_for('page.Unfollow', id=userid) }}'"
+		type="submit" class="btn btn-md btn-danger pull-right">Unfollow this user</button>
+	</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 col-lg-6 col-xs-12 col-sm-6">
+
+				<h2>Watched Movies List</h2>
+				<div class="table-responsive">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>Title</th>
+								<th>Year</th>
+								<th>Score</th>
+								<th>Votes</th>
+								<th>IMDB Url</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for TITLE, YEAR, SCORE, VOTES, IMDB_URL in movies %}
+							<tr>
+								<td>{{ TITLE }}</td>
+								<td>{{ YEAR }}</td>
+								<td>{{ SCORE }}</td>
+								<td>{{ VOTES }}</td>
+								<td><a href = "{{ IMDB_URL }}">{{ IMDB_URL }}</a></td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+
+			</div>
+
+			<div class="container">
+		<div class="row">
+			<div class="col-md-6 col-lg-6 col-xs-12 col-sm-6">
+
+				<h2>Following</h2>
+				<div class="table-responsive">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th id='id'>User Id</th>
+        						<th id='username'>Username</th>
+        						<th id='email'>Email</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for USERID, USERNAME, EMAIL in followingusers %}
+						      <tr>
+						      	<td>{{ USERID }}<br></td>
+						        <td><a href="{{ url_for('page.user_profiles', user_id=USERID)}}">{{ USERNAME }}</a><br></td>
+						        <td>{{ EMAIL }}</td>
+						      </tr>
+						    {% endfor %}
+						</tbody>
+					</table>
+				</div>
+
+			</div>
+
+
+			<div class="col-md-6 col-lg-6 col-xs-12 col-sm-6">
+
+				<h2>My Movie Lists</h2>
+				<p>Click to the name of the list to show content.</p>
+				<div class="table-responsive">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>Name</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for LIST_NAME in lists %}
+							<tr>
+								<td><a href = "showlist/{{ LIST_NAME }}">{{ LIST_NAME }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+
+			</div>
+
+
+			<div class="col-md-6 col-lg-6 col-xs-12 col-sm-6">
+
+				<h2>My posts</h2>
+				<div class="table-responsive">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Movie</th>
+								<th>Comments</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for POST_ID, TITLE, COMMENTS in posts %}
+							<tr>
+								<td>{{ POST_ID }}</td>
+								<td>{{ TITLE }}</td>
+								<td style="word-wrap: break-word;min-width: 160px;max-width: 160px;">{{ COMMENTS }}</td>
+								<td><button onclick="location.href = '{{ url_for('page.delete_post', postid=POST_ID) }}'" type ="submit" class = "btn btn-danger"> Delete </button></td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+{% endblock %}
+
+</html>
