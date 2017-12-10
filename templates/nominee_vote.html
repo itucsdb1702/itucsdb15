@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="static/login.css">
+	</head>
+	{% extends 'base.html' %} {% block content %}
+	<head>
+		<meta charset = "UTF-8" />
+		<title> NOMINEES </title>
+	</head>
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<img alt="Bootstrap Image Preview" src="http://www.sportsbettingexperts.com/wp-content/uploads/2017/07/oscars90-1024x576.jpg" />
+			</div>
+		</div>
+	</div>
+
+
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>
+								#MOVIDEID
+							</th>
+							<th>
+								Name of Nominee
+							</th>
+							<th>
+								Votes given by users
+							</th>
+						</tr>
+					</thead>
+
+					<tbody>
+						{% for ID, NAME, INFORMATION, PICTUREURL, DIRECTOR, VOTES in candidates %}
+						<tr>
+							<td>
+								{{ ID }}
+							</td>
+							<td>
+								{{ NAME }}
+							</td>
+							<td>
+								{{ VOTES }}
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+
+
+
+	{% endblock %}
+</html>
