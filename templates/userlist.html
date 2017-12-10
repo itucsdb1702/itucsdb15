@@ -1,40 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 {% extends 'base.html' %} {% block content %}
 
 <body>
 
-<div class="container">
-  <h2>Who to follow?</h2>
-  <p>The user list is below.</p>
-  <div class="table-responsive">
-  <table class="table">
-    <thead>
-      <tr>
-      	<th id='id'>User Id</th>
-        <th id='username'>Username</th>
-        <th id='email'>Email</th>
-      </tr>
-    </thead>
-    <tbody>
-    {% for USERID, USERNAME, EMAIL in users %}
-      <tr>
-      	<td>{{ USERID }}<br></td>
-        <td><a href="{{ url_for('page.user_profiles', user_id=USERID)}}">{{ USERNAME }}</a><br></td>
-        <td>{{ EMAIL }}</td>
-        <td><button onclick="location.href = '{{ url_for('page.Follow', id=USERID) }}'" type ="submit" class = "btn btn-primary"> Follow </button></td>
-      </tr>
-    {% endfor %}
-    </tbody>
-  </table>
-  </div>
-</div>
+	<div class="container">
+		<h2>Who to follow?</h2>
+		<p>The user list is below.</p>
+		<div class="table-responsive">
+			<table class="table">
+				<thead>
+					<tr>
+						<th id='id'>User Id</th>
+						<th id='username'>Username</th>
+						<th id='email'>Email</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for USERID, USERNAME, EMAIL in users %}
+					<tr>
+						<td>{{ USERID }}<br></td>
+						<td><a
+							href="{{ url_for('page.user_profiles', user_id=USERID)}}">{{
+								USERNAME }}</a><br></td>
+						<td>{{ EMAIL }}</td>
+						<td><button
+								onclick="location.href = '{{ url_for('page.Follow', id=USERID) }}'"
+								type="submit" class="btn btn-primary">Follow</button></td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
 
 
 </body>

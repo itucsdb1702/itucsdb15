@@ -523,7 +523,11 @@ def search_users():
             query = "SELECT ID FROM USERS WHERE (USERNAME = %s)"
             cursor.execute(query, (username_to_search,))
             userid = cursor.fetchone()
+        if userid is not None:
             return redirect(url_for('page.user_profiles', user_id = userid[0]))
+        else:
+            flash("We could not find " + username_to_search + ". He/She might be missing :)")
+            return redirect(url_for('page.home_page'))
 
 @page.route("/list", methods = ['GET', 'POST'])
 def list_page():
