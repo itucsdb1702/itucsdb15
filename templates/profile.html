@@ -67,7 +67,7 @@
 							{% for USERID, USERNAME, EMAIL in followingusers %}
 						      <tr>
 						      	<td>{{ USERID }}<br></td>
-						        <td>{{ USERNAME }}<br></td>
+						         <td><a href="{{ url_for('page.user_profiles', user_id=USERID)}}">{{ USERNAME }}</a><br></td>
 						        <td>{{ EMAIL }}</td>
 						        <td><button onclick="location.href = '{{ url_for('page.Unfollow', id=USERID) }}'" type ="submit" class = "btn btn-danger"> Unfollow </button></td>
 						      </tr>
