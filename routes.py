@@ -418,7 +418,6 @@ def Follow(id):
         follower_pair.new_follow()
         return redirect(url_for('page.home_page'))
 
-
 @page.route("/deletepost/<postid>")
 def delete_post(postid):
      with dbapi2._connect(current_app.config['dsn']) as connection:
@@ -450,6 +449,61 @@ def Unfollow(id):
         follower_pair.unfollow()
         return redirect(url_for('page.home_page'))
 
+@page.route("/userprofiles/<user_id>")
+def user_profiles(user_id):
+    if current_user.get_id() is not None:
+        if current_user.get_user_id()[0] == int(user_id):
+            return redirect(url_for('page.profile_page'))
+        else:
+            with dbapi2._connect(app.config['dsn']) as connection:
+
+                    cursor = connection.cursor()
+
+                    query = "SELECT USERNAME FROM USERS WHERE (ID = %s)"
+
+                    cursor.execute(query, (user_id,))
+
+                    usr = cursor.fetchone()
+
+                    user = User(usr[0],"","")
+
+                    if user is not None:
+                        movies = []
+                        lists = []
+                        userid = user_id
+                        with dbapi2._connect(current_app.config['dsn']) as connection:
+                            cursor = connection.cursor()
+                            query = """SELECT TITLE, YEAR, m.SCORE, VOTES, IMDB_URL FROM MOVIES m
+                                     INNER JOIN WATCHEDLIST w ON (m.MOVIEID = w.MOVIEID)
+                                     WHERE (w.USERNAME = %s) """
+
+                            cursor.execute(query, (user.username, ))
+
+                        for movie in cursor:
+                             movies.append(movie)
+
+                        query = """SELECT DISTINCT LIST_NAME FROM MOVIELIST WHERE (USER_ID = %s)"""
+
+                        cursor.execute(query, (userid, ))
+
+                        for list in cursor:
+                            lists.append(list[0])
+
+                        followingusers = []
+                        followingusers = user.get_following_users_by_userid()
+
+                        posts = []
+                        posts = user.get_posts()
+
+                        connection.commit()
+                        return render_template('userprofiles.html',userid=user_id, username=user.username, lists = lists, movies = movies, posts = posts, followingusers = followingusers)
+                    else:
+                        flash("There is no such user.")
+                        return redirect(url_for('page.home_page'))
+
+    else:
+        flash("Please log in to MovieShake")
+        return redirect(url_for('page.login_page'))
 @page.route("/list", methods = ['GET', 'POST'])
 def list_page():
     if request.method == "POST":
