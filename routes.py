@@ -33,14 +33,44 @@ def home_page():
     if current_user.get_id() is None:
         return render_template('home2.html')
     else:
-        return render_template('home.html')
+        current_userid = current_user.get_user_id()[0]
+        lists = []
+        
+        with dbapi2._connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            query = """SELECT DISTINCT m.LIST_NAME, m.USER_ID FROM MOVIELIST m
+                        INNER JOIN FOLLOWERS f ON (m.USER_ID = f.FOLLOWED_USER_ID)
+                        WHERE (f.FOLLOWING_USER_ID = %s)"""
+            
+            cursor.execute(query, (current_userid, ))
+
+            for list in cursor:
+                lists.append(list[0:2])
+        
+        
+        return render_template('home.html', lists = lists)
 
 @page.route('/home')
 def home_page_1():
     if current_user.get_id() is None:
         return render_template('home2.html')
     else:
-        return render_template('home.html')
+        current_userid = current_user.get_user_id()[0]
+        lists = []
+        
+        with dbapi2._connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            query = """SELECT m.LIST_NAME, m.USER_ID FROM MOVIELIST m
+                        INNER JOIN FOLLOWERS f ON (m.USER_ID = f.FOLLOWED_USER_ID)
+                        WHERE (f.FOLLOWING_USER_ID = %s)"""
+            
+            cursor.execute(query, (current_userid, ))
+
+            for list in cursor:
+                lists.append(list[0:2])
+        
+        
+        return render_template('home.html', lists = lists)
 
 
 @page.route('/login', methods = ['GET', 'POST'])
@@ -284,8 +314,6 @@ def movies_page():
 
                 if (oldscore != -1):
                     oldscore = oldscore[0]
-                    print(oldscore)
-                    print(score)
                     if int(oldscore) == int(score):
                         flash("You have already added "+ movie.title+".")
                         return redirect(url_for('page.home_page'))
@@ -582,7 +610,6 @@ def list_page():
 
                             movieToAdd.add_movie_to_db()
                             movieid = movieToAdd.search_movie_in_db()
-                            print(movieid)
                             newlist = MovieList(current_user.get_user_id(),movieid[0], list_name)
                             newlist.add_movie()
 
@@ -637,7 +664,6 @@ def Show_others_list(userid, listname):
 
         connection.commit()
         listnames.append(listname)
-        print(userid)
     return render_template('movielistforeign.html', movies = movies, listname = listnames, userid = userid)
 
 @page.route("/deletelist/<listname>")

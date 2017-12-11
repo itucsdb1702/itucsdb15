@@ -86,7 +86,28 @@
 		</div>
 	</div>
 
+	<div class="col-md-6 col-lg-6 col-xs-12 col-sm-6">
 
+				<h2>Followed Movie Lists</h2>
+				<p>Click to the name of the list to show content.</p>
+				<div class="table-responsive">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>Name</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for LIST_NAME, USER_ID in lists %}
+							<tr>
+								<td><a href = "/userprofiles/showotherslist/{{ USER_ID }}/{{ LIST_NAME }}">{{ LIST_NAME }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+
+			</div>
 
 
 

@@ -353,9 +353,9 @@ class MovieList:
             with dbapi2.connect(app.config['dsn']) as connection:
                     cursor = connection.cursor()
                     query = """SELECT LIST_ID FROM MOVIELIST
-                                WHERE((LIST_NAME = %s) AND (MOVIE_ID = %s))"""
+                                WHERE((LIST_NAME = %s) AND (MOVIE_ID = %s) AND (USER_ID = %s))"""
 
-                    cursor.execute(query, (self.list_name, self.movie_id,))
+                    cursor.execute(query, (self.list_name, self.movie_id, self.user_id, ))
                     name = cursor.fetchone()
 
                     connection.commit()
