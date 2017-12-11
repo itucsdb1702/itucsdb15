@@ -119,13 +119,15 @@
 							<tr>
 								<th>Name</th>
 								<th>Movie</th>
+								<th>Rated</th>
 							</tr>
 						</thead>
 						<tbody>
-							{% for USERNAME, TITLE, IMDB_URL in watcheds %}
+							{% for USERNAME, TITLE, IMDB_URL, SCORE in watcheds %}
 							<tr>
 								<td>{{ USERNAME }}</td>
 								<td><a href = "{{ IMDB_URL }}">{{ TITLE }}</td>
+								<td>{{ SCORE }}</td>
 							</tr>
 							{% endfor %}
 						</tbody>
