@@ -38,14 +38,15 @@ def home_page():
 
         with dbapi2._connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            query = """SELECT DISTINCT m.LIST_NAME, m.USER_ID FROM MOVIELIST m
+            query = """SELECT DISTINCT m.LIST_NAME, m.USER_ID, u.USERNAME FROM MOVIELIST m
                         INNER JOIN FOLLOWERS f ON (m.USER_ID = f.FOLLOWED_USER_ID)
+                        INNER JOIN USERS u ON(u.ID = m.USER_ID)
                         WHERE (f.FOLLOWING_USER_ID = %s)"""
 
             cursor.execute(query, (current_userid, ))
 
             for list in cursor:
-                lists.append(list[0:2])
+                lists.append(list[0:3])
 
             query = """SELECT u.USERNAME FROM USERS u
                         INNER JOIN FOLLOWERS f ON (u.ID = f.FOLLOWED_USER_ID)
@@ -83,14 +84,15 @@ def home_page_1():
 
         with dbapi2._connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            query = """SELECT m.LIST_NAME, m.USER_ID FROM MOVIELIST m
+            query = """SELECT DISTINCT m.LIST_NAME, m.USER_ID, u.USERNAME FROM MOVIELIST m
                         INNER JOIN FOLLOWERS f ON (m.USER_ID = f.FOLLOWED_USER_ID)
+                        INNER JOIN USERS u ON(u.ID = m.USER_ID)
                         WHERE (f.FOLLOWING_USER_ID = %s)"""
 
             cursor.execute(query, (current_userid, ))
 
             for list in cursor:
-                lists.append(list[0:2])
+                lists.append(list[0:3])
 
             query = """SELECT u.USERNAME FROM USERS u
                         INNER JOIN FOLLOWERS f ON (u.ID = f.FOLLOWED_USER_ID)

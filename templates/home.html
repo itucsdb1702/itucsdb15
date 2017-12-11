@@ -89,17 +89,18 @@
 	<div class="col-md-6 col-lg-6 col-xs-12 col-sm-6">
 
 				<h2>Followed Movie Lists</h2>
-				<p>Click to the name of the list to show content.</p>
 				<div class="table-responsive">
 					<table class="table table-striped">
 						<thead>
 							<tr>
-								<th>Name</th>
+								<th>Username</th>
+								<th>List</th>
 							</tr>
 						</thead>
 						<tbody>
-							{% for LIST_NAME, USER_ID in lists %}
+							{% for LIST_NAME, USER_ID, USERNAME in lists %}
 							<tr>
+								<td><a href="{{ url_for('page.user_profiles', user_id=USER_ID)}}">{{ USERNAME }}</td>
 								<td><a href = "/userprofiles/showotherslist/{{ USER_ID }}/{{ LIST_NAME }}">{{ LIST_NAME }}</td>
 							</tr>
 							{% endfor %}
@@ -112,12 +113,11 @@
 		<div class="col-md-6 col-lg-6 col-xs-12 col-sm-6">
 
 				<h2>What Did Your Friends Watch?</h2>
-				<p>Click to the name of the list to show content.</p>
 				<div class="table-responsive">
 					<table class="table table-striped">
 						<thead>
 							<tr>
-								<th>Name</th>
+								<th>Username</th>
 								<th>Movie</th>
 								<th>Rated</th>
 							</tr>
