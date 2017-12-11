@@ -15,7 +15,7 @@
 
 
 			<div class="row" style=" margin:0 auto;">
-				{% for ID , TITLE , STARTYEAR,ENDYEAR, SCORE,VOTES ,PICTURE,DESCRIPTION in nums %}
+				{% for ID, USER_NAME, SERIE_ID, DESCRIPTION in comments %}
 				<div class="container">
 			  <div class="well">
 			      <div class="media">
@@ -23,7 +23,7 @@
 
 					<h3>
 
-						<a href="/series/{{ ID }}">{{ ID }}){{ TITLE }}</a>
+						<a href="/series/{{ ID }}">{{ ID }}){{ DESCRIPTION }}</a>
 					</h3>
 					<div class="row">
 						<div class="col-md-4">
@@ -31,13 +31,13 @@
 						</div>
 						<div class="col-md-4">
 								<li>
-									{{ STARTYEAR }}
+
 								</li>
 								<li>
-									{{ ENDYEAR }}
+
 								</li>
 								<li>
-									{{ SCORE }}
+
 								</li>
 						</div>
 						<div class="col-md-4">

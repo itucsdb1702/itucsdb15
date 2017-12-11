@@ -33,14 +33,90 @@ def home_page():
     if current_user.get_id() is None:
         return render_template('home2.html')
     else:
-        return render_template('home.html')
+        current_userid = current_user.get_user_id()[0]
+        lists = []
+
+        with dbapi2._connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            query = """SELECT DISTINCT m.LIST_NAME, m.USER_ID FROM MOVIELIST m
+                        INNER JOIN FOLLOWERS f ON (m.USER_ID = f.FOLLOWED_USER_ID)
+                        WHERE (f.FOLLOWING_USER_ID = %s)"""
+
+            cursor.execute(query, (current_userid, ))
+
+            for list in cursor:
+                lists.append(list[0:2])
+
+            query = """SELECT u.USERNAME FROM USERS u
+                        INNER JOIN FOLLOWERS f ON (u.ID = f.FOLLOWED_USER_ID)
+                        WHERE(FOLLOWING_USER_ID = %s)"""
+
+            cursor.execute(query, (current_userid, ))
+
+            followings = []
+            for following in cursor:
+                followings.append(following[0])
+
+
+            watcheds = []
+            for followed in followings:
+                query = """SELECT w.USERNAME, m.TITLE, m.IMDB_URL, w.SCORE FROM WATCHEDLIST w
+                        INNER JOIN USERS u ON (u.USERNAME = w.USERNAME)
+                        INNER JOIN MOVIES m ON (m.MOVIEID = w.MOVIEID)
+                        WHERE (w.USERNAME = %s)
+                        ORDER BY w.MOVIEID DESC"""
+
+                cursor.execute(query, (followed, ))
+                for watched in cursor:
+                    watcheds.append(watched[0:4])
+
+
+        return render_template('home.html', lists = lists, watcheds = watcheds)
 
 @page.route('/home')
 def home_page_1():
     if current_user.get_id() is None:
         return render_template('home2.html')
     else:
-        return render_template('home.html')
+        current_userid = current_user.get_user_id()[0]
+        lists = []
+
+        with dbapi2._connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            query = """SELECT m.LIST_NAME, m.USER_ID FROM MOVIELIST m
+                        INNER JOIN FOLLOWERS f ON (m.USER_ID = f.FOLLOWED_USER_ID)
+                        WHERE (f.FOLLOWING_USER_ID = %s)"""
+
+            cursor.execute(query, (current_userid, ))
+
+            for list in cursor:
+                lists.append(list[0:2])
+
+            query = """SELECT u.USERNAME FROM USERS u
+                        INNER JOIN FOLLOWERS f ON (u.ID = f.FOLLOWED_USER_ID)
+                        WHERE(FOLLOWING_USER_ID = %s)"""
+
+            cursor.execute(query, (current_userid, ))
+
+            followings = []
+            for following in cursor:
+                followings.append(following[0])
+
+
+            watcheds = []
+            for followed in followings:
+                query = """SELECT w.USERNAME, m.TITLE, m.IMDB_URL, w.SCORE FROM WATCHEDLIST w
+                        INNER JOIN USERS u ON (u.USERNAME = w.USERNAME)
+                        INNER JOIN MOVIES m ON (m.MOVIEID = w.MOVIEID)
+                        WHERE (w.USERNAME = %s)
+                        ORDER BY w.MOVIEID DESC"""
+
+                cursor.execute(query, (followed, ))
+                for watched in cursor:
+                    watcheds.append(watched[0:4])
+
+
+        return render_template('home.html', lists = lists, watcheds = watcheds)
 
 @page.route('/login', methods = ['GET', 'POST'])
 def login_page():
@@ -159,6 +235,12 @@ def signup():
                     password = pwd_context.encrypt(password0)
                     newuser = User(username, email, password)
                     app.userlist.add_user(newuser)
+
+                    if login_user(newuser):
+                        flash("Welcome, " + current_user.username)
+                    else:
+                        flash("A problem occured.")
+
                     return render_template('home.html')
         else:
             return render_template('signup.html')
@@ -276,8 +358,6 @@ def movies_page():
 
                 if (oldscore != -1):
                     oldscore = oldscore[0]
-                    print(oldscore)
-                    print(score)
                     if int(oldscore) == int(score):
                         flash("You have already added "+ movie.title+".")
                         return redirect(url_for('page.home_page'))
@@ -509,11 +589,16 @@ def user_profiles(user_id):
                         followingusers = []
                         followingusers = user.get_following_users_by_userid()
 
+                        followedusers = []
+                        followedusers = user.get_followed_users_by_userid()
+
                         posts = []
                         posts = user.get_posts()
-
                         connection.commit()
-                        return render_template('userprofiles.html',userid=user_id, username=user.username, lists = lists, movies = movies, posts = posts, followingusers = followingusers)
+
+                        currentuserid = current_user.get_user_id()
+                        return render_template('userprofiles.html',userid=user_id, username=user.username, lists = lists, movies = movies, posts = posts, followingusers = followingusers, currentuserid = currentuserid,
+                                                                    followedusers = followedusers)
                     else:
                         flash("There is no such user.")
                         return redirect(url_for('page.home_page'))
@@ -583,7 +668,6 @@ def list_page():
 
                             movieToAdd.add_movie_to_db()
                             movieid = movieToAdd.search_movie_in_db()
-                            print(movieid)
                             newlist = MovieList(current_user.get_user_id(),movieid[0], list_name)
                             newlist.add_movie()
 
@@ -638,7 +722,6 @@ def Show_others_list(userid, listname):
 
         connection.commit()
         listnames.append(listname)
-        print(userid)
     return render_template('movielistforeign.html', movies = movies, listname = listnames, userid = userid)
 
 @page.route("/deletelist/<listname>")
@@ -721,7 +804,7 @@ def nominees():
 
     with dbapi2._connect(current_app.config['dsn']) as connection:
         cursor = connection.cursor()
-        query = """SELECT * FROM NOMINEES"""
+        query = """SELECT * FROM NOMINEES ORDER BY ID"""
 
         cursor.execute(query)
 
@@ -731,6 +814,26 @@ def nominees():
         connection.commit()
 
     return render_template('nominees.html', candidates = candidates)
+
+
+@page.route("/nominee_vote/<nominee_ID>", methods= ['GET', 'POST'])
+def nominee_vote(nominee_ID):
+    candidates = []
+
+    with dbapi2._connect(current_app.config['dsn']) as connection:
+        cursor = connection.cursor()
+        query = """UPDATE NOMINEES SET VOTES = VOTES+1 WHERE ID = '""" + nominee_ID + """'"""
+        cursor.execute(query)
+
+        query = """SELECT * FROM NOMINEES ORDER BY VOTES DESC"""
+        cursor.execute(query)
+
+        for candidate in cursor:
+            candidates.append(candidate)
+
+        connection.commit()
+
+    return render_template('nominee_vote.html', candidates = candidates)
 
 @page.route('/series', methods = ['GET', 'POST'])
 def series():
@@ -748,6 +851,24 @@ def series():
         connection.commit()
     return render_template('series.html', nums = nums)
 
+
+
+@page.route("/series/<id>", methods= ['GET', 'POST'])
+def series_comments(id):
+    comments = []
+
+    with dbapi2._connect(current_app.config['dsn']) as connection:
+        cursor = connection.cursor()
+
+        query = """SELECT * FROM COMMENTS WHERE COMMENTS.SERIE_ID=2 """
+        cursor.execute(query)
+
+        for comment in cursor:
+            comments.append(comment)
+
+        connection.commit()
+    return render_template('comments.html', comments = comments)
+
 @page.route('/news', methods = ['GET', 'POST'])
 def news():
 
@@ -763,3 +884,6 @@ def news():
 
         connection.commit()
     return render_template('news.html', nums = nums)
+
+
+

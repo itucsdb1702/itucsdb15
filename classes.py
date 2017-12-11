@@ -79,6 +79,24 @@ class User(UserMixin):
                     connection.commit()
 
                     return users
+                
+    def get_followed_users_by_userid(self):
+            with dbapi2.connect(app.config['dsn']) as connection:
+                    cursor = connection.cursor()
+                    query = """SELECT ID, USERNAME, EMAIL FROM USERS u
+                               INNER JOIN FOLLOWERS f ON (u.ID = f.FOLLOWING_USER_ID)
+                               WHERE (f.FOLLOWED_USER_ID = %s) """
+
+                    userid = self.get_user_id()
+                    cursor.execute(query, (userid,))
+
+                    users = []
+                    for user in cursor:
+                        users.append(user)
+
+                    connection.commit()
+
+                    return users
 
 
     def is_active(self):
@@ -335,9 +353,9 @@ class MovieList:
             with dbapi2.connect(app.config['dsn']) as connection:
                     cursor = connection.cursor()
                     query = """SELECT LIST_ID FROM MOVIELIST
-                                WHERE((LIST_NAME = %s) AND (MOVIE_ID = %s))"""
+                                WHERE((LIST_NAME = %s) AND (MOVIE_ID = %s) AND (USER_ID = %s))"""
 
-                    cursor.execute(query, (self.list_name, self.movie_id,))
+                    cursor.execute(query, (self.list_name, self.movie_id, self.user_id, ))
                     name = cursor.fetchone()
 
                     connection.commit()

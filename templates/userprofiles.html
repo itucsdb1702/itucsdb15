@@ -14,8 +14,18 @@
 	<div class="container">
 	<div class="row">
 	<h1 class="pull-left">{{username}}'s Profile</h1>
-	<button onclick="location.href = '{{ url_for('page.Unfollow', id=userid) }}'"
-		type="submit" class="btn btn-md btn-danger pull-right">Unfollow this user</button>
+
+
+	{% for USERID, USERNAME, EMAIL in followedusers %}
+		{% for USER_ID in currentuserid %}
+		{% if USER_ID == USERID %}
+		<button onclick="location.href = '{{ url_for('page.Unfollow', id=userid) }}'"
+			type="submit" class="btn btn-md btn-danger pull-right">Unfollow this user</button>
+		{% endif %}
+		{% endfor %}
+	{% endfor %}
+
+
 
 	</div>
 	</div>
@@ -122,7 +132,6 @@
 								<td>{{ POST_ID }}</td>
 								<td>{{ TITLE }}</td>
 								<td style="word-wrap: break-word;min-width: 160px;max-width: 160px;">{{ COMMENTS }}</td>
-								<td><button onclick="location.href = '{{ url_for('page.delete_post', postid=POST_ID) }}'" type ="submit" class = "btn btn-danger"> Delete </button></td>
 							</tr>
 							{% endfor %}
 						</tbody>
