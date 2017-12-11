@@ -114,8 +114,6 @@ def init_movies_db():
 
         return redirect(url_for('page.home_page'))
 
-
-
 @app.route('/init_posts_db')
 def init_posts_db():
     with dbapi2.connect(app.config['dsn']) as connection:

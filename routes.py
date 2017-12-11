@@ -490,6 +490,39 @@ def UserList():
             connection.commit()
         return render_template('userlist.html', users = users)
 
+@page.route("/feed", methods = ['GET', 'POST'])
+def feed():
+    current_userid = current_user.get_user_id()[0]
+    with dbapi2._connect(app.config['dsn']) as connection:
+        cursor = connection.cursor()
+
+        query = """SELECT u.USERNAME FROM USERS u
+                        INNER JOIN FOLLOWERS f ON (u.ID = f.FOLLOWED_USER_ID)
+                        WHERE(FOLLOWING_USER_ID = %s)"""
+
+        cursor.execute(query, (current_userid, ))
+
+        followings = []
+        for following in cursor:
+            followings.append(following[0])
+
+        posts = []
+        for followed in followings:
+            query = """SELECT u.ID, u.USERNAME, m.TITLE, p.COMMENTS FROM
+                            USERS u INNER JOIN POSTS p ON (u.ID = p.USER_ID)
+
+                                    INNER JOIN MOVIES m ON (m.MOVIEID = p.MOVIE_ID)
+
+                        WHERE (USERNAME = %s)
+
+                        ORDER BY p.POST_ID DESC"""
+
+            cursor.execute(query, (followed, ))
+            for post in cursor:
+                posts.append(post[0:4])
+
+    return render_template('feed.html', posts=posts)
+
 @page.route("/follow/<id>")
 def Follow(id):
     user = User(current_user.username, "","")
