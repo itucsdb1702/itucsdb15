@@ -496,14 +496,14 @@ def user_profiles(user_id):
 
                         followingusers = []
                         followingusers = user.get_following_users_by_userid()
-                        
+
                         followedusers = []
                         followedusers = user.get_followed_users_by_userid()
 
                         posts = []
                         posts = user.get_posts()
                         connection.commit()
-                        
+
                         currentuserid = current_user.get_user_id()
                         return render_template('userprofiles.html',userid=user_id, username=user.username, lists = lists, movies = movies, posts = posts, followingusers = followingusers, currentuserid = currentuserid,
                                                                     followedusers = followedusers)
@@ -759,6 +759,21 @@ def series():
 
         connection.commit()
     return render_template('series.html', nums = nums)
+@page.route("/series/<id>", methods= ['GET', 'POST'])
+def series_comments(id):
+    comments = []
+
+    with dbapi2._connect(current_app.config['dsn']) as connection:
+        cursor = connection.cursor()
+
+        query = """SELECT * FROM COMMENTS WHERE COMMENTS.SERIE_ID=2 """
+        cursor.execute(query)
+
+        for comment in cursor:
+            comments.append(comment)
+
+        connection.commit()
+    return render_template('comments.html', comments = comments)
 
 @page.route('/news', methods = ['GET', 'POST'])
 def news():
@@ -775,3 +790,6 @@ def news():
 
         connection.commit()
     return render_template('news.html', nums = nums)
+
+
+

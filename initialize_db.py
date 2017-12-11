@@ -402,6 +402,16 @@ def initialize_db_function(cursor):
                                     DESCRIPTION VARCHAR(1000) )""")
 
 
+    cursor.execute("""INSERT INTO SERIES (TITLE, STARTYEAR, ENDYEAR, SCORE, VOTES,PICTURE,DESCRIPTION) VALUES(
+                  'Game Of Thrones',
+                  '2011',
+                  '2018',
+                  '9.6',
+                  '1442',
+                  'http://cdn.pastemagazine.com/www/blogs/lists/winter-is-coming-game-of-thrones.jpg',
+                  'Nine noble families fight for control over the mythical lands of Westeros, while a forgotten race returns after being dormant for thousands of years.'
+                    )""")
+
     # News table
     cursor.execute("""DROP TABLE IF EXISTS NEWS CASCADE""")
     cursor.execute("""CREATE TABLE NEWS(
@@ -409,3 +419,23 @@ def initialize_db_function(cursor):
                                     TITLE VARCHAR(100),
                                     PICTURE VARCHAR(500),
                                     DESCRIPTION VARCHAR(1000) )""")
+
+
+        # Comments table
+    cursor.execute("""DROP TABLE IF EXISTS COMMENTS CASCADE""")
+    cursor.execute("""CREATE TABLE COMMENTS (
+                                    ID SERIAL PRIMARY KEY NOT NULL,
+                                    USER_NAME VARCHAR(100),
+                                    SERIE_ID INT NOT NULL,
+                                    DESCRIPTION VARCHAR(1000),
+                                        FOREIGN KEY (USER_NAME) REFERENCES USERS(USERNAME) ON DELETE CASCADE ON UPDATE CASCADE,
+                                        FOREIGN KEY (SERIE_ID) REFERENCES SERIES(ID) ON DELETE CASCADE ON UPDATE CASCADE )""")
+    cursor.execute("""INSERT INTO COMMENTS (USER_NAME, SERIE_ID, DESCRIPTION) VALUES(
+                  'tugrul',
+                  '1',
+                  'Nine noble families fight for control over the mythical lands of Westeros, while a forgotten race returns after being dormant for thousands of years.'
+                    )""")
+
+
+
+
