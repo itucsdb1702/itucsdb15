@@ -13,19 +13,20 @@
 <body>
 	<div class="container">
 		<div class="row">
-			{% for USERID, USERNAME, MOVIE_TITLE, COMMENTS in posts %}
+			{% for USERID, USERNAME, IMDB_URL, MOVIE_TITLE, COMMENTS in posts %}
 			<div class="row" style="padding-bottom: 30px;">
 				<div class="card">
 					<div class="card-body">
 						<h3 class="card-title">
 							<a href="{{ url_for('page.user_profiles', user_id=USERID)}}">{{USERNAME}}</a>
-							</h4>
-							<h5 class="card-subtitle mb-2 text-muted">
-								Movie Title: <strong> {{MOVIE_TITLE}}</strong>
-								</h6>
-								<p class="card-text"
-									style="word-wrap: break-word; min-width: 160px; max-width: 550px;">Reviews:
-									{{COMMENTS}}</p>
+						</h3>
+						<h5 class="card-subtitle mb-2 text-muted">
+							Movie Title: <strong><a href="{{ IMDB_URL }}">
+									{{MOVIE_TITLE}}</a></strong>
+						</h5>
+						<p class="card-text"
+							style="word-wrap: break-word; min-width: 160px; max-width: 550px;">Reviews:
+							{{COMMENTS}}</p>
 					</div>
 				</div>
 			</div>

@@ -508,7 +508,7 @@ def feed():
 
         posts = []
         for followed in followings:
-            query = """SELECT u.ID, u.USERNAME, m.TITLE, p.COMMENTS FROM
+            query = """SELECT u.ID, u.USERNAME, m.IMDB_URL, m.TITLE, p.COMMENTS FROM
                             USERS u INNER JOIN POSTS p ON (u.ID = p.USER_ID)
 
                                     INNER JOIN MOVIES m ON (m.MOVIEID = p.MOVIE_ID)
@@ -519,9 +519,23 @@ def feed():
 
             cursor.execute(query, (followed, ))
             for post in cursor:
-                posts.append(post[0:4])
+                posts.append(post[0:5])
 
     return render_template('feed.html', posts=posts)
+
+@page.route("/deleteaccount")
+def deleteaccount():
+    current_userid = current_user.get_user_id()
+    if current_userid is not None:
+        with dbapi2.connect(app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            query = """DELETE FROM USERS WHERE (ID = %s)"""
+            cursor.execute(query, current_userid)
+            connection.commit()
+        return redirect(url_for('page.home_page'))
+    else:
+        flash("Please log in to MovieShake.")
+        return redirect(url_for('page.home_page'))
 
 @page.route("/follow/<id>")
 def Follow(id):
