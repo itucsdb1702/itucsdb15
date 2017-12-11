@@ -42,7 +42,6 @@ def home_page_1():
     else:
         return render_template('home.html')
 
-
 @page.route('/login', methods = ['GET', 'POST'])
 def login_page():
 
@@ -78,7 +77,6 @@ def login_page():
 
     else:
         return render_template('login.html')
-
 
 @page.route("/logout")
 def logout():
@@ -310,6 +308,7 @@ def movies_page():
                     movie.update_votes_and_score(movieId, newscore, totalVotes)
 
                     post.add_post_to_db()
+
                     flash(movie.title + " is added to your watched list and your post has been saved.")
                     return redirect(url_for('page.home_page'))
 
@@ -439,6 +438,19 @@ def delete_post(postid):
             post_to_delete.delete_post_from_db()
             connection.commit()
             return redirect(url_for('page.profile_page'))
+
+@page.route("/updatepost/<postid>", methods = ['GET', 'POST'])
+def update_post(postid):
+    newcomments = request.form['comment']
+    with dbapi2._connect(current_app.config['dsn']) as connection:
+        cursor = connection.cursor()
+        query = """UPDATE POSTS
+                           SET COMMENTS =%s
+                                WHERE (POST_ID = %s)"""
+        cursor.execute(query, (newcomments, postid))
+        connection.commit()
+        flash("Your comment has been updated.")
+        return redirect(url_for('page.profile_page'))
 
 @page.route("/unfollow/<id>")
 def Unfollow(id):
