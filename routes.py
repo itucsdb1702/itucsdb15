@@ -2,7 +2,6 @@ import datetime
 import string
 import requests
 import os
-from tkinter import *
 import json
 import re
 import psycopg2 as dbapi2
@@ -25,8 +24,6 @@ from flask_login.utils import current_user
 from psycopg2.psycopg1 import connection
 from _sqlite3 import connect
 from multiprocessing import current_process
-from ensurepip import bootstrap
-from importlib import _bootstrap
 
 
 page = Blueprint('page',__name__)
