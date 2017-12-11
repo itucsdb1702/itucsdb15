@@ -161,6 +161,12 @@ def signup():
                     password = pwd_context.encrypt(password0)
                     newuser = User(username, email, password)
                     app.userlist.add_user(newuser)
+                    
+                    if login_user(newuser):
+                        flash("Welcome, " + current_user.username)
+                    else:
+                        flash("A problem occured.")
+                    
                     return render_template('home.html')
         else:
             return render_template('signup.html')
