@@ -108,6 +108,31 @@
 				</div>
 
 			</div>
+		
+		<div class="col-md-6 col-lg-6 col-xs-12 col-sm-6">
+
+				<h2>What Did Your Friends Watch?</h2>
+				<p>Click to the name of the list to show content.</p>
+				<div class="table-responsive">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Movie</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for USERNAME, TITLE, IMDB_URL in watcheds %}
+							<tr>
+								<td>{{ USERNAME }}</td>
+								<td><a href = "{{ IMDB_URL }}">{{ TITLE }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+
+			</div>
 
 
 

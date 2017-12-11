@@ -46,9 +46,32 @@ def home_page():
 
             for list in cursor:
                 lists.append(list[0:2])
+            
+            query = """SELECT u.USERNAME FROM USERS u
+                        INNER JOIN FOLLOWERS f ON (u.ID = f.FOLLOWED_USER_ID)
+                        WHERE(FOLLOWING_USER_ID = %s)"""
+        
+            cursor.execute(query, (current_userid, ))
+        
+            followings = []
+            for following in cursor:
+                followings.append(following[0])
+                
+                
+            watcheds = []    
+            for followed in followings:
+                query = """SELECT w.USERNAME, m.TITLE, m.IMDB_URL FROM WATCHEDLIST w
+                        INNER JOIN USERS u ON (u.USERNAME = w.USERNAME)
+                        INNER JOIN MOVIES m ON (m.MOVIEID = w.MOVIEID)
+                        WHERE (w.USERNAME = %s)
+                        ORDER BY w.MOVIEID DESC"""
+        
+                cursor.execute(query, (followed, ))
+                for watched in cursor:
+                    watcheds.append(watched[0:3])
         
         
-        return render_template('home.html', lists = lists)
+        return render_template('home.html', lists = lists, watcheds = watcheds)
 
 @page.route('/home')
 def home_page_1():
@@ -68,9 +91,32 @@ def home_page_1():
 
             for list in cursor:
                 lists.append(list[0:2])
+                
+            query = """SELECT u.USERNAME FROM USERS u
+                        INNER JOIN FOLLOWERS f ON (u.ID = f.FOLLOWED_USER_ID)
+                        WHERE(FOLLOWING_USER_ID = %s)"""
         
+            cursor.execute(query, (current_userid, ))
+            
+            followings = []
+            for following in cursor:
+                followings.append(following[0])
+                
+                
+            watcheds = []    
+            for followed in followings:
+                query = """SELECT w.USERNAME, m.TITLE FROM WATCHEDLIST w
+                        INNER JOIN USERS u ON (u.USERNAME = w.USERNAME)
+                        INNER JOIN MOVIES m ON (m.MOVIEID = w.MOVIEID)
+                        WHERE (w.USERNAME = %s)
+                        ORDER BY w.MOVIEID DESC"""
         
-        return render_template('home.html', lists = lists)
+                cursor.execute(query, (followed, ))
+                for watched in cursor:
+                    watcheds.append(watched[0:2])
+            
+            
+        return render_template('home.html', lists = lists, watcheds = watcheds)
 
 
 @page.route('/login', methods = ['GET', 'POST'])
