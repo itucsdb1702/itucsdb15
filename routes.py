@@ -804,6 +804,24 @@ def nominees():
     return render_template('nominees.html', candidates = candidates)
 
 
+@page.route("/nominee_vote/<nominee_ID>", methods= ['GET', 'POST'])
+def nominee_vote(nominee_ID):
+    candidates = []
+
+    with dbapi2._connect(current_app.config['dsn']) as connection:
+        cursor = connection.cursor()
+        query = """UPDATE NOMINEES SET VOTES = VOTES+1 WHERE ID = '""" + nominee_ID + """'"""
+        cursor.execute(query)
+
+        query = """SELECT * FROM NOMINEES ORDER BY VOTES DESC"""
+        cursor.execute(query)
+
+        for candidate in cursor:
+            candidates.append(candidate)
+
+        connection.commit()
+
+    return render_template('nominee_vote.html', candidates = candidates)
 
 @page.route('/series', methods = ['GET', 'POST'])
 def series():
