@@ -35,42 +35,42 @@ def home_page():
     else:
         current_userid = current_user.get_user_id()[0]
         lists = []
-        
+
         with dbapi2._connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """SELECT DISTINCT m.LIST_NAME, m.USER_ID FROM MOVIELIST m
                         INNER JOIN FOLLOWERS f ON (m.USER_ID = f.FOLLOWED_USER_ID)
                         WHERE (f.FOLLOWING_USER_ID = %s)"""
-            
+
             cursor.execute(query, (current_userid, ))
 
             for list in cursor:
                 lists.append(list[0:2])
-            
+
             query = """SELECT u.USERNAME FROM USERS u
                         INNER JOIN FOLLOWERS f ON (u.ID = f.FOLLOWED_USER_ID)
                         WHERE(FOLLOWING_USER_ID = %s)"""
-        
+
             cursor.execute(query, (current_userid, ))
-        
+
             followings = []
             for following in cursor:
                 followings.append(following[0])
-                
-                
-            watcheds = []    
+
+
+            watcheds = []
             for followed in followings:
                 query = """SELECT w.USERNAME, m.TITLE, m.IMDB_URL, w.SCORE FROM WATCHEDLIST w
                         INNER JOIN USERS u ON (u.USERNAME = w.USERNAME)
                         INNER JOIN MOVIES m ON (m.MOVIEID = w.MOVIEID)
                         WHERE (w.USERNAME = %s)
                         ORDER BY w.MOVIEID DESC"""
-        
+
                 cursor.execute(query, (followed, ))
                 for watched in cursor:
                     watcheds.append(watched[0:4])
-        
-        
+
+
         return render_template('home.html', lists = lists, watcheds = watcheds)
 
 @page.route('/home')
@@ -80,42 +80,42 @@ def home_page_1():
     else:
         current_userid = current_user.get_user_id()[0]
         lists = []
-        
+
         with dbapi2._connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """SELECT m.LIST_NAME, m.USER_ID FROM MOVIELIST m
                         INNER JOIN FOLLOWERS f ON (m.USER_ID = f.FOLLOWED_USER_ID)
                         WHERE (f.FOLLOWING_USER_ID = %s)"""
-            
+
             cursor.execute(query, (current_userid, ))
 
             for list in cursor:
                 lists.append(list[0:2])
-                
+
             query = """SELECT u.USERNAME FROM USERS u
                         INNER JOIN FOLLOWERS f ON (u.ID = f.FOLLOWED_USER_ID)
                         WHERE(FOLLOWING_USER_ID = %s)"""
-        
+
             cursor.execute(query, (current_userid, ))
-            
+
             followings = []
             for following in cursor:
                 followings.append(following[0])
-                
-                
-            watcheds = []    
+
+
+            watcheds = []
             for followed in followings:
                 query = """SELECT w.USERNAME, m.TITLE, m.IMDB_URL, w.SCORE FROM WATCHEDLIST w
                         INNER JOIN USERS u ON (u.USERNAME = w.USERNAME)
                         INNER JOIN MOVIES m ON (m.MOVIEID = w.MOVIEID)
                         WHERE (w.USERNAME = %s)
                         ORDER BY w.MOVIEID DESC"""
-        
+
                 cursor.execute(query, (followed, ))
                 for watched in cursor:
                     watcheds.append(watched[0:4])
-            
-            
+
+
         return render_template('home.html', lists = lists, watcheds = watcheds)
 
 
@@ -237,12 +237,12 @@ def signup():
                     password = pwd_context.encrypt(password0)
                     newuser = User(username, email, password)
                     app.userlist.add_user(newuser)
-                    
+
                     if login_user(newuser):
                         flash("Welcome, " + current_user.username)
                     else:
                         flash("A problem occured.")
-                    
+
                     return render_template('home.html')
         else:
             return render_template('signup.html')
@@ -837,6 +837,27 @@ def series():
 
         connection.commit()
     return render_template('series.html', nums = nums)
+
+
+@page.route("/nominee_vote/<nominee_ID>", methods= ['GET', 'POST'])
+def nominee_vote(nominee_ID):
+    candidates = []
+
+    with dbapi2._connect(current_app.config['dsn']) as connection:
+        cursor = connection.cursor()
+        query = """UPDATE NOMINEES SET VOTES = VOTES+1 WHERE ID = '""" + nominee_ID + """'"""
+        cursor.execute(query)
+
+        query = """SELECT * FROM NOMINEES ORDER BY VOTES DESC"""
+        cursor.execute(query)
+
+        for candidate in cursor:
+            candidates.append(candidate)
+
+        connection.commit()
+
+    return render_template('nominee_vote.html', candidates = candidates)
+
 @page.route("/series/<id>", methods= ['GET', 'POST'])
 def series_comments(id):
     comments = []
