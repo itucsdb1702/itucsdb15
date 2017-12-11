@@ -105,7 +105,7 @@ def home_page_1():
                 
             watcheds = []    
             for followed in followings:
-                query = """SELECT w.USERNAME, m.TITLE FROM WATCHEDLIST w
+                query = """SELECT w.USERNAME, m.TITLE, m.IMDB_URL FROM WATCHEDLIST w
                         INNER JOIN USERS u ON (u.USERNAME = w.USERNAME)
                         INNER JOIN MOVIES m ON (m.MOVIEID = w.MOVIEID)
                         WHERE (w.USERNAME = %s)
@@ -113,7 +113,7 @@ def home_page_1():
         
                 cursor.execute(query, (followed, ))
                 for watched in cursor:
-                    watcheds.append(watched[0:2])
+                    watcheds.append(watched[0:3])
             
             
         return render_template('home.html', lists = lists, watcheds = watcheds)
