@@ -437,7 +437,7 @@ def profile_page():
 
          with dbapi2._connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            query = """SELECT TITLE, YEAR, m.SCORE, VOTES, IMDB_URL FROM MOVIES m
+            query = """SELECT TITLE, YEAR, m.SCORE, VOTES, IMDB_URL, m.MOVIEID FROM MOVIES m
                                  INNER JOIN WATCHEDLIST w ON (m.MOVIEID = w.MOVIEID)
                                  WHERE (w.USERNAME = %s) """
 
@@ -460,7 +460,10 @@ def profile_page():
             posts = current_user.get_posts()
 
             connection.commit()
-         return render_template('profile.html', lists = lists, movies = movies, posts = posts, followingusers = followingusers)
+            usernames = []
+            usernames.append(current_user.username)
+         return render_template('profile.html', lists = lists, movies = movies, posts = posts, followingusers = followingusers,
+                                username = usernames)
     else:
         flash("Please log in to MovieShake")
         return redirect(url_for('page.login_page'))
@@ -934,5 +937,29 @@ def news():
         connection.commit()
     return render_template('news.html', nums = nums)
 
+@page.route('/deletefromwatched/<username>/<movieid>')
+def DeleteFromWatchedList(username, movieid):
+    movieToDelete = WatchedList(username, movieid, "")
+    score = movieToDelete.existsInWatchedList()
+    
+    movieToDelete = WatchedList(username, movieid, score)
+    
+    movieToDelete.delete_from_watched_list()
+    
+    movie = Movie("","","","","")
+    oldvotes = movie.getvotes_in_movie_db(movieid)
+    oldscore = movie.getscore_in_movie_db(movieid)
+    
+    if int(oldvotes[0]) > 1:
+        total = int(oldvotes)*int(oldscore)
+        total = total - score
+        newvotes = oldvotes - 1
+        newscore = total / newvotes
+        movie.update_votes_and_score(movieid, newscore, newvotes)
+    
+    return redirect(url_for('page.home_page'))
+
+
+                
 
 

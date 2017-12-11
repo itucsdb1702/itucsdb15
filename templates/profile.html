@@ -18,6 +18,7 @@
 		</td>
 	</div>
 	<div class="container">
+	{% for USERNAME in username %}
 		<div class="row">
 			<div class="col-md-6 col-lg-6 col-xs-12 col-sm-6">
 
@@ -34,13 +35,17 @@
 							</tr>
 						</thead>
 						<tbody>
-							{% for TITLE, YEAR, SCORE, VOTES, IMDB_URL in movies %}
+							{% for TITLE, YEAR, SCORE, VOTES, IMDB_URL, MOVIEID in movies %}
+							
 							<tr>
 								<td>{{ TITLE }}</td>
 								<td>{{ YEAR }}</td>
 								<td>{{ SCORE }}</td>
 								<td>{{ VOTES }}</td>
 								<td><a href="{{ IMDB_URL }}">{{ IMDB_URL }}</a></td>
+								<td><button
+												onclick="location.href = '{{ url_for('page.DeleteFromWatchedList', username=USERNAME, movieid = MOVIEID) }}'"
+												type="submit" class="btn btn-danger">Not Watched</button></td>
 							</tr>
 							{% endfor %}
 						</tbody>
@@ -160,6 +165,7 @@
 						</div>
 					</div>
 				</div>
+				{% endfor %}
 			</div>
 			<script>
 				function toggle() {

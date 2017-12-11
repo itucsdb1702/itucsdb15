@@ -270,14 +270,16 @@ class WatchedList:
                         return -1
                     else:
                         return score
+  
     def delete_from_watched_list(self):
             with dbapi2.connect(app.config['dsn']) as connection:
                     cursor = connection.cursor()
                     query = """DELETE FROM WATCHEDLIST
-                                WHERE((USERNAME = %S) AND (MOVIEID = %S))"""
+                                WHERE((USERNAME = %s) AND (MOVIEID = %s))"""
 
                     cursor.execute(query, (self.username, self.movieid))
                     connection.commit()
+                    
     def updateScoreOfWatchedMovie(self):
          with dbapi2.connect(app.config['dsn']) as connection:
                     cursor = connection.cursor()
@@ -286,7 +288,7 @@ class WatchedList:
                                 WHERE ((USERNAME = %s) AND (MOVIEID = %s))"""
 
                     cursor.execute(query, (self.score, self.username, self.movieid))
-
+                    connection.commit()
 class FollowerPair:
     def __init__(self, following_id, followed_id):
         self.following_id = following_id

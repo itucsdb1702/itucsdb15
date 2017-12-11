@@ -1,4 +1,99 @@
 def initialize_db_function(cursor):
+    
+    
+    query = """DROP TABLE IF EXISTS USERS CASCADE"""
+    cursor.execute(query)
+
+    query = """CREATE TABLE USERS(
+    ID SERIAL NOT NULL,
+    USERNAME VARCHAR(30),
+    PASSWORD VARCHAR(250),
+    EMAIL VARCHAR(50),
+    POST_ID INTEGER,
+    PRIMARY KEY(ID),
+    UNIQUE (USERNAME)
+    )"""
+    cursor.execute(query)
+    
+    query = "DROP TABLE IF EXISTS MOVIES CASCADE"
+    cursor.execute(query)
+
+    query ="""CREATE TABLE MOVIES(
+    MOVIEID SERIAL NOT NULL,
+    TITLE VARCHAR(100),
+    YEAR INTEGER,
+    SCORE FLOAT,
+    VOTES INTEGER,
+    IMDB_URL VARCHAR(2068),
+    PRIMARY KEY(MOVIEID)
+    )
+    """
+    cursor.execute(query)
+    
+    query = "DROP TABLE IF EXISTS POSTS CASCADE"
+    cursor.execute(query)
+
+    query = """CREATE TABLE POSTS(
+    POST_ID SERIAL NOT NULL,
+    COMMENTS VARCHAR(1000),
+    MOVIE_ID INTEGER,
+    USER_ID INTEGER,
+    PRIMARY KEY(POST_ID)
+    )
+    """
+    cursor.execute(query)
+
+
+    query = """ALTER TABLE POSTS
+    ADD FOREIGN KEY(MOVIE_ID)
+    REFERENCES MOVIES(MOVIEID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+    ADD FOREIGN KEY(USER_ID)
+    REFERENCES USERS(ID)
+    ON DELETE CASCADE
+    """
+    cursor.execute(query)
+    
+    query = "DROP TABLE IF EXISTS WATCHEDLIST CASCADE"
+    cursor.execute(query)
+
+    query = """CREATE TABLE WATCHEDLIST (USERNAME VARCHAR(30) NOT NULL,
+        MOVIEID INT NOT NULL,
+        SCORE INT, CONSTRAINT PAIR PRIMARY KEY (USERNAME,MOVIEID),
+            FOREIGN KEY (USERNAME) REFERENCES USERS(USERNAME)ON DELETE CASCADE ON UPDATE CASCADE,
+            FOREIGN KEY (MOVIEID) REFERENCES MOVIES(MOVIEID) ON DELETE CASCADE ON UPDATE CASCADE
+    )"""
+    cursor.execute(query)
+    
+    query = "DROP TABLE IF EXISTS FOLLOWERS CASCADE"
+    cursor.execute(query)
+
+    query = """CREATE TABLE FOLLOWERS (FRIENDSHIP_ID SERIAL NOT NULL,
+        FOLLOWING_USER_ID INT NOT NULL,
+        FOLLOWED_USER_ID INT, CONSTRAINT FRIENDSHIP UNIQUE (FOLLOWING_USER_ID,FOLLOWED_USER_ID),
+            FOREIGN KEY (FOLLOWING_USER_ID) REFERENCES USERS(ID),
+            FOREIGN KEY (FOLLOWED_USER_ID) REFERENCES USERS(ID)
+        ON DELETE CASCADE
+    )"""
+    cursor.execute(query)
+    
+    query = "DROP TABLE IF EXISTS MOVIELIST CASCADE"
+    cursor.execute(query)
+
+    query = """CREATE TABLE MOVIELIST (
+        LIST_ID SERIAL NOT NULL PRIMARY KEY,
+        USER_ID INT NOT NULL,
+        MOVIE_ID INT NOT NULL,
+        LIST_NAME VARCHAR(50) NOT NULL,
+        UNIQUE(LIST_NAME, USER_ID, MOVIE_ID), CONSTRAINT LISTPAIR
+            FOREIGN KEY (USER_ID) REFERENCES USERS(ID),
+            FOREIGN KEY (MOVIE_ID) REFERENCES MOVIES(MOVIEID)
+        ON DELETE CASCADE)
+    """
+    cursor.execute(query)
+    
+  
 
 
     # Actors table
@@ -430,12 +525,4 @@ def initialize_db_function(cursor):
                                     DESCRIPTION VARCHAR(1000),
                                         FOREIGN KEY (USER_NAME) REFERENCES USERS(USERNAME) ON DELETE CASCADE ON UPDATE CASCADE,
                                         FOREIGN KEY (SERIE_ID) REFERENCES SERIES(ID) ON DELETE CASCADE ON UPDATE CASCADE )""")
-    cursor.execute("""INSERT INTO COMMENTS (USER_NAME, SERIE_ID, DESCRIPTION) VALUES(
-                  'tugrul',
-                  '1',
-                  'Nine noble families fight for control over the mythical lands of Westeros, while a forgotten race returns after being dormant for thousands of years.'
-                    )""")
-
-
-
 
