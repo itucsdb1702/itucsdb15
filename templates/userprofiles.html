@@ -132,7 +132,6 @@
 								<td>{{ POST_ID }}</td>
 								<td>{{ TITLE }}</td>
 								<td style="word-wrap: break-word;min-width: 160px;max-width: 160px;">{{ COMMENTS }}</td>
-								<td><button onclick="location.href = '{{ url_for('page.delete_post', postid=POST_ID) }}'" type ="submit" class = "btn btn-danger"> Delete </button></td>
 							</tr>
 							{% endfor %}
 						</tbody>
