@@ -19,7 +19,7 @@
 
 </head>
 
-<body>
+<body style="background-color: #A9A9A9;">
 	<nav class="navbar navbar-default navbar-inverse">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -33,15 +33,18 @@
 				<a class="navbar-brand" href="/home">Movie Shake</a>
 			</div>
 
-			<div class="collapse navbar-collapse"
-				id="collapse-navbar">
+			<div class="collapse navbar-collapse" id="collapse-navbar">
 				<ul class="nav navbar-nav">
 					<li><a href="/home">Home <span class="sr-only"></span></a></li>
-					<li><a href="/userlist">Who to follow? <span class="sr-only"></span></a></li>
+					<li><a href="/feed">Feed <span class="sr-only"></span></a></li>
+					<li><a href="/userlist">Who to follow? <span
+							class="sr-only"></span></a></li>
 				</ul>
-				<form method="POST" action="{{url_for('page.search_users')}}" class="navbar-form navbar-left">
+				<form method="POST" action="{{url_for('page.search_users')}}"
+					class="navbar-form navbar-left">
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="Search username..." name="search_uname">
+						<input type="text" class="form-control"
+							placeholder="Search username..." name="search_uname">
 					</div>
 					<button type="submit" class="btn btn-default">Search</button>
 				</form>
@@ -64,7 +67,7 @@
 			<center>{{ message }}</center>
 		</div> {% endfor %}
 	</strong> {% endif %} {% endwith %}
-	<div class="container">{% block content %} {% endblock %}</div>
+	<div class="container" >{% block content %} {% endblock %}</div>
 </body>
 
 </html>

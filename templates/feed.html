@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+{% extends 'base.html' %} {% block content %}
+<body>
+	<div class="container">
+		<div class="row">
+			{% for USERID, USERNAME, MOVIE_TITLE, COMMENTS in posts %}
+			<div class="row" style="padding-bottom: 30px;">
+				<div class="card">
+					<div class="card-body">
+						<h3 class="card-title">
+							<a href="{{ url_for('page.user_profiles', user_id=USERID)}}">{{USERNAME}}</a>
+							</h4>
+							<h5 class="card-subtitle mb-2 text-muted">
+								Movie Title: <strong> {{MOVIE_TITLE}}</strong>
+								</h6>
+								<p class="card-text"
+									style="word-wrap: break-word; min-width: 160px; max-width: 550px;">Reviews:
+									{{COMMENTS}}</p>
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+</body>
+{% endblock %}
+
+</html>
