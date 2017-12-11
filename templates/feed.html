@@ -19,12 +19,13 @@
 					<div class="card-body">
 						<h3 class="card-title">
 							<a href="{{ url_for('page.user_profiles', user_id=USERID)}}">{{USERNAME}}</a>
-						</h4>
-						<h5 class="card-subtitle mb-2 text-muted">Movie Title:
-							{{MOVIE_TITLE}}</h6>
-						<p class="card-text"
-							style="word-wrap: break-word; min-width: 160px; max-width: 550px;">{{COMMENTS}}</p>
-
+							</h4>
+							<h5 class="card-subtitle mb-2 text-muted">
+								Movie Title: <strong> {{MOVIE_TITLE}}</strong>
+								</h6>
+								<p class="card-text"
+									style="word-wrap: break-word; min-width: 160px; max-width: 550px;">Reviews:
+									{{COMMENTS}}</p>
 					</div>
 				</div>
 			</div>
