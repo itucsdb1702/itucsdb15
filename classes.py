@@ -79,6 +79,24 @@ class User(UserMixin):
                     connection.commit()
 
                     return users
+                
+    def get_followed_users_by_userid(self):
+            with dbapi2.connect(app.config['dsn']) as connection:
+                    cursor = connection.cursor()
+                    query = """SELECT ID, USERNAME, EMAIL FROM USERS u
+                               INNER JOIN FOLLOWERS f ON (u.ID = f.FOLLOWING_USER_ID)
+                               WHERE (f.FOLLOWED_USER_ID = %s) """
+
+                    userid = self.get_user_id()
+                    cursor.execute(query, (userid,))
+
+                    users = []
+                    for user in cursor:
+                        users.append(user)
+
+                    connection.commit()
+
+                    return users
 
 
     def is_active(self):

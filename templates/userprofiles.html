@@ -14,8 +14,18 @@
 	<div class="container">
 	<div class="row">
 	<h1 class="pull-left">{{username}}'s Profile</h1>
-	<button onclick="location.href = '{{ url_for('page.Unfollow', id=userid) }}'"
-		type="submit" class="btn btn-md btn-danger pull-right">Unfollow this user</button>
+
+
+	{% for USERID, USERNAME, EMAIL in followedusers %}
+		{% for USER_ID in currentuserid %}
+		{% if USER_ID == USERID %}
+		<button onclick="location.href = '{{ url_for('page.Unfollow', id=userid) }}'"
+			type="submit" class="btn btn-md btn-danger pull-right">Unfollow this user</button>
+		{% endif %}
+		{% endfor %}
+	{% endfor %}
+
+
 
 	</div>
 	</div>
@@ -80,7 +90,7 @@
 
 			<div class="col-md-6 col-lg-6 col-xs-12 col-sm-6">
 
-				<h2>My Movie Lists</h2>
+				<h2>Movie Lists</h2>
 				<p>Click to the name of the list to show content.</p>
 				<div class="table-responsive">
 					<table class="table table-striped">
@@ -106,7 +116,7 @@
 
 			<div class="col-md-6 col-lg-6 col-xs-12 col-sm-6">
 
-				<h2>My posts</h2>
+				<h2>Posts</h2>
 				<div class="table-responsive">
 					<table class="table table-striped">
 						<thead>

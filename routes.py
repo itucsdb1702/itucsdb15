@@ -2,6 +2,7 @@ import datetime
 import string
 import requests
 import os
+from tkinter import *
 import json
 import re
 import psycopg2 as dbapi2
@@ -24,6 +25,8 @@ from flask_login.utils import current_user
 from psycopg2.psycopg1 import connection
 from _sqlite3 import connect
 from multiprocessing import current_process
+from ensurepip import bootstrap
+from importlib import _bootstrap
 
 
 page = Blueprint('page',__name__)
@@ -496,12 +499,17 @@ def user_profiles(user_id):
 
                         followingusers = []
                         followingusers = user.get_following_users_by_userid()
+                        
+                        followedusers = []
+                        followedusers = user.get_followed_users_by_userid()
 
                         posts = []
                         posts = user.get_posts()
-
                         connection.commit()
-                        return render_template('userprofiles.html',userid=user_id, username=user.username, lists = lists, movies = movies, posts = posts, followingusers = followingusers)
+                        
+                        currentuserid = current_user.get_user_id()
+                        return render_template('userprofiles.html',userid=user_id, username=user.username, lists = lists, movies = movies, posts = posts, followingusers = followingusers, currentuserid = currentuserid,
+                                                                    followedusers = followedusers)
                     else:
                         flash("There is no such user.")
                         return redirect(url_for('page.home_page'))
