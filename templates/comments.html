@@ -10,78 +10,167 @@
 	</head>
 
 	<body>
-		<div class="container-fluid">
+	<div class="container-fluid">
+			<div class="container">
+				  <ul class="nav nav-pills">
+				    <li class="active"><a data-toggle="pill" href="#home">Serie</a></li>
+				    <li><a data-toggle="pill" href="#menu1">Update This Serie</a></li>
+				    <li><a data-toggle="pill" href="#menu2">Delete This Serie</a></li>
+				  </ul>
 
+				<div class="tab-content">
+					    <div id="home" class="tab-pane fade in active" >
+							{% for ID , TITLE , STARTYEAR,ENDYEAR, SCORE,VOTES ,PICTURE,DESCRIPTION in nums %}
+							<div class="row" style=" margin:0 auto;">
 
+								<div class="container">
+							  <div class="well">
+							      <div class="media">
+								<div class="col-md-12"  >
 
-			<div class="row" style=" margin:0 auto;">
-				{% for ID, USER_NAME, SERIE_ID, DESCRIPTION in comments %}
-				<div class="container">
-			  <div class="well">
-			      <div class="media">
-				<div class="col-md-12"  >
+									<h3>
 
-					<h3>
+										{{ TITLE }}
+									</h3>
+									<div class="row">
+										<div class="col-md-4">
+											<img alt="Bootstrap Image Preview" src="{{ PICTURE }}" class="img-rounded" style="width:100%"/>
+										</div>
+										<div class="col-md-4">
+												<li>
+													Start year:{{ STARTYEAR }}
+												</li>
+												<li>
+													End year:{{ ENDYEAR }}
+												</li>
+												<li>
+													IMDB score:{{ SCORE }}
+												</li>
 
-						<a href="/series/{{ ID }}">{{ ID }}){{ DESCRIPTION }}</a>
-					</h3>
-					<div class="row">
-						<div class="col-md-4">
-							<img alt="Bootstrap Image Preview" src="http://cdn.pastemagazine.com/www/blogs/lists/winter-is-coming-game-of-thrones.jpg" class="img-rounded" style="width:100%"/>
+												<li>
+													About Movie:{{ DESCRIPTION }}
+												</li>
+										</div>
+										<div class="col-md-4">
+
+										</div>
+									</div>
+
+								</div>
+								</div>
+								</div>
+								</div>
+							</div>
+							{% endfor %}
+
+					    </div>
+					    <div id="menu1" class="tab-pane fade">
+						    <div class = "container text-center">
+									<div class = "panel-warning">
+										<div class = "panel-heading"><strong>Update a Serie</strong></div>
+										<div class = "panel-body">
+											<form action = "/update_series" method = "post" id = "updateseries">
+											{% for ID , TITLE , STARTYEAR,ENDYEAR, SCORE,VOTES ,PICTURE,DESCRIPTION in nums %}
+												<input type ="text" class="form-control" placeholder = "ID" value="{{ ID }}"><br>
+												<input type ="text" class="form-control" placeholder = "TITLE" name="TITLE"><br>
+												<input type="text" class="form-control" placeholder = "STARTYEAR" name="STARTYEAR"><br>
+												<input type="text" class="form-control" placeholder = "ENDYEAR" name="ENDYEAR"><br>
+												<input type="text" class="form-control" placeholder = "SCORE" name="SCORE"><br>
+												<input type="text" class="form-control" placeholder = "VOTES" name="VOTES"><br>
+												<input type="text" class="form-control" placeholder = "PICTURE" name="PICTURE"><br>
+												<input type="text" class="form-control" placeholder = "DESCRIPTION" name="DESCRIPTION"><br>
+											</form>
+										</div>
+									</div>
+									<button type="submit" form="updateseries" value="Submit">Update a Serie</button>
+							</div>
 						</div>
-						<div class="col-md-4">
-								<li>
-
-								</li>
-								<li>
-
-								</li>
-								<li>
-
-								</li>
+						<div id="menu2" class="tab-pane fade">
+						    <div class = "container text-center">
+									<div class = "panel-warning">
+										<div class = "panel-heading"><strong>Update This Serie</strong></div>
+										<div class = "panel-body">
+											<form action = "/delete_series" method = "post" id = "deleteseries">
+												<input type ="text" class="form-control" placeholder = "ID" value="{{ ID }}"><br>{% endfor %}
+											</form>
+										</div>
+									</div>
+									<button type="submit" form="deleteseries" value="Submit">Delete This Serie</button>
+							</div>
 						</div>
-						<div class="col-md-4">
+
+				</div>
+			</div><div class="container">
+{%  for ID, USER_NAME, SERIE_ID, DESCRIPTION in comments %}
+				<div class="row" style=" margin:0 auto;">
+		<div class="container">
+			<div class="well">
+				<div class="media">
+					<div class="col-md-12"  >
+
+
+
+
 							<p>
-								Nine noble families fight for control over the mythical lands of Westeros, while a forgotten race returns after being dormant for thousands of years.
+								<h3>WRITER:{{ USER_NAME }}</h3>
+								{{ DESCRIPTION }}
 							</p>
-						</div>
-					</div>
-					<div class="row" >
-							<p>
+							<div class = "container text-center">
+									<div class = "panel-warning">
+										<div class = "panel-heading"><strong>Update This Comment</strong></div>
+										<div class = "panel-body">
+											<form action = "/update_comments" method = "post" id = "updatecomments">
 
-							</p>
-					</div>
-					<div class="row" >
-						<div class="col-md-4">
+												<input type ="text" class="form-control" placeholder = "ID" value="{{ ID }}"><br>
+												<input type ="text" class="form-control" placeholder = "USER_NAME" value="{{ USER_NAME }}" name="USER_NAME"><br>
+												<input type="text" class="form-control" placeholder = "SERIE_ID" value="{{ SERIE_ID }}" name="SERIE_ID"><br>
+												<input type="text" class="form-control" placeholder = "DESCRIPTION" name="DESCRIPTION"><br>
 
-							<button type="button" class="btn btn-primary">
-								Favourites
-							</button>
-						</div>
-						<div class="col-md-4">
+											</form>
+										</div>
+									</div>
+									<button type="submit" form="updatecomments" value="Submit">Update This Comment</button>
+							</div>
+							<div class = "container text-center">
+									<div class = "panel-warning">
+										<div class = "panel-heading"><strong>Delete This Comment</strong></div>
+										<div class = "panel-body">
+											<form action = "/series/delete_comments" method = "post" id = "deletecomments">
+												<input type ="text" class="form-control" placeholder = "ID" value="{{ ID }}"><br>
+											</form>
+										</div>
+									</div>
+									<button type="submit" form="deletecomments" value="Submit">Delete This Comment</button>
+							</div>
 
-							<button type="button" class="btn btn-success">
-								Like
-							</button>
-						</div>
+</div></div></div></div>
 
-						<div class="col-md-4">
-
-							<button type="button" class="btn btn-danger">
-								Dislike
-							</button>
-						</div>
-					</div>
-
-				</div>
-				</div>
-				</div>
-				</div>
-			</div>
-			{% endfor %}
-
+		</div>{% endfor %}
 		</div>
-		</body>
+		<div class="container">
+				<div class="row" style=" margin:0 auto;">
+		<div class="container">
+			<div class="well">
+				<div class="media">
+					<div class="col-md-12"  >
+ 							<div class = "container text-center">
+									<div class = "panel-warning">
+										<div class = "panel-heading"><strong>Comment This Serie</strong></div>
+										<div class = "panel-body">
+											<form action = "/add_comments" method = "post" id = "addcomments">
+															{%  for ID, USER_NAME, SERIE_ID, DESCRIPTION in comments %}
+												<input type ="text" class="form-control" placeholder = "USER_NAME" value="{{ USER_NAME in comments}}" name="USER_NAME"><br>{% endfor %}
+							{% for ID , TITLE , STARTYEAR,ENDYEAR, SCORE,VOTES ,PICTURE,DESCRIPTION in nums %}
+												<input type ="text" class="form-control" placeholder = "SERIE_ID" value="{{ ID }}" name="SERIE_ID"><br>{% endfor %}
+												<input type ="text" class="form-control" placeholder = "ENTER COMMENT" name="DESCRIPTION"><br>
+											</form>
+										</div>
+									</div>
+									<button type="submit" form="addcomments" value="Submit">Comment This Serie</button>
+							</div></div></div></div></div></div></div>
+		</div>
+
+	</body>
 
 {% endblock %}
 

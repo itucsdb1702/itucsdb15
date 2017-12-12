@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<link rel="stylesheet" type="text/css" href="static/login.css">
+		<link rel="stylesheet" type="text/css" href="static/style.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	</head>
 	{% extends 'base.html' %} {% block content %}
 	<head>
@@ -11,74 +12,95 @@
 
 	<body>
 		<div class="container-fluid">
+			<div class="container">
+				  <ul class="nav nav-pills">
+				    <li class="active"><a data-toggle="pill" href="#home">Series</a></li>
+				    <li><a data-toggle="pill" href="#menu1">Add Series</a></li>
+				    <li><a data-toggle="pill" href="#menu2">Update Series</a></li>
+				    <li><a data-toggle="pill" href="#menu3">Delete Series</a></li>
+				  </ul>
+
+				<div class="tab-content">
+					    <div id="home" class="tab-pane fade in active" >
+							{% for ID , TITLE , STARTYEAR,ENDYEAR, SCORE,VOTES ,PICTURE,DESCRIPTION in nums %}
+							    <div class="w3l-movie-gride-agile">
+							        <a href="#" class="hvr-shutter-out-horizontal">
+							            <img src="{{ PICTURE }}" title="" class="img-series" alt=" " style="width:175px;height:250px"/>
+
+							        </a>
+							        <div class="agileits_w3layouts_mid_1_home">
+							            <div class="w3l-movie-text">
+							                 <a href="/series/{{ ID }}" class="hvr-shutter-out-horizontal">{{ TITLE }}</a>
+							            </div>
+							            <div class="agile_mid_2_home">
+							                {{ STARTYEAR }}
+
+							                <div class="clearfix"></div>
+							            </div>
+							        </div>
 
 
+							    <div class="clearfix"></div>
+							</div>
 
-			<div class="row" style=" margin:0 auto;">
-				{% for ID , TITLE , STARTYEAR,ENDYEAR, SCORE,VOTES ,PICTURE,DESCRIPTION in nums %}
-				<div class="container">
-			  <div class="well">
-			      <div class="media">
-				<div class="col-md-12"  >
+						{% endfor %}
 
-					<h3>
-
-						<a href="/series/{{ ID }}">{{ ID }}){{ TITLE }}</a>
-					</h3>
-					<div class="row">
-						<div class="col-md-4">
-							<img alt="Bootstrap Image Preview" src="http://cdn.pastemagazine.com/www/blogs/lists/winter-is-coming-game-of-thrones.jpg" class="img-rounded" style="width:100%"/>
+					    </div>
+					    <div id="menu1" class="tab-pane fade">
+						    <div class = "container text-center">
+									<div class = "panel-warning">
+										<div class = "panel-heading"><strong>Add a Serie</strong></div>
+										<div class = "panel-body">
+											<form action = "/add_series" method = "post" id = "addseries">
+												<input type = "text" class="form-control" placeholder = "TITLE" name="TITLE"><br>
+												<input type="text" class="form-control" placeholder = "STARTYEAR" name="STARTYEAR"><br>
+												<input type="text" class="form-control" placeholder = "ENDYEAR" name="ENDYEAR"><br>
+												<input type="text" class="form-control" placeholder = "SCORE" name="SCORE"><br>
+												<input type="text" class="form-control" placeholder = "VOTES" name="VOTES"><br>
+												<input type="text" class="form-control" placeholder = "PICTURE" name="PICTURE"><br>
+												<input type="text" class="form-control" placeholder = "DESCRIPTION" name="DESCRIPTION"><br>
+											</form>
+										</div>
+									</div>
+									<button type="submit" form="addseries" value="Submit">Add a Serie</button>
+								</div>
+							</div>
+						<div id="menu2" class="tab-pane fade">
+						    <div class = "container text-center">
+									<div class = "panel-warning">
+										<div class = "panel-heading"><strong>Update a Serie</strong></div>
+										<div class = "panel-body">
+											<form action = "/update_series" method = "post" id = "updateseries">
+												<input type ="text" class="form-control" placeholder = "ID" name="ID"><br>
+												<input type ="text" class="form-control" placeholder = "TITLE" name="TITLE"><br>
+												<input type="text" class="form-control" placeholder = "STARTYEAR" name="STARTYEAR"><br>
+												<input type="text" class="form-control" placeholder = "ENDYEAR" name="ENDYEAR"><br>
+												<input type="text" class="form-control" placeholder = "SCORE" name="SCORE"><br>
+												<input type="text" class="form-control" placeholder = "VOTES" name="VOTES"><br>
+												<input type="text" class="form-control" placeholder = "PICTURE" name="PICTURE"><br>
+												<input type="text" class="form-control" placeholder = "DESCRIPTION" name="DESCRIPTION"><br>
+											</form>
+										</div>
+									</div>
+									<button type="submit" form="updateseries" value="Submit">Update a Serie</button>
+							</div>
 						</div>
-						<div class="col-md-4">
-								<li>
-									{{ STARTYEAR }}
-								</li>
-								<li>
-									{{ ENDYEAR }}
-								</li>
-								<li>
-									{{ SCORE }}
-								</li>
+						<div id="menu3" class="tab-pane fade">
+						    <div class = "container text-center">
+									<div class = "panel-warning">
+										<div class = "panel-heading"><strong>Update a Serie</strong></div>
+										<div class = "panel-body">
+											<form action = "/delete_series" method = "post" id = "deleteseries">
+												<input type ="text" class="form-control" placeholder = "ID" name="ID"><br>
+											</form>
+										</div>
+									</div>
+									<button type="submit" form="deleteseries" value="Submit">Delete a Serie</button>
+							</div>
 						</div>
-						<div class="col-md-4">
-							<p>
-								Nine noble families fight for control over the mythical lands of Westeros, while a forgotten race returns after being dormant for thousands of years.
-							</p>
-						</div>
-					</div>
-					<div class="row" >
-							<p>
-
-							</p>
-					</div>
-					<div class="row" >
-						<div class="col-md-4">
-
-							<button type="button" class="btn btn-primary">
-								Favourites
-							</button>
-						</div>
-						<div class="col-md-4">
-
-							<button type="button" class="btn btn-success">
-								Like
-							</button>
-						</div>
-
-						<div class="col-md-4">
-
-							<button type="button" class="btn btn-danger">
-								Dislike
-							</button>
-						</div>
-					</div>
-
-				</div>
-				</div>
-				</div>
 				</div>
 			</div>
-			{% endfor %}
+
 
 		</div>
 		</body>
