@@ -887,39 +887,31 @@ def nominee_vote(nominee_ID):
 
     return render_template('nominee_vote.html', candidates = candidates)
 
-@page.route('/series', methods = ['GET', 'POST'])
-def series():
-
-    nums = []
-    with dbapi2._connect(current_app.config['dsn']) as connection:
-        cursor = connection.cursor()
-        query = """SELECT * FROM SERIES"""
-
-        cursor.execute(query)
-
-        for num in cursor:
-            nums.append(num)
-
-        connection.commit()
-    return render_template('series.html', nums = nums)
 
 
+@page.route('/deletefromwatched/<username>/<movieid>')
+def DeleteFromWatchedList(username, movieid):
+    movieToDelete = WatchedList(username, movieid, "")
+    score = movieToDelete.existsInWatchedList()
 
-@page.route("/series/<id>", methods= ['GET', 'POST'])
-def series_comments(id):
-    comments = []
+    movieToDelete = WatchedList(username, movieid, score)
 
-    with dbapi2._connect(current_app.config['dsn']) as connection:
-        cursor = connection.cursor()
+    movieToDelete.delete_from_watched_list()
 
-        query = """SELECT * FROM COMMENTS WHERE COMMENTS.SERIE_ID=2 """
-        cursor.execute(query)
+    movie = Movie("","","","","")
+    oldvotes = movie.getvotes_in_movie_db(movieid)
+    oldscore = movie.getscore_in_movie_db(movieid)
 
-        for comment in cursor:
-            comments.append(comment)
+    if int(oldvotes[0]) > 1:
+        total = int(oldvotes)*int(oldscore)
+        total = total - score
+        newvotes = oldvotes - 1
+        newscore = total / newvotes
+        movie.update_votes_and_score(movieid, newscore, newvotes)
 
-        connection.commit()
-    return render_template('comments.html', comments = comments)
+    return redirect(url_for('page.home_page'))
+
+
 
 @page.route('/news', methods = ['GET', 'POST'])
 def news():
@@ -936,30 +928,242 @@ def news():
 
         connection.commit()
     return render_template('news.html', nums = nums)
+@page.route('/series', methods = ['GET', 'POST'])
+def series():
 
-@page.route('/deletefromwatched/<username>/<movieid>')
-def DeleteFromWatchedList(username, movieid):
-    movieToDelete = WatchedList(username, movieid, "")
-    score = movieToDelete.existsInWatchedList()
-    
-    movieToDelete = WatchedList(username, movieid, score)
-    
-    movieToDelete.delete_from_watched_list()
-    
-    movie = Movie("","","","","")
-    oldvotes = movie.getvotes_in_movie_db(movieid)
-    oldscore = movie.getscore_in_movie_db(movieid)
-    
-    if int(oldvotes[0]) > 1:
-        total = int(oldvotes)*int(oldscore)
-        total = total - score
-        newvotes = oldvotes - 1
-        newscore = total / newvotes
-        movie.update_votes_and_score(movieid, newscore, newvotes)
-    
-    return redirect(url_for('page.home_page'))
+    nums = []
+    with dbapi2._connect(current_app.config['dsn']) as connection:
+        cursor = connection.cursor()
+        query = """SELECT * FROM SERIES ORDER BY ID"""
+
+        cursor.execute(query)
+
+        for num in cursor:
+            nums.append(num)
+
+        connection.commit()
+    return render_template('series.html', nums = nums)
+
+@page.route("/series/<id>", methods= ['GET', 'POST'])
+def series_comments(id):
+    comments = []
+    nums=[]
+
+    with dbapi2._connect(current_app.config['dsn']) as connection:
+        cursor = connection.cursor()
+        query = """SELECT * FROM COMMENTS WHERE SERIE_ID=%s """
+        cursor.execute(query,(id))
+
+        for comment in cursor:
+            comments.append(comment)
+
+        query = """SELECT * FROM SERIES WHERE ID=%s """
+        cursor.execute(query,(id))
+
+        for num in cursor:
+            nums.append(num)
+
+        connection.commit()
+    return render_template('comments.html', comments = comments,nums=nums)
+
+@page.route('/add_series', methods = ['GET', 'POST'])
+def add_series():
+    #checks if user is logged in
+    if current_user.get_id() is not None:
+        if request.method =='POST':
+             TITLE = request.form['TITLE']
+             STARTYEAR = request.form['STARTYEAR']
+             ENDYEAR = request.form['ENDYEAR']
+             SCORE = request.form['SCORE']
+             VOTES = request.form['VOTES']
+             PICTURE =request.form['PICTURE']
+             DESCRIPTION =request.form['DESCRIPTION']
+
+             with dbapi2.connect(app.config['dsn']) as connection:
+                 cursor = connection.cursor()
+                 state= """INSERT INTO SERIES (TITLE, STARTYEAR, ENDYEAR, SCORE, VOTES,PICTURE, DESCRIPTION) VALUES(%s,%s,%s,%s,%s,%s,%s)"""
+
+                 cursor.execute(state, (TITLE, STARTYEAR, ENDYEAR, SCORE, VOTES,PICTURE, DESCRIPTION))
+                 connection.commit()
 
 
-                
+        return redirect('series')
+    else:
+         flash("PlEASE LOG IN")
+         return redirect(url_for('page.login_page'))
+
+@page.route('/update_series', methods = ['GET', 'POST'])
+def update_series():
+    #checks if user is logged in
+    if current_user.get_id() is not None:
+        if request.method =='POST':
+             ID = request.form['ID']
+             TITLE = request.form['TITLE']
+             STARTYEAR = request.form['STARTYEAR']
+             ENDYEAR = request.form['ENDYEAR']
+             SCORE = request.form['SCORE']
+             VOTES = request.form['VOTES']
+             PICTURE =request.form['PICTURE']
+             DESCRIPTION =request.form['DESCRIPTION']
+
+             with dbapi2.connect(app.config['dsn']) as connection:
+                 cursor = connection.cursor()
+                 state= """UPDATE SERIES SET(TITLE, STARTYEAR, ENDYEAR, SCORE, VOTES,PICTURE, DESCRIPTION) = (%s,%s,%s,%s,%s,%s,%s) WHERE ID=%s """
+
+                 cursor.execute(state, (TITLE, STARTYEAR, ENDYEAR, SCORE, VOTES,PICTURE, DESCRIPTION,ID))
+                 connection.commit()
+
+
+        return redirect('series')
+    else:
+         flash("PlEASE LOG IN")
+         return redirect(url_for('page.login_page'))
+@page.route('/delete_series', methods = ['GET', 'POST'])
+def delete_series():
+    #checks if user is logged in
+    if current_user.get_id() is not None:
+        if request.method =='POST':
+             ID = request.form['ID']
+
+             with dbapi2.connect(app.config['dsn']) as connection:
+                 cursor = connection.cursor()
+                 state= """DELETE FROM SERIES WHERE ID=%s """
+
+                 cursor.execute(state, (ID))
+                 connection.commit()
+
+
+        return redirect('/series')
+    else:
+         flash("PlEASE LOG IN")
+         return redirect(url_for('page.login_page'))
+@page.route('/add_comments', methods = ['GET', 'POST'])
+def add_comments():
+    #checks if user is logged in
+    if current_user.get_id() is not None:
+        if request.method =='POST':
+             USER_NAME = request.form['USER_NAME']
+             SERIE_ID = request.form['SERIE_ID']
+             DESCRIPTION = request.form['DESCRIPTION']
+
+             with dbapi2.connect(app.config['dsn']) as connection:
+                 cursor = connection.cursor()
+                 state= """INSERT INTO COMMENTS (USER_NAME,SERIE_ID,DESCRIPTION) VALUES(%s,%s,%s)"""
+
+                 cursor.execute(state, (USER_NAME,SERIE_ID,DESCRIPTION))
+                 connection.commit()
+
+
+        return redirect('series')
+    else:
+         flash("PlEASE LOG IN")
+         return redirect(url_for('page.login_page'))
+@page.route('/delete_comments', methods = ['GET', 'POST'])
+def delete_comments():
+    #checks if user is logged in
+    if current_user.get_id() is not None:
+        if request.method =='POST':
+             ID = request.form['ID']
+
+             with dbapi2.connect(app.config['dsn']) as connection:
+                 cursor = connection.cursor()
+                 state= """DELETE FROM COMMENTS WHERE ID=%s """
+
+                 cursor.execute(state, (ID))
+                 connection.commit()
+
+
+        return redirect('series')
+    else:
+         flash("PlEASE LOG IN")
+         return redirect(url_for('page.login_page'))
+
+@page.route('/update_comments', methods = ['GET', 'POST'])
+def update_comments():
+    #checks if user is logged in
+    if current_user.get_id() is not None:
+        if request.method =='POST':
+             ID = request.form['ID']
+             USER_NAME = request.form['USER_NAME']
+             SERIE_ID = request.form['SERIE_ID']
+             DESCRIPTION = request.form['DESCRIPTION']
+
+             with dbapi2.connect(app.config['dsn']) as connection:
+                 cursor = connection.cursor()
+                 state= """UPDATE SERIES SET(USER_NAME, SERIE_ID, DESCRIPTION) = (%s,%s,%s) WHERE ID=%s """
+
+                 cursor.execute(state, (USER_NAME, SERIE_ID, DESCRIPTION,ID))
+                 connection.commit()
+
+
+        return redirect('/series')
+    else:
+         flash("PlEASE LOG IN")
+         return redirect(url_for('page.login_page'))
+@page.route('/add_news', methods = ['GET', 'POST'])
+def add_news():
+    #checks if user is logged in
+    if current_user.get_id() is not None:
+        if request.method =='POST':
+             TITLE = request.form['TITLE']
+             PICTURE = request.form['PICTURE']
+             DESCRIPTION = request.form['DESCRIPTION']
+             USER_NAME = request.form['USER_NAME']
+
+             with dbapi2.connect(app.config['dsn']) as connection:
+                 cursor = connection.cursor()
+                 state= """INSERT INTO NEWS (TITLE,PICTURE,DESCRIPTION,USER_NAME) VALUES(%s,%s,%s,%s)"""
+
+                 cursor.execute(state, (TITLE,PICTURE,DESCRIPTION,USER_NAME))
+                 connection.commit()
+
+
+        return redirect('series')
+    else:
+         flash("PlEASE LOG IN")
+         return redirect(url_for('page.login_page'))
+@page.route('/delete_news', methods = ['GET', 'POST'])
+def delete_news():
+    #checks if user is logged in
+    if current_user.get_id() is not None:
+        if request.method =='POST':
+             ID = request.form['ID']
+
+             with dbapi2.connect(app.config['dsn']) as connection:
+                 cursor = connection.cursor()
+                 state= """DELETE FROM NEWS WHERE ID=%s """
+
+                 cursor.execute(state, (ID))
+                 connection.commit()
+
+
+        return redirect('news')
+    else:
+         flash("PlEASE LOG IN")
+         return redirect(url_for('page.login_page'))
+
+@page.route('/update_news', methods = ['GET', 'POST'])
+def update_news():
+    #checks if user is logged in
+    if current_user.get_id() is not None:
+        if request.method =='POST':
+             ID = request.form['ID']
+             TITLE = request.form['TITLE']
+             PICTURE = request.form['PICTURE']
+             DESCRIPTION = request.form['DESCRIPTION']
+             USER_NAME = request.form['USER_NAME']
+
+             with dbapi2.connect(app.config['dsn']) as connection:
+                 cursor = connection.cursor()
+                 state= """UPDATE NEWS SET(TITLE, PICTURE, DESCRIPTION,USER_NAME) = (%s,%s,%s) WHERE ID=%s """
+
+                 cursor.execute(state, (USER_NAME, SERIE_ID, DESCRIPTION,ID))
+                 connection.commit()
+
+
+        return redirect('news')
+    else:
+         flash("PlEASE LOG IN")
+         return redirect(url_for('page.login_page'))
 
 

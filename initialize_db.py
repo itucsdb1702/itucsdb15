@@ -1,6 +1,6 @@
 def initialize_db_function(cursor):
-    
-    
+
+
     query = """DROP TABLE IF EXISTS USERS CASCADE"""
     cursor.execute(query)
 
@@ -14,7 +14,7 @@ def initialize_db_function(cursor):
     UNIQUE (USERNAME)
     )"""
     cursor.execute(query)
-    
+
     query = "DROP TABLE IF EXISTS MOVIES CASCADE"
     cursor.execute(query)
 
@@ -29,7 +29,7 @@ def initialize_db_function(cursor):
     )
     """
     cursor.execute(query)
-    
+
     query = "DROP TABLE IF EXISTS POSTS CASCADE"
     cursor.execute(query)
 
@@ -54,7 +54,7 @@ def initialize_db_function(cursor):
     ON DELETE CASCADE
     """
     cursor.execute(query)
-    
+
     query = "DROP TABLE IF EXISTS WATCHEDLIST CASCADE"
     cursor.execute(query)
 
@@ -65,7 +65,7 @@ def initialize_db_function(cursor):
             FOREIGN KEY (MOVIEID) REFERENCES MOVIES(MOVIEID) ON DELETE CASCADE ON UPDATE CASCADE
     )"""
     cursor.execute(query)
-    
+
     query = "DROP TABLE IF EXISTS FOLLOWERS CASCADE"
     cursor.execute(query)
 
@@ -77,7 +77,7 @@ def initialize_db_function(cursor):
         ON DELETE CASCADE
     )"""
     cursor.execute(query)
-    
+
     query = "DROP TABLE IF EXISTS MOVIELIST CASCADE"
     cursor.execute(query)
 
@@ -92,8 +92,8 @@ def initialize_db_function(cursor):
         ON DELETE CASCADE)
     """
     cursor.execute(query)
-    
-  
+
+
 
 
     # Actors table
@@ -484,6 +484,8 @@ def initialize_db_function(cursor):
 
 
 
+
+
      # Series table
     cursor.execute("""DROP TABLE IF EXISTS SERIES CASCADE""")
     cursor.execute("""CREATE TABLE SERIES(
@@ -502,10 +504,31 @@ def initialize_db_function(cursor):
                   '2011',
                   '2018',
                   '9.6',
-                  '1442',
-                  'http://cdn.pastemagazine.com/www/blogs/lists/winter-is-coming-game-of-thrones.jpg',
+                  '0',
+                  'https://images-na.ssl-images-amazon.com/images/M/MV5BMjE3NTQ1NDg1Ml5BMl5BanBnXkFtZTgwNzY2NDA0MjI@._V1_SY1000_CR0,0,674,1000_AL_.jpg',
                   'Nine noble families fight for control over the mythical lands of Westeros, while a forgotten race returns after being dormant for thousands of years.'
                     )""")
+    cursor.execute("""INSERT INTO SERIES (TITLE, STARTYEAR, ENDYEAR, SCORE, VOTES,PICTURE,DESCRIPTION) VALUES(
+                  'West World',
+                  '2011',
+                  '2018',
+                  '8.9',
+                  '0',
+                  'https://images-na.ssl-images-amazon.com/images/M/MV5BMTEyODk5NTc2MjNeQTJeQWpwZ15BbWU4MDQ5NTgwOTkx._V1_SY1000_CR0,0,674,1000_AL_.jpg',
+                  'Set at the intersection of the near future and the reimagined past, explore a world in which every human appetite, no matter how noble or depraved, can be indulged without consequence.'
+                    )""")
+
+    cursor.execute("""INSERT INTO SERIES (TITLE, STARTYEAR, ENDYEAR, SCORE, VOTES,PICTURE,DESCRIPTION) VALUES(
+                  'Rick and Morty',
+                  '2013',
+                  '2018',
+                  '9.3',
+                  '0',
+                  'https://images-na.ssl-images-amazon.com/images/M/MV5BMjRiNDRhNGUtMzRkZi00MThlLTg0ZDMtNjc5YzFjYmFjMmM4XkEyXkFqcGdeQXVyNzQ1ODk3MTQ@._V1_.jpg',
+                  'An animated series that follows the exploits of a super scientist and his not-so-bright grandson.'
+                    )""")
+
+
 
     # News table
     cursor.execute("""DROP TABLE IF EXISTS NEWS CASCADE""")
@@ -513,7 +536,10 @@ def initialize_db_function(cursor):
                                     ID SERIAL PRIMARY KEY NOT NULL,
                                     TITLE VARCHAR(100),
                                     PICTURE VARCHAR(500),
-                                    DESCRIPTION VARCHAR(1000) )""")
+                                    DESCRIPTION VARCHAR(1000),
+                                    USER_NAME VARCHAR(100),
+
+                                        FOREIGN KEY (USER_NAME) REFERENCES USERS(USERNAME) ON DELETE CASCADE ON UPDATE CASCADE )""")
 
 
         # Comments table
@@ -525,4 +551,10 @@ def initialize_db_function(cursor):
                                     DESCRIPTION VARCHAR(1000),
                                         FOREIGN KEY (USER_NAME) REFERENCES USERS(USERNAME) ON DELETE CASCADE ON UPDATE CASCADE,
                                         FOREIGN KEY (SERIE_ID) REFERENCES SERIES(ID) ON DELETE CASCADE ON UPDATE CASCADE )""")
+    cursor.execute("""INSERT INTO COMMENTS (USER_NAME, SERIE_ID, DESCRIPTION) VALUES(
+                  'tugrul',
+                  '1',
+                  'Nine noble families fight for control over the mythical lands of Westeros, while a forgotten race returns after being dormant for thousands of years.'
+                    )""")
+
 

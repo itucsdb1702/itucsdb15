@@ -19,3 +19,169 @@ div#datetime {
 	font-size: 80%;
 	text-align: right;
 }
+.w3l-movie-gride-agile {
+
+            width:195px;
+            margin:5px;
+            padding:10px;
+            height:350px;
+            float:left;
+            resize:none;
+        }
+.img-series{ padding-top:5px; padding-left:5px; }
+.w3l-movie-text {
+            align-content: center;
+            text-align: center;
+            font-size: 1.2em;
+            color: #222;
+            font-family: 'Roboto Condensed', sans-serif;
+
+
+
+}
+.agile_mid_2_home{ height:30px;  text-align:center; align-content:center; }
+.block-stars {padding-left:50px; padding-top:5px;         }
+
+ul, label {
+            margin: 0;
+            padding: 0;
+}
+ul.w3l-ratings li, .w3l-ratings a {
+                display: inline-block !important;
+                list-style: none;
+            }
+p, ul li, ol li {
+                margin: 0;
+                font-size: 14px;
+            }
+            .comment_container {
+            margin: auto;
+            width: 70%;
+
+            padding: 10px;
+            border-bottom:1px solid #d0d0d0;
+        }
+        textarea {
+            width: 780px;
+            min-height: 60px;
+            resize: none;
+            overflow: auto;
+            margin-top:8px;
+        }
+        .profile_commenter{ width:60px; height:60px; background-color:aqua; float:left; margin:10px 20px 0 20px;}
+        .profile_commenter_ex {
+            width: 60px;
+            height: 60px;
+            background-color: aqua;
+            float: left;
+            margin: 10px 20px 0 20px;
+        }
+
+        .commented_area {
+            width: 70%;
+            height: auto;
+            background-color: pink;
+            border-bottom: 1px solid #d0d0d0;
+        }
+        .text_area{ background-color:blue; width:600px; float:left; height:70px;}
+        .commented_name{  width:75px; height:30px; top:5px; }
+        .comment_container {
+            margin: auto;
+            width: 70%;
+            padding: 10px;
+            border-bottom: 1px solid #d0d0d0;
+        }
+
+        textarea {
+            width: 780px;
+            min-height: 60px;
+            resize: none;
+            overflow: auto;
+            margin-top: 8px;
+        }
+
+        .profile_commenter {
+            width: 60px;
+            height: 60px;
+            background-color: aqua;
+            float: left;
+            margin: 10px 20px 0 20px;
+        }
+
+        .profile_commenter_ex {
+            width: 60px;
+            height: 60px;
+            background-color: aqua;
+            float: left;
+            margin: 10px 20px 0 20px;
+        }
+
+        .commented_area {
+            width: 70%;
+            height: auto;
+            background-color: pink;
+            border-bottom: 1px solid #d0d0d0;
+        }
+
+        .text_area {
+            background-color: blue;
+            width: 600px;
+            float: left;
+            height: 70px;
+        }
+
+        .commented_name {
+            width: 75px;
+            height: 30px;
+            top: 5px;
+        }
+
+
+
+
+        .news_container{
+            margin:auto;
+            width:80%;
+
+            height:600px;
+
+        }
+        .news_container_left { float:left; width:85%; height:600px;      }
+
+
+        .news {
+            width: 875px;
+            height: 175px;
+            padding: 15px 0 0 15px;
+
+        }
+        .news_photo {
+            width: 310px;
+            height: 160px;
+           float:left;
+        }
+        .news_letter {
+            width: 350px;
+            height: 160px;
+            float: left;
+            background-color:#eee;
+
+        }
+        .baslik {
+            font-family: Arial,Helvetica,sans-serif;
+            font-weight:700;
+            font-size: 15px;
+            line-height: 18px;
+            margin:25px 0 5px 10px;
+
+        }
+        .tarih {
+            font-family: Arial,Helvetica,sans-serif;
+            font-size: 13px;
+            margin: 0 0 5px 10px;
+        }
+        .detay {
+            font-family: Arial,Helvetica,sans-serif;
+            font-size: 12px;
+            margin: 0 5px 5px 10px;
+        }
